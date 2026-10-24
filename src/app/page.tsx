@@ -42,8 +42,13 @@ export default function LandingPage() {
   const [demoRepoInput, setDemoRepoInput] = useState<string>('https://github.com/expressjs/express');
   const [isAutoCycle, setIsAutoCycle] = useState(true);
 
-  // Auto-cycle through the 4 steps unless user interacts
+  // Auto-cycle through the 4 steps unless user interacts or prefers reduced motion
   useEffect(() => {
+    if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setIsAutoCycle(false);
+      return;
+    }
+
     if (!isAutoCycle) return;
     const timer = setInterval(() => {
       setActiveStep((prev) => {
@@ -560,7 +565,7 @@ export default function LandingPage() {
       {/* ========================================================
           SECTION D — HOW IT WORKS (The 4-Step Rail)
           ======================================================== */}
-      <section id="process" className="py-24 border-b border-platinumSilver/15 relative bg-gradient-to-b from-black via-blackHole/40 to-black">
+      <section id="process" className="scroll-mt-24 py-24 border-b border-platinumSilver/15 relative bg-gradient-to-b from-black via-blackHole/40 to-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
@@ -635,7 +640,7 @@ export default function LandingPage() {
       {/* ========================================================
           SECTION F — FEATURE GRID (Varied Composition)
           ======================================================== */}
-      <section id="features" className="py-24 border-b border-platinumSilver/15 relative">
+      <section id="features" className="scroll-mt-24 py-24 border-b border-platinumSilver/15 relative">
         
         {/* Subtle Ambient Refraction */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-gradient-to-r from-mochaBrown/15 via-paleLavender/10 to-electricTangerine/15 rounded-full blur-[100px] pointer-events-none" />
@@ -698,7 +703,7 @@ export default function LandingPage() {
       {/* ========================================================
           SECTION G — SAFETY SECTION
           ======================================================== */}
-      <section id="safety" className="py-24 border-b border-platinumSilver/15 bg-gradient-to-b from-blackHole/30 to-black relative">
+      <section id="safety" className="scroll-mt-24 py-24 border-b border-platinumSilver/15 bg-gradient-to-b from-blackHole/30 to-black relative">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
           
           <div className="space-y-3">
@@ -769,7 +774,7 @@ export default function LandingPage() {
       {/* ========================================================
           SECTION H — FAQ ACCORDION
           ======================================================== */}
-      <section id="faqs" className="py-24 border-b border-platinumSilver/15">
+      <section id="faqs" className="scroll-mt-24 py-24 border-b border-platinumSilver/15">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           
           <div className="text-center mb-14 space-y-3">

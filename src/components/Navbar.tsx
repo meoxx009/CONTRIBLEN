@@ -84,6 +84,18 @@ export default function Navbar() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Close dropdown & mobile menu with Escape key
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        setDropdownOpen(false);
+        setMobileMenuOpen(false);
+      }
+    }
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   // Close dropdown & mobile menu on route change
   useEffect(() => {
     setDropdownOpen(false);
@@ -115,7 +127,7 @@ export default function Navbar() {
   const publicLinks = [
     { label: 'Process', href: '/#process', id: 'process' },
     { label: 'Features', href: '/#features', id: 'features' },
-    { label: 'Safety', href: '/safety', id: 'safety' },
+    { label: 'Safety', href: '/#safety', id: 'safety' },
     { label: 'FAQs', href: '/#faqs', id: 'faqs' },
   ];
 
