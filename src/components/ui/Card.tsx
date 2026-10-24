@@ -3,7 +3,7 @@
 import React from 'react';
 
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
-  variant?: 'glass' | 'widget' | 'warm' | 'linen' | 'cotton';
+  variant?: 'glass' | 'widget' | 'warm' | 'linen' | 'cotton' | 'liquid-glass' | 'liquid-hero' | 'metric-card';
 }
 
 export function Card({
@@ -23,6 +23,12 @@ export function Card({
     linen: 'bg-sustainableLinen text-neutral-900 border border-neutral-300 shadow-md',
     // Cotton: Recycled Cotton warm tone
     cotton: 'bg-recycledCotton text-neutral-900 border border-neutral-300/80 shadow-md',
+    // Liquid glass: high-translucency glass with Platinum Silver specular rim
+    'liquid-glass': 'liquid-glass-card text-textPrimary',
+    // Liquid hero: elevated multi-stop glass with deep blur
+    'liquid-hero': 'liquid-glass-hero text-textPrimary',
+    // Metric card: high-hierarchy metric panel with subtle glow
+    'metric-card': 'liquid-glass-card border-platinumSilver/25 hover:border-lemonChiffon/40 text-textPrimary',
   };
 
   return (

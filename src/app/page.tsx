@@ -27,27 +27,44 @@ import {
   Play,
   RotateCcw,
   ExternalLink,
+  BookOpen,
+  GitCommit,
+  Clock,
+  KeyRound,
+  FileSearch,
 } from 'lucide-react';
 
 export default function LandingPage() {
   const router = useRouter();
   const [activeStep, setActiveStep] = useState<number>(0);
+  const [activePreviewTab, setActivePreviewTab] = useState<'finding' | 'explanation' | 'route' | 'draft'>('finding');
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [demoRepoInput, setDemoRepoInput] = useState<string>('https://github.com/expressjs/express');
-
-  // Auto-cycle through the 4 steps unless user interacts
   const [isAutoCycle, setIsAutoCycle] = useState(true);
 
+  // Auto-cycle through the 4 steps unless user interacts
   useEffect(() => {
     if (!isAutoCycle) return;
     const timer = setInterval(() => {
-      setActiveStep((prev) => (prev + 1) % 4);
-    }, 4500);
+      setActiveStep((prev) => {
+        const next = (prev + 1) % 4;
+        const tabMap: ('finding' | 'explanation' | 'route' | 'draft')[] = ['finding', 'finding', 'explanation', 'route'];
+        setActivePreviewTab(tabMap[next]);
+        return next;
+      });
+    }, 5000);
     return () => clearInterval(timer);
   }, [isAutoCycle]);
 
   const handleStepClick = (index: number) => {
     setActiveStep(index);
+    const tabMap: ('finding' | 'explanation' | 'route' | 'draft')[] = ['finding', 'finding', 'explanation', 'route'];
+    setActivePreviewTab(tabMap[index]);
+    setIsAutoCycle(false);
+  };
+
+  const handleTabClick = (tab: 'finding' | 'explanation' | 'route' | 'draft') => {
+    setActivePreviewTab(tab);
     setIsAutoCycle(false);
   };
 
@@ -58,70 +75,120 @@ export default function LandingPage() {
     }
   };
 
+  const trustPrinciples = [
+    {
+      title: 'Read-Only Public Scan',
+      desc: 'Bounded to 60 files and static parsing with zero repository code execution.',
+      icon: Lock,
+      color: 'text-lemonChiffon',
+    },
+    {
+      title: 'Deterministic Verification',
+      desc: 'Rule matches and published OSV.dev CVEs backed by SHA-256 evidence hashes.',
+      icon: Shield,
+      color: 'text-electricTangerine',
+    },
+    {
+      title: 'Sanitized AI Context',
+      desc: 'Server-side Gemini adapter strictly anchored to verified file lines with redacted tokens.',
+      icon: Cpu,
+      color: 'text-paleLavender',
+    },
+    {
+      title: 'Human-Approved Issue Drafts',
+      desc: 'Strict manual publishing model: zero automatic GitHub issues or uninvited PRs.',
+      icon: GitPullRequest,
+      color: 'text-botticelli',
+    },
+  ];
+
   const processSteps = [
     {
       num: '01',
       title: 'Scan',
       tagline: 'Deterministic Static Analysis',
       badge: 'Zero Code Execution',
-      desc: 'Connects to any public GitHub repository. Strictly read-only, checks dependency manifests, audits GitHub Actions workflows, masks credentials, and tests governance health without executing code.',
+      desc: 'Inspects public GitHub repositories using sandboxed static analysis across package manifests, GitHub Actions workflows, and project health files.',
       icon: Search,
       evidenceSnippet: 'npm audit • package.json • .github/workflows/*.yml',
-      highlightColor: 'from-electricTangerine to-lemonChiffon',
     },
     {
       num: '02',
       title: 'Verify',
       tagline: 'Evidence & OSV Verification',
       badge: 'Zero AI Hallucination',
-      desc: 'Cryptographically hashes evidence snippets and cross-references published CVEs using the OSV.dev batch API. The deterministic scanner is the sole source of truth for finding existence and severity.',
+      desc: 'Hashes normalized code evidence cryptographically and cross-references published advisories with OSV.dev. The deterministic engine is the sole source of truth.',
       icon: CheckCircle2,
-      evidenceSnippet: 'OSV Batch Query • SHA-256 Evidence Hash: e3b0c44298fc...',
-      highlightColor: 'from-botticelli to-platinumSilver',
+      evidenceSnippet: 'OSV Batch Query • SHA-256 Evidence Hash: e3b0c442...',
     },
     {
       num: '03',
       title: 'Understand',
       tagline: 'Grounded Gemini Explanations',
       badge: 'Strict Server Adapter',
-      desc: 'Server-side Gemini adapter translates raw technical findings into beginner-friendly, educational context. Explanations are strictly anchored to verified file paths, line numbers, and redacted evidence.',
+      desc: 'Server-side Gemini explains technical context in plain English. Explanations are anchored to verified file paths and line numbers without altering severities.',
       icon: Cpu,
       evidenceSnippet: 'Anchored line 18 • Plain-English impact • Required skills',
-      highlightColor: 'from-paleLavender to-lemonChiffon',
     },
     {
       num: '04',
       title: 'Contribute',
       tagline: 'Actionable Routes & Issue Drafts',
       badge: 'Maintainer Safe',
-      desc: 'Contributors receive structured plans with required skills, target files, and test criteria. Maintainers receive polite, reviewable Markdown issue drafts ready for manual review and publishing.',
+      desc: 'Translates verified findings into step-by-step contribution packs with skill checklists, test plans, and structured Markdown issue drafts for maintainers.',
       icon: Compass,
       evidenceSnippet: 'Readiness: 88/100 • 8-Section Markdown Draft • Human PR',
-      highlightColor: 'from-lemonChiffon to-electricTangerine',
     },
   ];
 
   const features = [
     {
-      title: 'Evidence-First Security Scanner',
-      desc: 'Deterministic rules govern finding existence, severity, and confidence. Real published CVEs from OSV.dev are verified without allowing AI to invent security claims.',
-      tag: 'Zero Invented CVEs',
-      color: 'border-platinumSilver/25',
+      title: 'Verified Security & Dependency Findings',
+      desc: 'Deterministic rules audit workflows for write-all permissions, unpinned actions, and script injection. Real dependencies are checked against OSV.dev published advisories with zero AI-generated CVEs.',
+      tag: 'Zero Hallucinations',
       icon: Shield,
+      stat: '100% Deterministic',
+      size: 'large',
     },
     {
-      title: 'Beginner-Friendly Onboarding',
-      desc: 'Bite-sized contributor tasks sorted by difficulty with estimated effort, required skills, and clear test plans so newcomers never feel overwhelmed.',
-      tag: 'Skills & Test Plans',
-      color: 'border-lemonChiffon/30',
-      icon: Compass,
+      title: 'Contribution Readiness Score',
+      desc: 'Evaluates codebase health across 5 transparent factors: documentation, test suites, CI automation, dependency freshness, and security governance.',
+      tag: 'Clamped 0-100',
+      icon: Zap,
+      stat: '5-Factor Score',
+      size: 'small',
     },
     {
-      title: 'Maintainer-Safe Issue Drafts',
-      desc: 'Pre-drafted, structured Markdown issues prevent friction. ContribLens never auto-publishes issues or PRs: human maintainer review is strictly enforced.',
+      title: 'Cryptographic Evidence Chain',
+      desc: 'An 8-step traceable trust trail binds raw repository files to SHA-256 evidence hashes, verifying scanner rule attribution before any AI explanation occurs.',
+      tag: 'Verifiable Trail',
+      icon: FileSearch,
+      stat: 'SHA-256 Hashing',
+      size: 'small',
+    },
+    {
+      title: 'Skill Gap & Learning Mode',
+      desc: 'Tailored checklists bridge the knowledge gap for beginners with three distinct explanation depths: Quick Summary, Detailed Context, and Architecture Deep-Dive.',
+      tag: 'Student Friendly',
+      icon: BookOpen,
+      stat: '3 Depth Modes',
+      size: 'small',
+    },
+    {
+      title: 'Scan Diff & History Engine',
+      desc: 'Tracks repository evolution across repeated scans, categorizing findings into new, resolved, or unchanged using stable content fingerprints.',
+      tag: 'Delta Tracking',
+      icon: GitCommit,
+      stat: 'Stable Fingerprints',
+      size: 'small',
+    },
+    {
+      title: 'Maintainer-Ready Issue Drafts',
+      desc: 'Generates polite, reviewable 8-section Markdown issues formatted to open-source norms. Zero auto-posting: human maintainer review is strictly enforced.',
       tag: 'Human in the Loop',
-      color: 'border-paleLavender/30',
       icon: FileText,
+      stat: '8 Core Sections',
+      size: 'large',
     },
   ];
 
@@ -139,7 +206,7 @@ export default function LandingPage() {
     {
       category: 'Maintainer Etiquette',
       q: 'Does ContribLens automatically post issues or pull requests to GitHub?',
-      a: 'Never. ContribLens operates under a strict manual publishing model. Issue drafts can be previewed, edited, copied, or downloaded as Markdown files, but cannot be automatically submitted to external GitHub repositories without human maintainer approval.',
+      a: 'Never. ContribLens operates under a strict manual publishing model. Issue drafts can be previewed, edited, copied, or downloaded as Markdown files, but cannot be automatically submitted to external GitHub repositories without human maintainer review.',
     },
     {
       category: 'Secret Protection',
@@ -169,32 +236,32 @@ export default function LandingPage() {
     <div className="flex flex-col w-full bg-black text-textPrimary overflow-hidden">
       
       {/* ========================================================
-          HERO SECTION: Atmospheric Depth, Metallic Chrome Lens & Interactive 4-Stage Preview
+          SECTION B — HERO
           ======================================================== */}
-      <section className="relative min-h-[92vh] flex items-center justify-center pt-12 pb-24 px-4 sm:px-6 lg:px-8">
+      <section className="relative min-h-[90vh] flex items-center justify-center pt-10 pb-20 px-4 sm:px-6 lg:px-8">
         
-        {/* Layered Atmospheric Ambient Lighting */}
-        <div className="absolute top-[-180px] left-1/2 -translate-x-1/2 w-[850px] sm:w-[1200px] h-[600px] bg-gradient-to-b from-electricTangerine/20 via-coffeeBean/35 to-transparent rounded-[100%] blur-[120px] pointer-events-none" />
-        <div className="absolute top-[250px] -left-40 w-[500px] h-[500px] bg-gradient-to-tr from-mochaBrown/25 via-paleLavender/10 to-transparent rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute top-[350px] -right-40 w-[550px] h-[550px] bg-gradient-to-tl from-platinumSilver/15 via-electricTangerine/10 to-transparent rounded-full blur-[110px] pointer-events-none" />
+        {/* Layered Atmospheric Ambient Lighting (Mocha Brown + Platinum Silver + Tangerine) */}
+        <div className="absolute top-[-160px] left-1/2 -translate-x-1/2 w-[850px] sm:w-[1250px] h-[550px] bg-gradient-to-b from-electricTangerine/20 via-coffeeBean/30 to-transparent rounded-[100%] blur-[120px] pointer-events-none" />
+        <div className="absolute top-[280px] -left-36 w-[480px] h-[480px] bg-gradient-to-tr from-mochaBrown/25 via-paleLavender/10 to-transparent rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute top-[320px] -right-36 w-[520px] h-[520px] bg-gradient-to-tl from-platinumSilver/15 via-electricTangerine/10 to-transparent rounded-full blur-[110px] pointer-events-none" />
 
         {/* Hero Content Grid */}
         <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center relative z-10">
           
-          {/* Left: Value Proposition, Editorial Branding & High-Impact CTAs (Col span 7) */}
+          {/* Left: Value Proposition, Eyebrow & High-Impact CTAs (Col span 7) */}
           <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
             
-            {/* Liquid Chrome Editorial Badge */}
+            {/* Concise Eyebrow */}
             <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full liquid-chrome-pill text-xs font-medium text-platinumSilver shadow-sm">
               <span className="w-2 h-2 rounded-full bg-electricTangerine animate-pulse" />
-              <span className="font-semibold text-lemonChiffon">ContribLens OSS</span>
+              <span className="font-semibold text-lemonChiffon font-mono">Evidence-First Open-Source Contribution</span>
               <span className="text-platinumSilver/40">•</span>
               <span className="text-paleLavender">Scan. Understand. Contribute.</span>
             </div>
 
-            {/* Editorial Headline with Liquid Chrome & Tangerine Gradient */}
+            {/* Headline */}
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-textPrimary leading-[1.08]">
-              From security risk to{' '}
+              From security finding to{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-platinumSilver via-lemonChiffon to-electricTangerine">
                 safe contribution.
               </span>
@@ -202,7 +269,7 @@ export default function LandingPage() {
 
             {/* Subheading */}
             <p className="text-base sm:text-lg text-platinumSilver/80 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-normal">
-              ContribLens scans public GitHub repositories, verifies dependency and workflow findings with deterministic evidence, explains them with grounded Gemini in plain English, and produces beginner-friendly contribution packs and maintainer issue drafts.
+              ContribLens scans public GitHub repositories, verifies findings with deterministic static analysis, explains them with grounded Gemini in plain English, and produces beginner-friendly contribution packs and maintainer issue drafts.
             </p>
 
             {/* High-Impact Action CTAs */}
@@ -216,93 +283,56 @@ export default function LandingPage() {
               </Link>
 
               <a
-                href="#live-preview"
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById('live-preview')?.scrollIntoView({ behavior: 'smooth' });
-                }}
+                href="#process"
                 className="w-full sm:w-auto px-8 py-4 rounded-full bg-white/5 hover:bg-white/10 text-platinumSilver border border-platinumSilver/30 font-semibold text-sm transition-all backdrop-blur-md shadow-liquid-glass flex items-center justify-center gap-2 group active:scale-95"
               >
-                <Play className="w-3.5 h-3.5 text-lemonChiffon fill-lemonChiffon/30 group-hover:scale-110 transition-transform" />
-                <span>Explore 4-Stage Journey</span>
+                <Compass className="w-4 h-4 text-lemonChiffon group-hover:rotate-45 transition-transform" />
+                <span>See How It Works</span>
               </a>
             </div>
 
-            {/* Interactive Pipeline Formula Stepper */}
-            <div className="pt-4 flex flex-wrap items-center justify-center lg:justify-start gap-2 text-xs font-mono">
-              <span className="text-textMuted/70">Evidence Chain:</span>
-              <button
-                onClick={() => handleStepClick(0)}
-                className={`px-3 py-1 rounded-full border transition-all ${
-                  activeStep === 0
-                    ? 'bg-electricTangerine/20 border-electricTangerine text-electricTangerine font-bold shadow-sm'
-                    : 'bg-black/40 border-platinumSilver/15 text-platinumSilver/70 hover:text-platinumSilver'
-                }`}
-              >
-                1. Scan
-              </button>
-              <span className="text-platinumSilver/30">→</span>
-              <button
-                onClick={() => handleStepClick(1)}
-                className={`px-3 py-1 rounded-full border transition-all ${
-                  activeStep === 1
-                    ? 'bg-botticelli/20 border-botticelli text-botticelli font-bold shadow-sm'
-                    : 'bg-black/40 border-platinumSilver/15 text-platinumSilver/70 hover:text-platinumSilver'
-                }`}
-              >
-                2. Verify
-              </button>
-              <span className="text-platinumSilver/30">→</span>
-              <button
-                onClick={() => handleStepClick(2)}
-                className={`px-3 py-1 rounded-full border transition-all ${
-                  activeStep === 2
-                    ? 'bg-paleLavender/20 border-paleLavender text-paleLavender font-bold shadow-sm'
-                    : 'bg-black/40 border-platinumSilver/15 text-platinumSilver/70 hover:text-platinumSilver'
-                }`}
-              >
-                3. Understand
-              </button>
-              <span className="text-platinumSilver/30">→</span>
-              <button
-                onClick={() => handleStepClick(3)}
-                className={`px-3 py-1 rounded-full border transition-all ${
-                  activeStep === 3
-                    ? 'bg-lemonChiffon/20 border-lemonChiffon text-lemonChiffon font-bold shadow-sm'
-                    : 'bg-black/40 border-platinumSilver/15 text-platinumSilver/70 hover:text-platinumSilver'
-                }`}
-              >
-                4. Contribute
-              </button>
+            {/* Small Trust Line */}
+            <div className="pt-2 flex flex-wrap items-center justify-center lg:justify-start gap-3 text-xs text-platinumSilver/70 font-mono">
+              <span className="flex items-center gap-1.5">
+                <Lock className="w-3.5 h-3.5 text-lemonChiffon" /> Read-only scan
+              </span>
+              <span>•</span>
+              <span className="flex items-center gap-1.5">
+                <Shield className="w-3.5 h-3.5 text-electricTangerine" /> No code execution
+              </span>
+              <span>•</span>
+              <span className="flex items-center gap-1.5">
+                <FileText className="w-3.5 h-3.5 text-paleLavender" /> Human-reviewed drafts
+              </span>
             </div>
 
-            {/* Intentional Floating Metric Chips (Replacing debug-like labels) */}
+            {/* 4 Clean Intentional Floating Callout Chips */}
             <div className="pt-2 grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-[11px] text-platinumSilver/90 font-medium">
-              <div className="p-2.5 rounded-xl bg-white/[0.03] border border-platinumSilver/15 backdrop-blur-md flex items-center gap-2">
+              <div className="p-2.5 rounded-xl bg-white/[0.04] border border-platinumSilver/15 backdrop-blur-md flex items-center gap-2 shadow-sm">
                 <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                <span>100% Deterministic</span>
+                <span>Verified Evidence</span>
               </div>
-              <div className="p-2.5 rounded-xl bg-white/[0.03] border border-platinumSilver/15 backdrop-blur-md flex items-center gap-2">
-                <Shield className="w-3.5 h-3.5 text-electricTangerine shrink-0" />
-                <span>OSV.dev Verified</span>
+              <div className="p-2.5 rounded-xl bg-white/[0.04] border border-platinumSilver/15 backdrop-blur-md flex items-center gap-2 shadow-sm">
+                <Zap className="w-3.5 h-3.5 text-lemonChiffon shrink-0" />
+                <span>Readiness 88/100</span>
               </div>
-              <div className="p-2.5 rounded-xl bg-white/[0.03] border border-platinumSilver/15 backdrop-blur-md flex items-center gap-2">
-                <Cpu className="w-3.5 h-3.5 text-paleLavender shrink-0" />
-                <span>Grounded Gemini</span>
+              <div className="p-2.5 rounded-xl bg-white/[0.04] border border-platinumSilver/15 backdrop-blur-md flex items-center gap-2 shadow-sm">
+                <FileText className="w-3.5 h-3.5 text-electricTangerine shrink-0" />
+                <span>Human Review Only</span>
               </div>
-              <div className="p-2.5 rounded-xl bg-white/[0.03] border border-platinumSilver/15 backdrop-blur-md flex items-center gap-2">
-                <Lock className="w-3.5 h-3.5 text-lemonChiffon shrink-0" />
+              <div className="p-2.5 rounded-xl bg-white/[0.04] border border-platinumSilver/15 backdrop-blur-md flex items-center gap-2 shadow-sm">
+                <Lock className="w-3.5 h-3.5 text-paleLavender shrink-0" />
                 <span>Zero Execution</span>
               </div>
             </div>
 
           </div>
 
-          {/* Right: Interactive 4-Stage Product Preview Panel (Col span 5) */}
-          <div className="lg:col-span-5" id="live-preview">
+          {/* Right: Rich Interactive Product Preview Frame (Col span 5) */}
+          <div className="lg:col-span-5" id="hero-preview">
             <div className="liquid-glass-hero p-6 sm:p-7 rounded-3xl space-y-5 relative group">
               
-              {/* Metallic Specular Highlight Header */}
+              {/* Header with Sample Repository Tag */}
               <div className="flex items-center justify-between pb-4 border-b border-platinumSilver/15">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full liquid-chrome-orb flex items-center justify-center shadow-md">
@@ -311,9 +341,9 @@ export default function LandingPage() {
                   <div>
                     <div className="text-xs font-mono font-semibold text-lemonChiffon flex items-center gap-1.5">
                       <span>expressjs/express</span>
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                     </div>
-                    <span className="text-[10px] text-textMuted font-mono">Branch: master • 18 verified files</span>
+                    <span className="text-[10px] text-textMuted font-mono">Sample Context • 18 verified files</span>
                   </div>
                 </div>
 
@@ -324,96 +354,106 @@ export default function LandingPage() {
                 </div>
               </div>
 
-              {/* 4 Interactive Step Selector Pills */}
-              <div className="grid grid-cols-4 gap-1 p-1 rounded-xl bg-black/60 border border-platinumSilver/15 text-[11px] font-mono">
-                {processSteps.map((step, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => handleStepClick(idx)}
-                    className={`py-1.5 px-1 rounded-lg text-center transition-all ${
-                      activeStep === idx
-                        ? 'bg-white/15 text-lemonChiffon font-bold border border-platinumSilver/30 shadow-sm'
-                        : 'text-platinumSilver/60 hover:text-platinumSilver'
-                    }`}
-                  >
-                    {step.title}
-                  </button>
-                ))}
+              {/* 4 Interactive Segmented Tabs: Finding, Explanation, Route, Draft */}
+              <div className="grid grid-cols-4 gap-1 p-1 rounded-xl bg-black/70 border border-platinumSilver/15 text-[11px] font-mono" role="tablist">
+                <button
+                  role="tab"
+                  aria-selected={activePreviewTab === 'finding'}
+                  onClick={() => handleTabClick('finding')}
+                  className={`py-1.5 px-1 rounded-lg text-center transition-all ${
+                    activePreviewTab === 'finding'
+                      ? 'bg-white/15 text-lemonChiffon font-bold border border-platinumSilver/30 shadow-sm'
+                      : 'text-platinumSilver/60 hover:text-platinumSilver'
+                  }`}
+                >
+                  Finding
+                </button>
+                <button
+                  role="tab"
+                  aria-selected={activePreviewTab === 'explanation'}
+                  onClick={() => handleTabClick('explanation')}
+                  className={`py-1.5 px-1 rounded-lg text-center transition-all ${
+                    activePreviewTab === 'explanation'
+                      ? 'bg-white/15 text-lemonChiffon font-bold border border-platinumSilver/30 shadow-sm'
+                      : 'text-platinumSilver/60 hover:text-platinumSilver'
+                  }`}
+                >
+                  Explain
+                </button>
+                <button
+                  role="tab"
+                  aria-selected={activePreviewTab === 'route'}
+                  onClick={() => handleTabClick('route')}
+                  className={`py-1.5 px-1 rounded-lg text-center transition-all ${
+                    activePreviewTab === 'route'
+                      ? 'bg-white/15 text-lemonChiffon font-bold border border-platinumSilver/30 shadow-sm'
+                      : 'text-platinumSilver/60 hover:text-platinumSilver'
+                  }`}
+                >
+                  Route
+                </button>
+                <button
+                  role="tab"
+                  aria-selected={activePreviewTab === 'draft'}
+                  onClick={() => handleTabClick('draft')}
+                  className={`py-1.5 px-1 rounded-lg text-center transition-all ${
+                    activePreviewTab === 'draft'
+                      ? 'bg-white/15 text-lemonChiffon font-bold border border-platinumSilver/30 shadow-sm'
+                      : 'text-platinumSilver/60 hover:text-platinumSilver'
+                  }`}
+                >
+                  Draft
+                </button>
               </div>
 
               {/* Dynamic Interactive Stage Body */}
-              <div className="min-h-[260px] flex flex-col justify-between">
-                {activeStep === 0 && (
-                  /* STAGE 1: SCAN */
-                  <div className="space-y-3 animate-in fade-in duration-300">
-                    <div className="p-3.5 rounded-xl bg-black/70 border border-platinumSilver/20 space-y-2">
+              <div className="min-h-[250px] flex flex-col justify-between">
+                
+                {/* TAB 1: FINDING */}
+                {activePreviewTab === 'finding' && (
+                  <div className="space-y-3 animate-in fade-in duration-200">
+                    <div className="p-3.5 rounded-xl bg-black/80 border border-platinumSilver/20 space-y-2">
                       <div className="flex items-center justify-between text-[11px] font-mono">
-                        <span className="text-electricTangerine font-semibold">STAGE 1: STATIC SCAN</span>
-                        <span className="text-platinumSilver/60">Strictly Read-Only</span>
+                        <span className="px-2 py-0.5 rounded bg-rosewood text-white font-bold text-[10px]">
+                          HIGH SEVERITY
+                        </span>
+                        <span className="text-lemonChiffon">Confidence: 98%</span>
                       </div>
-                      <div className="space-y-1 font-mono text-[11px] text-platinumSilver/90 bg-black/80 p-2.5 rounded-lg border border-white/5">
-                        <p className="text-emerald-400">✓ Parsed package.json (42 dependencies)</p>
-                        <p className="text-emerald-400">✓ Scanned .github/workflows/ci.yml</p>
-                        <p className="text-electricTangerine">! Identified write-all permission grant</p>
-                        <p className="text-platinumSilver/60">ℹ Redacted 0 secrets (zero credentials exposed)</p>
+                      <div className="text-xs font-semibold text-textPrimary leading-snug">
+                        Overly Permissive Workflow: write-all declared
+                      </div>
+                      <div className="font-mono text-[10px] text-platinumSilver/70 bg-black/90 p-2 rounded border border-white/5 space-y-1">
+                        <p className="text-platinumSilver/60">File: .github/workflows/ci.yml:18</p>
+                        <p className="text-electricTangerine">Evidence: permissions: write-all</p>
+                        <p className="text-lemonChiffon">Hash: SHA-256 e3b0c44298fc1c149afb...</p>
                       </div>
                     </div>
-                    <div className="p-3 rounded-xl bg-coffeeBean/70 border border-electricTangerine/30 flex items-center justify-between text-xs">
-                      <span className="text-textPrimary font-medium">Deterministic Rule Triggered</span>
-                      <span className="px-2 py-0.5 rounded bg-rosewood text-white font-mono text-[10px] font-bold">
+                    <div className="p-2.5 rounded-xl bg-coffeeBean/70 border border-electricTangerine/30 flex items-center justify-between text-xs">
+                      <span className="text-textPrimary font-medium text-[11px]">Deterministic Rule</span>
+                      <span className="px-2 py-0.5 rounded bg-black text-electricTangerine font-mono text-[10px]">
                         GH-ACTIONS-WRITE-ALL
                       </span>
                     </div>
                   </div>
                 )}
 
-                {activeStep === 1 && (
-                  /* STAGE 2: VERIFY */
-                  <div className="space-y-3 animate-in fade-in duration-300">
-                    <div className="p-3.5 rounded-xl bg-black/70 border border-platinumSilver/20 space-y-2">
+                {/* TAB 2: EXPLANATION */}
+                {activePreviewTab === 'explanation' && (
+                  <div className="space-y-3 animate-in fade-in duration-200">
+                    <div className="p-3.5 rounded-xl bg-black/80 border border-platinumSilver/20 space-y-2">
                       <div className="flex items-center justify-between text-[11px] font-mono">
-                        <span className="text-botticelli font-semibold">STAGE 2: OSV &amp; EVIDENCE HASH</span>
-                        <span className="text-lemonChiffon font-mono">Confidence: 98%</span>
-                      </div>
-                      <div className="space-y-1.5 font-mono text-[11px] bg-black/80 p-2.5 rounded-lg border border-white/5">
-                        <div className="flex items-center justify-between">
-                          <span className="text-textMuted">OSV Batch API:</span>
-                          <span className="text-emerald-400">Verified CVE-2024-XXXX</span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-textMuted">SHA-256 Hash:</span>
-                          <span className="text-lemonChiffon font-mono">8f4c2e...b91a</span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-textMuted">Source Tool:</span>
-                          <span className="text-platinumSilver">Deterministic YAML Auditor</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="p-3 rounded-xl bg-blackHole border border-botticelli/30 flex items-center justify-between text-xs">
-                      <span className="text-platinumSilver font-medium">Invariant Check</span>
-                      <span className="text-lemonChiffon font-mono text-[10px]">Zero AI Inventions</span>
-                    </div>
-                  </div>
-                )}
-
-                {activeStep === 2 && (
-                  /* STAGE 3: UNDERSTAND */
-                  <div className="space-y-3 animate-in fade-in duration-300">
-                    <div className="p-3.5 rounded-xl bg-black/70 border border-platinumSilver/20 space-y-2">
-                      <div className="flex items-center justify-between text-[11px] font-mono">
-                        <span className="text-paleLavender font-semibold">STAGE 3: GROUNDED GEMINI EXPLANATION</span>
+                        <span className="text-paleLavender font-semibold">GROUNDED GEMINI EXPLANATION</span>
                         <span className="text-lemonChiffon text-[10px]">Anchored: L18</span>
                       </div>
-                      <div className="text-xs text-platinumSilver/90 leading-relaxed bg-black/80 p-2.5 rounded-lg border border-white/5 space-y-1.5">
-                        <p className="font-semibold text-lemonChiffon">What this means in plain English:</p>
+                      <div className="text-xs text-platinumSilver/90 leading-relaxed bg-black/90 p-2.5 rounded border border-white/5 space-y-1.5">
+                        <p className="font-semibold text-lemonChiffon text-[11px]">Plain-English Impact:</p>
                         <p className="text-[11px] text-platinumSilver/80">
-                          &quot;The CI workflow grants unrestricted write permissions to every repository asset. If a compromised dependency runs in CI, it could modify pull request comments or releases.&quot;
+                          &quot;This GitHub Actions workflow grants unrestricted write access to every repository asset. If an external untrusted action or PR payload executes here, it could tamper with code releases.&quot;
                         </p>
                       </div>
                     </div>
-                    <div className="p-3 rounded-xl bg-coffeeBean/60 border border-paleLavender/30 flex items-center justify-between text-xs">
-                      <span className="text-textPrimary font-medium">Required Skill</span>
+                    <div className="p-2.5 rounded-xl bg-coffeeBean/60 border border-paleLavender/30 flex items-center justify-between text-xs">
+                      <span className="text-textPrimary font-medium text-[11px]">Required Skill</span>
                       <span className="px-2 py-0.5 rounded bg-black text-paleLavender font-mono text-[10px] border border-paleLavender/30">
                         GitHub Actions • YAML
                       </span>
@@ -421,43 +461,61 @@ export default function LandingPage() {
                   </div>
                 )}
 
-                {activeStep === 3 && (
-                  /* STAGE 4: CONTRIBUTE */
-                  <div className="space-y-3 animate-in fade-in duration-300">
-                    <div className="p-3.5 rounded-xl bg-black/70 border border-platinumSilver/20 space-y-2">
+                {/* TAB 3: ROUTE */}
+                {activePreviewTab === 'route' && (
+                  <div className="space-y-3 animate-in fade-in duration-200">
+                    <div className="p-3.5 rounded-xl bg-black/80 border border-platinumSilver/20 space-y-2">
                       <div className="flex items-center justify-between text-[11px] font-mono">
-                        <span className="text-lemonChiffon font-semibold">STAGE 4: ACTIONABLE CONTRIBUTION</span>
-                        <span className="text-emerald-400 text-[10px]">Beginner • 25m</span>
+                        <span className="text-lemonChiffon font-semibold">ACTIONABLE TASK ROUTE</span>
+                        <span className="text-emerald-400 text-[10px]">Beginner • 25m effort</span>
                       </div>
-                      <div className="space-y-1.5 text-[11px] bg-black/80 p-2.5 rounded-lg border border-white/5">
-                        <div className="flex items-center gap-1.5 text-lemonChiffon font-semibold">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                          <span>Actionable Route: Scope permissions</span>
-                        </div>
-                        <p className="text-textMuted text-[10px]">
-                          Target: <code className="text-platinumSilver font-mono">.github/workflows/ci.yml:18</code>
-                        </p>
-                        <p className="text-textMuted text-[10px]">
-                          Acceptance Criteria: Change <code className="text-rosewood">permissions: write-all</code> to <code className="text-emerald-400">contents: read</code>
-                        </p>
+                      <div className="space-y-1 text-[11px] bg-black/90 p-2.5 rounded border border-white/5 font-mono">
+                        <p className="text-lemonChiffon font-semibold">Action: Declare minimal permissions</p>
+                        <p className="text-textMuted text-[10px]">Target: .github/workflows/ci.yml:18</p>
+                        <p className="text-platinumSilver/80 text-[10px]">Criteria: replace write-all with contents: read</p>
                       </div>
                     </div>
-                    <div className="p-3 rounded-xl bg-coffeeBean/70 border border-lemonChiffon/30 flex items-center justify-between text-xs">
-                      <span className="text-lemonChiffon font-medium">Maintainer Issue Draft</span>
-                      <span className="px-2.5 py-0.5 rounded-full bg-black text-platinumSilver font-mono text-[10px] border border-borderDark">
-                        Manual PR Only
+                    <div className="p-2.5 rounded-xl bg-coffeeBean/70 border border-lemonChiffon/30 flex items-center justify-between text-xs">
+                      <span className="text-lemonChiffon font-medium text-[11px]">Readiness Score</span>
+                      <span className="px-2.5 py-0.5 rounded-full bg-black text-lemonChiffon font-mono text-[10px] border border-lemonChiffon/30">
+                        88/100 (Safe for Newcomers)
                       </span>
                     </div>
                   </div>
                 )}
 
-                {/* Live Status Bar Footer */}
+                {/* TAB 4: DRAFT */}
+                {activePreviewTab === 'draft' && (
+                  <div className="space-y-3 animate-in fade-in duration-200">
+                    <div className="p-3.5 rounded-xl bg-black/80 border border-platinumSilver/20 space-y-2">
+                      <div className="flex items-center justify-between text-[11px] font-mono">
+                        <span className="text-platinumSilver font-semibold">MAINTAINER ISSUE DRAFT</span>
+                        <span className="text-lemonChiffon text-[10px]">8 Sections Validated</span>
+                      </div>
+                      <div className="space-y-1 text-[10px] bg-black/90 p-2.5 rounded border border-white/5 font-mono text-platinumSilver/80">
+                        <p className="text-lemonChiffon font-bold">### Summary of Proposed Fix</p>
+                        <p>Restrict CI workflow permissions to read-only content access.</p>
+                        <p className="text-platinumSilver/60 mt-1">### Verification Steps</p>
+                        <p>1. Run workflow dry-run with explicit scopes.</p>
+                      </div>
+                    </div>
+                    <div className="p-2.5 rounded-xl bg-blackHole border border-platinumSilver/25 flex items-center justify-between text-xs">
+                      <span className="text-platinumSilver font-medium text-[11px]">Publish Model</span>
+                      <span className="px-2 py-0.5 rounded bg-black text-lemonChiffon font-mono text-[10px]">
+                        Manual Human Review Only
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Sample Label & Interaction Toggle */}
                 <div className="pt-3 flex items-center justify-between text-[11px] text-textMuted border-t border-platinumSilver/15">
                   <div className="flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-electricTangerine" />
-                    <span>Evidence Chain 4-Step Pipeline</span>
+                    <span className="text-[10px] font-mono text-platinumSilver/60">Sample Data Preview • No network calls</span>
                   </div>
                   <button
+                    type="button"
                     onClick={() => setIsAutoCycle(!isAutoCycle)}
                     className="flex items-center gap-1 text-lemonChiffon hover:underline text-[10px] font-mono"
                   >
@@ -476,14 +534,38 @@ export default function LandingPage() {
       </section>
 
       {/* ========================================================
-          SECTION 1: THE 4-STEP WORKFLOW (Redesigned with Clear Flow & Progress)
+          SECTION C — COMPACT TRUST STRIP
           ======================================================== */}
-      <section id="process" className="py-24 border-t border-platinumSilver/15 relative bg-gradient-to-b from-blackHole/40 via-black to-blackHole/60">
+      <section className="py-8 border-y border-platinumSilver/15 bg-blackHole/50 backdrop-blur-md relative z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {trustPrinciples.map((tp, idx) => {
+              const Icon = tp.icon;
+              return (
+                <div key={idx} className="flex items-start gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-white/[0.04] border border-platinumSilver/20 flex items-center justify-center shrink-0 shadow-sm">
+                    <Icon className={`w-4 h-4 ${tp.color}`} />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-textPrimary tracking-tight">{tp.title}</h4>
+                    <p className="text-[11px] text-platinumSilver/70 leading-relaxed mt-0.5">{tp.desc}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================================
+          SECTION D — HOW IT WORKS (The 4-Step Rail)
+          ======================================================== */}
+      <section id="process" className="py-24 border-b border-platinumSilver/15 relative bg-gradient-to-b from-black via-blackHole/40 to-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-            <span className="text-xs font-bold text-electricTangerine uppercase tracking-widest block">
-              The Evidence-First Pipeline
+            <span className="text-xs font-bold text-electricTangerine uppercase tracking-widest block font-mono">
+              The 4-Step Pipeline
             </span>
             <h2 className="text-3xl sm:text-5xl font-extrabold text-textPrimary tracking-tight">
               From cold security findings to safe maintainer pull requests
@@ -493,28 +575,34 @@ export default function LandingPage() {
             </p>
           </div>
 
-          {/* Connected 4-Step Process Cards */}
+          {/* 4-Step Rail Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative">
             {processSteps.map((step, idx) => {
               const Icon = step.icon;
+              const isSelected = activeStep === idx;
               return (
                 <div
                   key={idx}
-                  className="liquid-glass-card p-6 rounded-2xl relative space-y-4 flex flex-col justify-between group"
+                  onClick={() => handleStepClick(idx)}
+                  className={`liquid-glass-card p-6 rounded-2xl relative space-y-4 flex flex-col justify-between cursor-pointer transition-all ${
+                    isSelected ? 'border-lemonChiffon/60 shadow-liquid-glow scale-[1.02]' : 'hover:border-platinumSilver/35'
+                  }`}
                 >
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-3xl font-mono font-bold text-lemonChiffon/30 group-hover:text-lemonChiffon transition-colors">
+                      <span className={`text-3xl font-mono font-bold transition-colors ${
+                        isSelected ? 'text-lemonChiffon' : 'text-lemonChiffon/30'
+                      }`}>
                         {step.num}
                       </span>
-                      <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-coffeeBean to-black border border-platinumSilver/25 flex items-center justify-center text-electricTangerine group-hover:scale-105 transition-all shadow-sm">
+                      <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-coffeeBean to-black border border-platinumSilver/25 flex items-center justify-center text-electricTangerine shadow-sm">
                         <Icon className="w-5 h-5 drop-shadow-[0_0_6px_rgba(255,109,31,0.5)]" />
                       </div>
                     </div>
 
                     <div>
                       <div className="flex items-center gap-2 mb-1">
-                        <h3 className="text-lg font-bold text-textPrimary group-hover:text-lemonChiffon transition-colors">
+                        <h3 className="text-lg font-bold text-textPrimary">
                           {step.title}
                         </h3>
                         <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/5 text-platinumSilver/80 border border-white/10">
@@ -531,7 +619,6 @@ export default function LandingPage() {
                     </p>
                   </div>
 
-                  {/* Concrete Evidence Snippet */}
                   <div className="pt-3 border-t border-platinumSilver/15">
                     <span className="text-[10px] font-mono text-lemonChiffon/80 block truncate">
                       {step.evidenceSnippet}
@@ -546,9 +633,9 @@ export default function LandingPage() {
       </section>
 
       {/* ========================================================
-          SECTION 2: CORE FEATURES (Engineered for Open-Source Safety)
+          SECTION F — FEATURE GRID (Varied Composition)
           ======================================================== */}
-      <section id="features" className="py-24 border-t border-platinumSilver/15 relative">
+      <section id="features" className="py-24 border-b border-platinumSilver/15 relative">
         
         {/* Subtle Ambient Refraction */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-gradient-to-r from-mochaBrown/15 via-paleLavender/10 to-electricTangerine/15 rounded-full blur-[100px] pointer-events-none" />
@@ -556,7 +643,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           
           <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
-            <span className="text-xs font-bold text-lemonChiffon uppercase tracking-widest block">
+            <span className="text-xs font-bold text-lemonChiffon uppercase tracking-widest block font-mono">
               Engineered for Open-Source Safety
             </span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-textPrimary tracking-tight">
@@ -567,18 +654,28 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Varied Composition Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feat, idx) => {
               const Icon = feat.icon;
+              const isLarge = feat.size === 'large';
               return (
                 <div
                   key={idx}
-                  className="liquid-glass-card p-7 rounded-2xl space-y-4 hover:border-lemonChiffon/40 transition-all flex flex-col justify-between"
+                  className={`liquid-glass-card p-7 rounded-3xl space-y-4 hover:border-lemonChiffon/40 transition-all flex flex-col justify-between ${
+                    isLarge ? 'md:col-span-2 lg:col-span-2 bg-gradient-to-br from-blackHole to-coffeeBean/40' : ''
+                  }`}
                 >
                   <div className="space-y-4">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-coffeeBean via-black to-blackHole border border-platinumSilver/30 flex items-center justify-center text-electricTangerine shadow-sm">
-                      <Icon className="w-6 h-6" />
+                    <div className="flex items-center justify-between">
+                      <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-coffeeBean via-black to-blackHole border border-platinumSilver/30 flex items-center justify-center text-electricTangerine shadow-sm">
+                        <Icon className="w-6 h-6" />
+                      </div>
+                      <span className="text-xs font-mono font-bold px-3 py-1 rounded-full bg-white/5 text-lemonChiffon border border-lemonChiffon/30">
+                        {feat.stat}
+                      </span>
                     </div>
+
                     <h3 className="text-xl font-bold text-textPrimary">{feat.title}</h3>
                     <p className="text-xs sm:text-sm text-platinumSilver/80 leading-relaxed font-normal">
                       {feat.desc}
@@ -586,7 +683,7 @@ export default function LandingPage() {
                   </div>
 
                   <div className="pt-2">
-                    <span className="inline-block text-xs font-mono text-lemonChiffon px-3 py-1 rounded-full bg-black/60 border border-lemonChiffon/30 shadow-inner">
+                    <span className="inline-block text-xs font-mono text-platinumSilver/80 px-3 py-1 rounded-full bg-black/60 border border-platinumSilver/20 shadow-inner">
                       {feat.tag}
                     </span>
                   </div>
@@ -599,14 +696,14 @@ export default function LandingPage() {
       </section>
 
       {/* ========================================================
-          SECTION 3: THREE CORE INVARIANTS & ETHICAL GUARANTEES
+          SECTION G — SAFETY SECTION
           ======================================================== */}
-      <section id="safety" className="py-24 border-t border-platinumSilver/15 bg-gradient-to-b from-blackHole/30 to-black relative">
+      <section id="safety" className="py-24 border-b border-platinumSilver/15 bg-gradient-to-b from-blackHole/30 to-black relative">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
           
           <div className="space-y-3">
-            <span className="text-xs font-bold text-electricTangerine uppercase tracking-widest">
-              Core Safety Invariants
+            <span className="text-xs font-bold text-electricTangerine uppercase tracking-widest font-mono">
+              Core Safety Commitment
             </span>
             <h2 className="text-3xl sm:text-5xl font-extrabold text-textPrimary tracking-tight">
               Code verifies. Gemini explains. Human approves.
@@ -629,7 +726,7 @@ export default function LandingPage() {
 
             <div className="liquid-glass-card p-6 rounded-2xl border border-platinumSilver/20 space-y-2">
               <div className="w-8 h-8 rounded-lg bg-coffeeBean border border-platinumSilver/20 flex items-center justify-center text-electricTangerine mb-3">
-                <Shield className="w-4 h-4" />
+                <KeyRound className="w-4 h-4" />
               </div>
               <span className="font-bold text-sm text-textPrimary block">2. Strict Secret Masking</span>
               <p className="text-xs text-platinumSilver/75 leading-relaxed font-normal">
@@ -648,17 +745,35 @@ export default function LandingPage() {
             </div>
           </div>
 
+          <div className="pt-4 flex flex-wrap items-center justify-center gap-4 text-xs font-mono">
+            <Link
+              href="/security"
+              className="text-lemonChiffon hover:underline flex items-center gap-1 font-semibold"
+            >
+              <span>Read Full Security Policy</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+            <span className="text-platinumSilver/30">•</span>
+            <Link
+              href="/privacy"
+              className="text-paleLavender hover:underline flex items-center gap-1 font-semibold"
+            >
+              <span>Privacy &amp; Data Retention</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
         </div>
       </section>
 
       {/* ========================================================
-          SECTION 4: FAQ ACCORDION (Upgraded Liquid Glass Accordions)
+          SECTION H — FAQ ACCORDION
           ======================================================== */}
-      <section id="faqs" className="py-24 border-t border-platinumSilver/15">
+      <section id="faqs" className="py-24 border-b border-platinumSilver/15">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           
           <div className="text-center mb-14 space-y-3">
-            <span className="text-xs font-bold text-electricTangerine uppercase tracking-widest block">
+            <span className="text-xs font-bold text-electricTangerine uppercase tracking-widest block font-mono">
               Frequently Asked Questions
             </span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-textPrimary tracking-tight">
@@ -711,9 +826,9 @@ export default function LandingPage() {
       </section>
 
       {/* ========================================================
-          SECTION 5: FINALE CALL TO ACTION (Grand Editorial Terminal)
+          SECTION I — FINAL CTA (Warm Liquid-Glass Terminal)
           ======================================================== */}
-      <section className="py-24 border-t border-platinumSilver/20 relative overflow-hidden bg-gradient-to-b from-coffeeBean/40 via-blackHole to-black">
+      <section className="py-24 relative overflow-hidden bg-gradient-to-b from-coffeeBean/40 via-blackHole to-black">
         
         {/* Ambient Warm Atmosphere */}
         <div className="absolute inset-0 bg-gradient-to-t from-electricTangerine/15 via-transparent to-transparent pointer-events-none" />
@@ -722,7 +837,7 @@ export default function LandingPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8 relative z-10">
           
           <div className="space-y-4">
-            <span className="text-xs font-bold text-lemonChiffon uppercase tracking-widest block">
+            <span className="text-xs font-bold text-lemonChiffon uppercase tracking-widest block font-mono">
               Start Contributing Today
             </span>
             <h2 className="text-3xl sm:text-5xl font-extrabold text-textPrimary tracking-tight">

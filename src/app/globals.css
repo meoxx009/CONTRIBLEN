@@ -18,6 +18,21 @@
   --color-text-primary: #F5F3ED;
   --color-text-muted: #AAA9A1;
   --color-border-dark: rgba(245, 243, 237, 0.14);
+
+  /* Master Semantic Tokens per Section 5 */
+  --color-bg-void: #000000;
+  --color-surface-glass: rgba(28, 28, 30, 0.65);
+  --color-surface-glass-strong: rgba(22, 20, 24, 0.85);
+  --color-border-glass: rgba(229, 228, 226, 0.16);
+  --color-highlight-glass: rgba(229, 228, 226, 0.32);
+  --color-accent-primary: #FF6D1F;
+  --color-accent-warm: #6F4E37;
+  --color-accent-ai: #E6E0F0;
+  --color-metallic: #E5E4E2;
+  --color-critical: #6B0B0C;
+  --color-info: #CDE3E8;
+  --shadow-glass: 0 20px 48px -12px rgba(0, 0, 0, 0.7);
+  --blur-glass: 20px;
 }
 
 body {
@@ -133,19 +148,48 @@ body {
     radial-gradient(circle at 50% 85%, rgba(45, 18, 13, 0.35) 0%, transparent 60%);
 }
 
-/* Glass card utility (legacy compatibility) */
+/* Fallback for browsers without backdrop-filter support */
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .liquid-glass-nav {
+    background: #141416 !important;
+  }
+  .liquid-glass-card,
+  .liquid-glass-hero {
+    background: #1c1c1f !important;
+  }
+}
+
+/* Glass card utility (legacy compatibility upgraded to liquid-glass) */
 .glass-panel {
-  background: rgba(34, 34, 34, 0.72);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid var(--color-border-dark);
+  background: linear-gradient(
+    135deg,
+    rgba(34, 34, 34, 0.75) 0%,
+    rgba(25, 24, 27, 0.8) 50%,
+    rgba(32, 26, 25, 0.75) 100%
+  );
+  backdrop-filter: blur(20px) saturate(170%);
+  -webkit-backdrop-filter: blur(20px) saturate(170%);
+  border: 1px solid rgba(229, 228, 226, 0.16);
+  box-shadow:
+    0 16px 40px -12px rgba(0, 0, 0, 0.65),
+    inset 0 1px 1px 0 rgba(229, 228, 226, 0.2),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .glass-panel-warm {
-  background: rgba(45, 18, 13, 0.65);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 109, 31, 0.2);
+  background: linear-gradient(
+    135deg,
+    rgba(45, 18, 13, 0.72) 0%,
+    rgba(35, 15, 12, 0.8) 50%,
+    rgba(40, 20, 16, 0.75) 100%
+  );
+  backdrop-filter: blur(20px) saturate(170%);
+  -webkit-backdrop-filter: blur(20px) saturate(170%);
+  border: 1px solid rgba(255, 109, 31, 0.25);
+  box-shadow:
+    0 16px 40px -12px rgba(0, 0, 0, 0.65),
+    inset 0 1px 1px 0 rgba(229, 228, 226, 0.18);
 }
 
 /* Document surface on sustainable linen */

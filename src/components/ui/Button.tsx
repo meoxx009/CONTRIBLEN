@@ -4,7 +4,7 @@ import React from 'react';
 import { Loader2 } from 'lucide-react';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'lemon';
+  variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'lemon' | 'glass';
   size?: 'sm' | 'md' | 'lg';
   loading?: boolean;
   icon?: React.ReactNode;
@@ -49,6 +49,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       // Lemon: Lemon Chiffon safe-action accent
       lemon:
         'bg-lemonChiffon hover:bg-lemonChiffon-hover text-black font-semibold shadow-md focus-visible:ring-lemonChiffon active:scale-[0.98]',
+      // Glass: Liquid glass button with Platinum Silver specular rim and Pale Lavender hover
+      glass:
+        'bg-white/[0.06] hover:bg-white/[0.12] text-platinumSilver border border-platinumSilver/30 hover:border-lemonChiffon/40 backdrop-blur-xl shadow-liquid-glass focus-visible:ring-lemonChiffon active:scale-[0.98]',
     };
 
     return (

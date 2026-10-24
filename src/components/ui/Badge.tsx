@@ -4,7 +4,7 @@ import React from 'react';
 import type { Severity } from '@/types';
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-  variant?: 'critical' | 'high' | 'medium' | 'low' | 'info' | 'lemon' | 'tech' | 'neutral';
+  variant?: 'critical' | 'high' | 'medium' | 'low' | 'info' | 'lemon' | 'tech' | 'neutral' | 'chrome' | 'lavender' | 'silver';
   size?: 'sm' | 'md';
 }
 
@@ -37,6 +37,12 @@ export function Badge({
     tech: 'bg-botticelli/15 text-botticelli border border-botticelli/30 font-mono font-medium',
     // Neutral: Black Hole glass
     neutral: 'bg-blackHole text-textPrimary border border-borderDark font-medium',
+    // Chrome: Metallic liquid chrome pill
+    chrome: 'liquid-chrome-pill text-platinumSilver font-semibold',
+    // Lavender: Pale Lavender accent for AI & learning cues
+    lavender: 'bg-paleLavender/15 text-paleLavender border border-paleLavender/35 font-medium',
+    // Silver: Platinum Silver reflective chip
+    silver: 'bg-white/10 text-platinumSilver border border-platinumSilver/30 font-medium',
   };
 
   return (
