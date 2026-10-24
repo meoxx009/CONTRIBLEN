@@ -20,7 +20,10 @@ interface DatabaseSchema {
   activities: ActivityEvent[];
 }
 
-const DATA_DIR = path.join(process.cwd(), '.data');
+const DATA_DIR =
+  process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME || process.env.TMPDIR
+    ? path.join(process.env.TMPDIR || '/tmp', '.data')
+    : path.join(process.cwd(), '.data');
 const DB_FILE = path.join(DATA_DIR, 'db.json');
 
 const INITIAL_DATA: DatabaseSchema = {

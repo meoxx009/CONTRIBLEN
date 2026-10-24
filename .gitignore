@@ -23,9 +23,15 @@ yarn-error.log*
 # Local environment variables
 .env
 .env.*
+.env.local
+.env.production
 .env*.local
 !.env.example
 *.local
+
+# Vercel deployment artifacts
+.vercel/
+.vercel
 
 # Local persistence database (data files)
 .data/
