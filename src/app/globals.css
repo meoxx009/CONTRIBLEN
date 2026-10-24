@@ -12,6 +12,9 @@
   --color-sustainable-linen: #FAF3E1;
   --color-recycled-cotton: #F5E7C6;
   --color-botticelli: #CDE3E8;
+  --color-mocha-brown: #6F4E37;
+  --color-platinum-silver: #E5E4E2;
+  --color-pale-lavender: #E6E0F0;
   --color-text-primary: #F5F3ED;
   --color-text-muted: #AAA9A1;
   --color-border-dark: rgba(245, 243, 237, 0.14);
@@ -26,7 +29,111 @@ body {
   overflow-x: hidden;
 }
 
-/* Glass card utility */
+/* ----------------------------------------------------
+ * High-Fidelity Liquid Glass Design System
+ * ---------------------------------------------------- */
+
+/* Liquid Glass Navigation Bar */
+.liquid-glass-nav {
+  background: rgba(18, 18, 20, 0.65);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border-bottom: 1px solid rgba(229, 228, 226, 0.14);
+  box-shadow: 
+    0 16px 36px -10px rgba(0, 0, 0, 0.65),
+    inset 0 1px 0 0 rgba(229, 228, 226, 0.28),
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.4);
+}
+
+/* Liquid Glass Cards & Panels */
+.liquid-glass-card {
+  background: linear-gradient(
+    135deg,
+    rgba(34, 34, 34, 0.72) 0%,
+    rgba(25, 24, 27, 0.8) 50%,
+    rgba(32, 26, 25, 0.75) 100%
+  );
+  backdrop-filter: blur(20px) saturate(170%);
+  -webkit-backdrop-filter: blur(20px) saturate(170%);
+  border: 1px solid rgba(229, 228, 226, 0.16);
+  box-shadow:
+    0 20px 48px -12px rgba(0, 0, 0, 0.7),
+    inset 0 1px 1px 0 rgba(229, 228, 226, 0.22),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.liquid-glass-card:hover {
+  border-color: rgba(229, 228, 226, 0.32);
+  box-shadow:
+    0 24px 56px -12px rgba(0, 0, 0, 0.8),
+    0 0 30px -8px rgba(255, 109, 31, 0.25),
+    inset 0 1px 1px 0 rgba(229, 228, 226, 0.35),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+}
+
+/* Elevated Primary Liquid Glass Panel */
+.liquid-glass-hero {
+  background: linear-gradient(
+    145deg,
+    rgba(30, 28, 32, 0.82) 0%,
+    rgba(22, 20, 24, 0.88) 50%,
+    rgba(45, 18, 13, 0.65) 100%
+  );
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid rgba(229, 228, 226, 0.2);
+  box-shadow:
+    0 32px 64px -16px rgba(0, 0, 0, 0.85),
+    0 0 50px -10px rgba(255, 109, 31, 0.2),
+    inset 0 1.5px 1px 0 rgba(229, 228, 226, 0.35),
+    inset 0 0 0 1px rgba(230, 224, 240, 0.12);
+}
+
+/* Liquid Chrome Badge / Micro-Pill */
+.liquid-chrome-pill {
+  background: linear-gradient(
+    135deg,
+    rgba(229, 228, 226, 0.15) 0%,
+    rgba(111, 78, 55, 0.18) 50%,
+    rgba(230, 224, 240, 0.14) 100%
+  );
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(229, 228, 226, 0.28);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.3),
+    0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Metallic Liquid Chrome Orb / Core Object */
+.liquid-chrome-orb {
+  background: radial-gradient(
+    circle at 35% 30%,
+    #FFFFFF 0%,
+    #E5E4E2 22%,
+    #CBC3DC 45%,
+    #6F4E37 75%,
+    #2D120D 100%
+  );
+  box-shadow:
+    0 0 60px -10px rgba(255, 109, 31, 0.45),
+    0 0 40px -5px rgba(230, 224, 240, 0.35),
+    inset 0 -8px 16px rgba(0, 0, 0, 0.8),
+    inset 0 8px 12px rgba(255, 255, 255, 0.6);
+}
+
+/* Atmospheric Ambient Lighting Gradients */
+.ambient-glow-mesh {
+  background: 
+    radial-gradient(circle at 50% 15%, rgba(255, 109, 31, 0.18) 0%, transparent 55%),
+    radial-gradient(circle at 20% 40%, rgba(111, 78, 55, 0.22) 0%, transparent 45%),
+    radial-gradient(circle at 80% 35%, rgba(230, 224, 240, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 50% 85%, rgba(45, 18, 13, 0.35) 0%, transparent 60%);
+}
+
+/* Glass card utility (legacy compatibility) */
 .glass-panel {
   background: rgba(34, 34, 34, 0.72);
   backdrop-filter: blur(14px);
