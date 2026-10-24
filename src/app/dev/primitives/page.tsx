@@ -310,9 +310,9 @@ export default function PrimitivesDeveloperPreviewPage() {
                       },
                       {
                         id: 'acc-2',
-                        title: 'How does Gemini explain verified findings?',
+                        title: 'How does Gamma 4 explain verified findings?',
                         content:
-                          'Gemini receives only pre-verified, redacted evidence bundles. It cannot invent findings or alter severity levels.',
+                          'Gamma 4 receives only pre-verified, redacted evidence bundles. It cannot invent findings or alter severity levels.',
                         badge: <Badge variant="tech" size="sm">Grounding</Badge>,
                       },
                     ]}

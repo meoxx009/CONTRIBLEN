@@ -36,7 +36,7 @@ export const MAX_AI_REQUEST_BYTES = 50000;
 export const MAX_AI_RESPONSE_BYTES = 64000;
 export const MAX_AI_CALLS_PER_USER_DAY = 50;
 
-const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gamma-4';
 const DEFAULT_TIMEOUT_MS = Number(process.env.GEMINI_API_TIMEOUT_MS) || 15000;
 
 let aiClientInstance: GoogleGenAI | null = null;

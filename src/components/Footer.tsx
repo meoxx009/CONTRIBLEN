@@ -23,7 +23,7 @@ export default function Footer() {
                 <Lock className="w-3.5 h-3.5 text-lemonChiffon" /> Read-only &amp; Sandboxed
               </span>
               <span className="flex items-center gap-1.5">
-                <Cpu className="w-3.5 h-3.5 text-paleLavender" /> Grounded Gemini Adapter
+                <Cpu className="w-3.5 h-3.5 text-paleLavender" /> Grounded Gamma 4 Adapter
               </span>
             </div>
           </div>

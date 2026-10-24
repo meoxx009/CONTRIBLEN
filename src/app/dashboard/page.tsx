@@ -225,7 +225,7 @@ export default function DashboardPage() {
               <span className="text-paleLavender font-semibold">3. Understand</span>
               <Cpu className="w-3.5 h-3.5 text-paleLavender" />
             </div>
-            <p className="text-[10px] text-platinumSilver/80">Grounded Gemini active</p>
+            <p className="text-[10px] text-platinumSilver/80">Grounded Gamma 4 active</p>
           </div>
 
           <div className="p-3 rounded-xl bg-black/60 border border-platinumSilver/20 space-y-1">

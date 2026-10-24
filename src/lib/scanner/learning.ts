@@ -269,7 +269,7 @@ ${
 ---
 
 ## 6. Safety & Human Approval Notice
-> **Important:** ContribLens OSS operates under the core invariant: **Code verifies. Gemini explains. Human approves.**
+> **Important:** ContriBLens OSS operates under the core invariant: **Code verifies. Gamma 4 explains. Human approves.**
 > This contribution pack is an educational resource. Pull requests and issues must be reviewed and submitted manually. Never publish automated or unreviewed issues.
 `;
 }

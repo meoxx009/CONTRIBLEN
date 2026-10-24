@@ -1014,7 +1014,7 @@ export default function FindingsPage() {
                   </div>
                 </div>
 
-                {/* Action Buttons: Explain with Gemini & Create Contribution Route */}
+                {/* Action Buttons: Explain with Gamma 4 & Create Contribution Route */}
                 <div className="pt-2 flex flex-col sm:flex-row items-center gap-3 border-t border-borderDark">
                   <button
                     onClick={() => handleRequestExplanation(selectedFinding)}
@@ -1024,12 +1024,12 @@ export default function FindingsPage() {
                     {explainingId === selectedFinding.id ? (
                       <>
                         <Loader2 className="w-3.5 h-3.5 animate-spin text-electricTangerine" />
-                        <span>Grounded Gemini Query...</span>
+                        <span>Grounded Gamma 4 Query...</span>
                       </>
                     ) : (
                       <>
                         <Sparkles className="w-3.5 h-3.5 text-lemonChiffon" />
-                        <span>Explain with Gemini</span>
+                        <span>Explain with Gamma 4</span>
                       </>
                     )}
                   </button>
@@ -1114,7 +1114,7 @@ export default function FindingsPage() {
                     }`}
                   >
                     {currentExplanation.generatedBy === 'gemini'
-                      ? 'Grounded via Gemini Adapter'
+                      ? 'Grounded via Gamma 4 Adapter'
                       : 'Fallback Used: Deterministic Planner (100% Grounded Evidence)'}
                   </span>
                   <span className="text-xs text-botticelli capitalize">

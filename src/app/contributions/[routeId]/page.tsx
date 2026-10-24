@@ -578,7 +578,7 @@ export default function RouteDetailPage() {
                           : step.verifiedBy === 'scanner'
                           ? 'Verified by Scanner'
                           : step.verifiedBy === 'gemini'
-                          ? 'Grounded by Gemini'
+                          ? 'Grounded by Gamma 4'
                           : 'Human Review Required'}
                       </span>
                     </div>

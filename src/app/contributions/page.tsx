@@ -836,7 +836,7 @@ function ContributionsContent() {
                               : 'bg-coffeeBean text-lemonChiffon border-electricTangerine/40'
                           }`}
                         >
-                          {route.generatedBy === 'gemini' ? 'Gemini Grounded' : 'Fallback Used: Deterministic'}
+                          {route.generatedBy === 'gemini' ? 'Gamma 4 Grounded' : 'Fallback Used: Deterministic'}
                         </span>
 
                         <span className="text-xs font-medium text-textMuted flex items-center gap-1 font-mono">

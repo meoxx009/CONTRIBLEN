@@ -108,7 +108,7 @@ function DraftsContent() {
         setDrafts((prev) => prev.map((d) => (d.id === data.draft.id ? data.draft : d)));
         showToast(
           data.draft.generatedBy === 'gemini'
-            ? 'Draft regenerated via Gemini using server-side evidence!'
+            ? 'Draft regenerated via Gamma 4 using server-side evidence!'
             : 'Draft regenerated via Deterministic Planner (Fallback)',
           'success'
         );
@@ -271,7 +271,7 @@ function DraftsContent() {
                             : 'bg-coffeeBean text-lemonChiffon border-electricTangerine/40'
                         }`}
                       >
-                        {d.generatedBy === 'gemini' ? 'GEMINI' : 'FALLBACK'}
+                        {d.generatedBy === 'gemini' ? 'GAMMA 4' : 'FALLBACK'}
                       </span>
                       <span className="capitalize px-1.5 py-0.5 rounded text-[9px] bg-black border border-borderDark text-textMuted">
                         {d.status || 'draft'}
@@ -316,7 +316,7 @@ function DraftsContent() {
                     <Sparkles className="w-3 h-3 text-lemonChiffon" />
                     <span>
                       {selectedDraft.generatedBy === 'gemini'
-                        ? 'AI-validated (Gemini Grounded)'
+                        ? 'AI-validated (Gamma 4 Grounded)'
                         : 'Deterministic Template (Fallback)'}
                     </span>
                   </span>
@@ -359,12 +359,12 @@ function DraftsContent() {
                   </button>
                 </div>
 
-                {/* Regenerate Button (Gemini server-side evidence load) */}
+                {/* Regenerate Button (Gamma 4 server-side evidence load) */}
                 <button
                   onClick={handleRegenerateDraft}
                   disabled={regenerating}
                   className="px-3.5 py-1.5 rounded-full bg-black hover:bg-coffeeBean text-lemonChiffon text-xs font-semibold flex items-center gap-1.5 transition-colors border border-lemonChiffon/30 disabled:opacity-50"
-                  title="Regenerate issue draft via Gemini with fresh server-side evidence"
+                  title="Regenerate issue draft via Gamma 4 with fresh server-side evidence"
                 >
                   <RotateCw className={`w-3.5 h-3.5 ${regenerating ? 'animate-spin' : ''}`} />
                   <span>{regenerating ? 'Regenerating...' : 'Regenerate'}</span>
@@ -502,7 +502,7 @@ function DraftsContent() {
                       </Link>
                     )}
                     <span className="text-[11px] font-mono text-[#332b26] bg-[#ebe3d7] px-2.5 py-1 rounded-md">
-                      {selectedDraft.generatedBy === 'gemini' ? 'AI-validated (Gemini)' : 'Deterministic Template'}
+                      {selectedDraft.generatedBy === 'gemini' ? 'AI-validated (Gamma 4)' : 'Deterministic Template'}
                     </span>
                   </div>
 

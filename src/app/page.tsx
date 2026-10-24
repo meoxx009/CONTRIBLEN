@@ -84,7 +84,7 @@ export default function LandingPage() {
     },
     {
       title: 'Grounded AI Explanations',
-      desc: 'Server-side Gemini adapter strictly anchored to verified code lines with redacted secrets.',
+      desc: 'Server-side Gamma 4 adapter strictly anchored to verified code lines with redacted secrets.',
       icon: Cpu,
     },
     {
@@ -112,7 +112,7 @@ export default function LandingPage() {
     {
       num: '03',
       title: 'Understand',
-      tagline: 'Grounded Gemini explanations',
+      tagline: 'Grounded Gamma 4 explanations',
       desc: 'Translates raw security findings into plain English, explaining impact, required skills, and target files.',
       icon: Cpu,
     },
@@ -167,8 +167,8 @@ export default function LandingPage() {
   const faqs = [
     {
       category: 'Grounding & AI Safety',
-      q: 'How does ContriBLens prevent Gemini from hallucinating vulnerabilities?',
-      a: 'Gemini operates through a server-side adapter bound by strict grounding guardrails: it is never permitted to declare a vulnerability independently or alter deterministic severities. Every prompt is tied to an existing finding ID and verified, redacted evidence. If the model is unreachable, a robust deterministic fallback engine steps in seamlessly.',
+      q: 'How does ContriBLens prevent Gamma 4 from hallucinating vulnerabilities?',
+      a: 'Gamma 4 operates through a server-side adapter bound by strict grounding guardrails: it is never permitted to declare a vulnerability independently or alter deterministic severities. Every prompt is tied to an existing finding ID and verified, redacted evidence. If the model is unreachable, a robust deterministic fallback engine steps in seamlessly.',
     },
     {
       category: 'Security Architecture',
@@ -280,7 +280,7 @@ export default function LandingPage() {
               </span>
               <span className="hidden sm:inline text-platinumSilver/30">•</span>
               <span className="flex items-center gap-1.5">
-                <Check className="w-3.5 h-3.5 text-paleLavender" /> Grounded Gemini (no inventions)
+                <Check className="w-3.5 h-3.5 text-paleLavender" /> Grounded Gamma 4 (no inventions)
               </span>
               <span className="hidden sm:inline text-platinumSilver/30">•</span>
               <span className="flex items-center gap-1.5">
@@ -631,10 +631,10 @@ export default function LandingPage() {
               Core Safety Commitment
             </span>
             <h2 className="text-2xl sm:text-4xl font-extrabold text-textPrimary tracking-tight">
-              Code verifies. Gemini explains. Human approves.
+              Code verifies. Gamma 4 explains. Human approves.
             </h2>
             <p className="text-xs sm:text-sm text-platinumSilver/80 max-w-xl mx-auto leading-relaxed">
-              Deterministic scanner rules own finding existence and severity. Grounded Gemini translates technical evidence into constructive contributor guides without inventing CVEs. External PR creation always requires human maintainer review.
+              Deterministic scanner rules own finding existence and severity. Grounded Gamma 4 translates technical evidence into constructive contributor guides without inventing CVEs. External PR creation always requires human maintainer review.
             </p>
           </div>
 

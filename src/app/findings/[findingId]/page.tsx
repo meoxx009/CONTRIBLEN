@@ -670,14 +670,14 @@ export default function FindingDetailPage({
           </div>
         </div>
 
-        {/* AI Grounded Explanation with Gemini */}
+        {/* AI Grounded Explanation with Gamma 4 */}
         <div className="p-6 sm:p-8 rounded-2xl bg-[#222222]/80 border border-[#FAF3E1]/10 space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-2">
               <Sparkles className="w-5 h-5 text-[#FF6D1F]" />
               <div>
                 <h2 className="text-base font-semibold text-[#F5F3ED]">
-                  Gemini Deep Explanation Query
+                  Gamma 4 Deep Explanation Query
                 </h2>
                 <span className="text-xs text-textMuted">Evidence-grounded assistance (never mutates severity)</span>
               </div>
@@ -689,7 +689,7 @@ export default function FindingDetailPage({
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#FFF8CA] text-[#000000] font-medium text-xs hover:opacity-90 disabled:opacity-50 transition-opacity shrink-0"
               >
                 {explaining ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
-                {explaining ? 'Grounding...' : 'Explain with Gemini'}
+                {explaining ? 'Grounding...' : 'Explain with Gamma 4'}
               </button>
             )}
           </div>
@@ -704,7 +704,7 @@ export default function FindingDetailPage({
                       : 'bg-[#2D120D] text-[#FFF8CA] border-[#FF6D1F]/40'
                   }`}>
                     {explanation.generatedBy === 'gemini'
-                      ? 'Grounded via Gemini Adapter'
+                      ? 'Grounded via Gamma 4 Adapter'
                       : 'Fallback Used: Deterministic Planner'}
                   </span>
                   <span>Estimated effort: <strong className="text-[#F5F3ED]">{explanation.estimatedEffort}</strong></span>
@@ -735,7 +735,7 @@ export default function FindingDetailPage({
             </div>
           ) : (
             <p className="text-xs text-[#AAA9A1]">
-              Generate a beginner-friendly, evidence-grounded explanation and contributor readiness breakdown using Gemini.
+              Generate a beginner-friendly, evidence-grounded explanation and contributor readiness breakdown using Gamma 4.
             </p>
           )}
         </div>
