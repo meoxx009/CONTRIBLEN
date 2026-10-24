@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%">
+  <rect width="1200" height="800" fill="#000000" />
+  <circle cx="600" cy="150" r="350" fill="#FF6D1F" opacity="0.12" filter="blur(60px)" />
+  
+  <!-- Header -->
+  <rect x="100" y="30" width="1000" height="60" rx="30" fill="#222222" stroke="#FAF3E1" stroke-opacity="0.14" />
+  <text x="140" y="67" font-family="sans-serif" font-weight="bold" font-size="18" fill="#F5F3ED">ContribShield <tspan fill="#FFF8CA" font-size="12">OSS</tspan></text>
+  <text x="500" y="66" font-family="sans-serif" font-size="14" fill="#AAA9A1">Process    Features    Safety    FAQs</text>
+  <rect x="940" y="42" width="130" height="36" rx="18" fill="#FFF8CA" />
+  <text x="975" y="65" font-family="sans-serif" font-weight="bold" font-size="13" fill="#000000">Sign up</text>
+
+  <!-- Hero -->
+  <text x="150" y="220" font-family="sans-serif" font-weight="bold" font-size="44" fill="#F5F3ED">Evidence-First Security &amp;</text>
+  <text x="150" y="275" font-family="sans-serif" font-weight="bold" font-size="44" fill="#FF6D1F">Contribution Navigator</text>
+  <text x="150" y="325" font-family="sans-serif" font-size="16" fill="#AAA9A1">Find what is unsafe in any public repository. Let Gemini explain it.</text>
+  <text x="150" y="350" font-family="sans-serif" font-size="16" fill="#AAA9A1">Build beginner-friendly routes and maintainer-reviewable issue drafts.</text>
+
+  <!-- CTAs -->
+  <rect x="150" y="390" width="180" height="46" rx="23" fill="#FFF8CA" />
+  <text x="185" y="418" font-family="sans-serif" font-weight="bold" font-size="14" fill="#000000">Scan Repository</text>
+  <rect x="350" y="390" width="160" height="46" rx="23" fill="#222222" stroke="#FAF3E1" stroke-opacity="0.2" />
+  <text x="390" y="418" font-family="sans-serif" font-size="14" fill="#F5F3ED">Explore Demo</text>
+
+  <!-- Hero Dashboard Glass Card -->
+  <rect x="680" y="180" width="420" height="280" rx="16" fill="#222222" fill-opacity="0.85" stroke="#FF6D1F" stroke-opacity="0.3" />
+  <text x="710" y="220" font-family="monospace" font-size="12" fill="#FF6D1F">SCAN TARGET: expressjs/express</text>
+  <rect x="710" y="240" width="360" height="60" rx="8" fill="#000000" stroke="#FAF3E1" stroke-opacity="0.1" />
+  <text x="725" y="265" font-family="sans-serif" font-size="13" fill="#F5F3ED">Readiness Score: 88/100</text>
+  <text x="725" y="285" font-family="sans-serif" font-size="12" fill="#AAA9A1">4 Verified Findings · Zero Secret Leaks</text>
+
+  <!-- Process Section -->
+  <rect x="150" y="520" width="280" height="180" rx="12" fill="#222222" stroke="#FAF3E1" stroke-opacity="0.1" />
+  <text x="180" y="560" font-family="sans-serif" font-weight="bold" font-size="16" fill="#FFF8CA">1. Scan &amp; Verify</text>
+  <text x="180" y="595" font-family="sans-serif" font-size="13" fill="#AAA9A1">Deterministic rules parse manifests,</text>
+  <text x="180" y="615" font-family="sans-serif" font-size="13" fill="#AAA9A1">workflows &amp; health signals.</text>
+
+  <rect x="460" y="520" width="280" height="180" rx="12" fill="#222222" stroke="#FAF3E1" stroke-opacity="0.1" />
+  <text x="490" y="560" font-family="sans-serif" font-weight="bold" font-size="16" fill="#FF6D1F">2. Explain &amp; Plan</text>
+  <text x="490" y="595" font-family="sans-serif" font-size="13" fill="#AAA9A1">Gemini generates plain-English</text>
+  <text x="490" y="615" font-family="sans-serif" font-size="13" fill="#AAA9A1">explanations &amp; contributor tasks.</text>
+
+  <rect x="770" y="520" width="280" height="180" rx="12" fill="#222222" stroke="#FAF3E1" stroke-opacity="0.1" />
+  <text x="800" y="560" font-family="sans-serif" font-weight="bold" font-size="16" fill="#CDE3E8">3. Review &amp; Contribute</text>
+  <text x="800" y="595" font-family="sans-serif" font-size="13" fill="#AAA9A1">Export maintainer-reviewable</text>
+  <text x="800" y="615" font-family="sans-serif" font-size="13" fill="#AAA9A1">Markdown issue drafts safely.</text>
+</svg>

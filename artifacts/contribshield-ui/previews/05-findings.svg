@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%">
+  <rect width="1200" height="800" fill="#000000" />
+  
+  <!-- Horizontal App Nav -->
+  <rect x="0" y="0" width="1200" height="64" fill="#222222" stroke="#FAF3E1" stroke-opacity="0.1" />
+  <text x="50" y="38" font-family="sans-serif" font-weight="bold" font-size="16" fill="#F5F3ED">ContribShield <tspan fill="#FFF8CA" font-size="11">OSS</tspan></text>
+  <text x="240" y="38" font-family="sans-serif" font-size="13" fill="#AAA9A1">Dashboard</text>
+  <text x="350" y="38" font-family="sans-serif" font-size="13" fill="#AAA9A1">Scan Repository</text>
+  <text x="500" y="38" font-family="sans-serif" font-weight="bold" font-size="13" fill="#FFF8CA">Findings</text>
+  <line x1="500" y1="52" x2="560" y2="52" stroke="#FFF8CA" stroke-width="2" />
+  <text x="610" y="38" font-family="sans-serif" font-size="13" fill="#AAA9A1">Contributions + Stack</text>
+
+  <!-- Filter Bar -->
+  <rect x="50" y="90" width="1100" height="60" rx="12" fill="#222222" stroke="#FAF3E1" stroke-opacity="0.1" />
+  <rect x="70" y="102" width="60" height="34" rx="17" fill="#FFF8CA" />
+  <text x="88" y="123" font-family="sans-serif" font-weight="bold" font-size="12" fill="#000000">ALL</text>
+
+  <rect x="145" y="102" width="90" height="34" rx="17" fill="#6B0B0C" />
+  <text x="165" y="123" font-family="sans-serif" font-weight="bold" font-size="12" fill="#FFF8CA">CRITICAL (1)</text>
+
+  <rect x="250" y="102" width="75" height="34" rx="17" fill="#2D120D" stroke="#FF6D1F" stroke-opacity="0.5" />
+  <text x="270" y="123" font-family="sans-serif" font-weight="bold" font-size="12" fill="#FF6D1F">HIGH (2)</text>
+
+  <!-- Split View: Finding List (Left) -->
+  <rect x="50" y="170" width="480" height="580" rx="16" fill="#222222" stroke="#FAF3E1" stroke-opacity="0.1" />
+  
+  <!-- Finding Card 1: Selected -->
+  <rect x="70" y="195" width="440" height="110" rx="12" fill="#2D120D" stroke="#FF6D1F" stroke-width="1.5" />
+  <rect x="90" y="215" width="50" height="20" rx="4" fill="#FF6D1F" />
+  <text x="100" y="229" font-family="sans-serif" font-weight="bold" font-size="10" fill="#000000">HIGH</text>
+  <text x="155" y="229" font-family="monospace" font-size="11" fill="#CDE3E8">GH-ACTIONS-UNPINNED</text>
+  <text x="90" y="260" font-family="sans-serif" font-weight="bold" font-size="14" fill="#F5F3ED">Unpinned GitHub Action Step</text>
+  <text x="90" y="285" font-family="sans-serif" font-size="12" fill="#AAA9A1">.github/workflows/ci.yml:L14</text>
+
+  <!-- Finding Card 2 -->
+  <rect x="70" y="320" width="440" height="110" rx="12" fill="#000000" stroke="#FAF3E1" stroke-opacity="0.1" />
+  <rect x="90" y="340" width="50" height="20" rx="4" fill="#6B0B0C" />
+  <text x="95" y="354" font-family="sans-serif" font-weight="bold" font-size="10" fill="#FFF8CA">CRIT</text>
+  <text x="155" y="354" font-family="monospace" font-size="11" fill="#CDE3E8">SEC-GITHUB-TOKEN</text>
+  <text x="90" y="385" font-family="sans-serif" font-weight="bold" font-size="14" fill="#F5F3ED">Exposed Secret Credential</text>
+  <text x="90" y="410" font-family="sans-serif" font-size="12" fill="#AAA9A1">.env.example:L5 · Redacted</text>
+
+  <!-- Split View: Finding Details (Right) -->
+  <rect x="550" y="170" width="600" height="580" rx="16" fill="#222222" stroke="#FAF3E1" stroke-opacity="0.1" />
+  <text x="580" y="215" font-family="sans-serif" font-weight="bold" font-size="20" fill="#F5F3ED">Unpinned GitHub Action Step</text>
+  <text x="580" y="245" font-family="sans-serif" font-size="13" fill="#AAA9A1">File: <tspan font-family="monospace" fill="#FFF8CA">.github/workflows/ci.yml:14</tspan></text>
+
+  <rect x="580" y="270" width="540" height="120" rx="8" fill="#000000" stroke="#FAF3E1" stroke-opacity="0.1" />
+  <text x="600" y="300" font-family="monospace" font-size="12" fill="#CDE3E8">13: jobs:</text>
+  <text x="600" y="325" font-family="monospace" font-size="12" fill="#FF6D1F">14:   - uses: actions/checkout@master</text>
+  <text x="600" y="350" font-family="monospace" font-size="12" fill="#AAA9A1">15:   - run: npm test</text>
+
+  <!-- Gemini Grounded Explanation Box -->
+  <rect x="580" y="410" width="540" height="180" rx="10" fill="#000000" stroke="#FF6D1F" stroke-opacity="0.3" />
+  <text x="600" y="440" font-family="sans-serif" font-weight="bold" font-size="13" fill="#FF6D1F">✦ GEMINI GROUNDED EXPLANATION</text>
+  <text x="600" y="470" font-family="sans-serif" font-size="12" fill="#F5F3ED">Unpinned actions allow third-party code to change unexpectedly.</text>
+  <text x="600" y="490" font-family="sans-serif" font-size="12" fill="#F5F3ED">Pinning to a full commit SHA guarantees immutable CI behavior.</text>
+  <text x="600" y="525" font-family="sans-serif" font-size="11" fill="#AAA9A1">Difficulty: BEGINNER · Estimated Effort: 15-20 mins</text>
+
+  <!-- Route Generation CTA -->
+  <rect x="580" y="615" width="260" height="44" rx="22" fill="#FFF8CA" />
+  <text x="620" y="642" font-family="sans-serif" font-weight="bold" font-size="13" fill="#000000">Generate Contribution Route</text>
+</svg>
