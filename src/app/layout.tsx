@@ -5,7 +5,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
 export const metadata: Metadata = {
-  title: 'ContribLens OSS — Scan. Understand. Contribute.',
+  title: 'ContriBLens OSS — Scan. Understand. Contribute.',
   description:
     'Helps beginners discover meaningful open-source contribution opportunities by scanning public GitHub repositories, verifying findings, explaining them in plain English, and creating actionable contribution plans.',
 };

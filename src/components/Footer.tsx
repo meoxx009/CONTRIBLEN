@@ -13,7 +13,7 @@ export default function Footer() {
               <div className="w-7 h-7 rounded-lg bg-electricTangerine/20 border border-electricTangerine/30 flex items-center justify-center text-electricTangerine">
                 <Shield className="w-4 h-4" />
               </div>
-              <span className="tracking-tight">ContribLens <span className="text-[10px] bg-coffeeBean text-lemonChiffon border border-lemonChiffon/30 px-2 py-0.5 rounded-full font-mono">OSS</span></span>
+              <span className="tracking-tight">ContriBLens <span className="text-[10px] bg-coffeeBean text-lemonChiffon border border-lemonChiffon/30 px-2 py-0.5 rounded-full font-mono">OSS</span></span>
             </div>
             <p className="text-platinumSilver/70 max-w-sm text-xs leading-relaxed">
               Scan. Understand. Contribute. Discover meaningful open-source contribution opportunities by scanning public GitHub repositories and turning verified findings into actionable plans and maintainer issue drafts.
@@ -52,7 +52,7 @@ export default function Footer() {
 
         <div className="border-t border-platinumSilver/15 pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-platinumSilver/60 gap-4">
           <div>
-            &copy; {new Date().getFullYear()} ContribLens OSS. Released under MIT License.
+            &copy; {new Date().getFullYear()} ContriBLens OSS. Released under MIT License.
           </div>
           <div className="flex items-center gap-4 font-mono">
             <span className="text-lemonChiffon">Scan. Understand. Contribute.</span>

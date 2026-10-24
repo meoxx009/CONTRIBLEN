@@ -133,7 +133,7 @@ export default function Navbar() {
 
   return (
     <header
-      className={`sticky top-0 z-40 w-full transition-all duration-300 ${
+      className={`sticky top-0 z-40 w-full pt-[env(safe-area-inset-top,0px)] transition-all duration-300 ${
         scrolled
           ? 'bg-black/80 backdrop-blur-2xl border-b border-platinumSilver/20 shadow-liquid-nav'
           : 'bg-black/55 backdrop-blur-xl border-b border-platinumSilver/12 shadow-sm'
@@ -151,7 +151,7 @@ export default function Navbar() {
               </div>
               <div className="flex flex-col">
                 <span className="font-bold text-base tracking-tight text-textPrimary flex items-center gap-1.5 group-hover:text-platinumSilver transition-colors">
-                  ContribLens <span className="text-[10px] font-semibold bg-coffeeBean text-lemonChiffon border border-lemonChiffon/30 px-2 py-0.5 rounded-full shadow-sm font-mono">OSS</span>
+                  ContriBLens <span className="text-[10px] font-semibold bg-coffeeBean text-lemonChiffon border border-lemonChiffon/30 px-2 py-0.5 rounded-full shadow-sm font-mono">OSS</span>
                 </span>
                 <span className="text-[11px] text-textMuted -mt-0.5 hidden sm:inline tracking-wide">Scan. Understand. Contribute.</span>
               </div>
