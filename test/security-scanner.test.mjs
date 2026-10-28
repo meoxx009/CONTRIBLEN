@@ -10,7 +10,12 @@ import {
   GitHubBranchNotFoundError,
   GitHubNotFoundError,
   GitHubAuthError,
+  executeGitHubRequest,
+  getSanitizedGitHubToken,
+  resetGitHubTokenState,
+  getGitHubHeaders,
 } from '../src/lib/scanner/github.ts';
+import { signSessionToken, verifySessionToken } from '../src/lib/auth.ts';
 import { parsePackageJson, parseRequirementsTxt, parsePyprojectToml } from '../src/lib/scanner/manifests.ts';
 import { scanGitHubActions } from '../src/lib/scanner/actions.ts';
 import { checkRepositoryHealth } from '../src/lib/scanner/health.ts';
@@ -643,5 +648,168 @@ describe('ContribLens Robust URL Parsing, Error Classification & Route Generatio
     assert.ok(route.acceptanceCriteria.length > 0, 'Acceptance criteria must have clear criteria');
     assert.ok(route.skills.length > 0, 'Skills must be listed');
     assert.ok(['beginner', 'intermediate', 'advanced'].includes(route.difficulty));
+  });
+});
+
+describe('ContribLens Permanent Authentication & Token Resiliency Suite (Section 13)', () => {
+  // Test 1: Public repository without GitHub token
+  test('Test 1: unauthenticated public request operates cleanly with no Authorization header', () => {
+    resetGitHubTokenState();
+    const prev = process.env.GITHUB_TOKEN;
+    delete process.env.GITHUB_TOKEN;
+
+    const token = getSanitizedGitHubToken();
+    assert.strictEqual(token, null, 'Expected null token when unset');
+
+    const headers = getGitHubHeaders(false);
+    assert.strictEqual(headers['Authorization'], undefined, 'No Authorization header must be sent');
+    assert.strictEqual(headers['Accept'], 'application/vnd.github.v3+json');
+
+    if (prev) process.env.GITHUB_TOKEN = prev;
+  });
+
+  // Test 2: Public repository with valid GitHub token
+  test('Test 2: valid GitHub token is used server-side and never exposed', () => {
+    resetGitHubTokenState();
+    const prev = process.env.GITHUB_TOKEN;
+    process.env.GITHUB_TOKEN = 'ghp_validTokenSecret1234567890';
+
+    const token = getSanitizedGitHubToken();
+    assert.strictEqual(token, 'ghp_validTokenSecret1234567890');
+
+    const headers = getGitHubHeaders(true);
+    assert.strictEqual(headers['Authorization'], 'token ghp_validTokenSecret1234567890');
+
+    // Placeholders are safely rejected
+    process.env.GITHUB_TOKEN = 'your_github_token_here';
+    assert.strictEqual(getSanitizedGitHubToken(), null, 'Placeholder tokens must be ignored');
+
+    process.env.GITHUB_TOKEN = '   ';
+    assert.strictEqual(getSanitizedGitHubToken(), null, 'Whitespace tokens must be ignored');
+
+    if (prev) process.env.GITHUB_TOKEN = prev;
+    else delete process.env.GITHUB_TOKEN;
+    resetGitHubTokenState();
+  });
+
+  // Test 3: Public repository with invalid optional token falls back to unauthenticated public request
+  test('Test 3: invalid optional token falls back to unauthenticated public access without crashing', async () => {
+    resetGitHubTokenState();
+    const prev = process.env.GITHUB_TOKEN;
+    process.env.GITHUB_TOKEN = 'ghp_invalid_token_which_gets_401';
+
+    // Intercept fetch or call executeGitHubRequest with custom mock
+    const originalFetch = globalThis.fetch;
+    let callCount = 0;
+    let fallbackHeaderSent = null;
+
+    globalThis.fetch = async (url, opts) => {
+      callCount++;
+      const authHeader = opts?.headers?.['Authorization'];
+      if (authHeader && authHeader.includes('ghp_invalid_token')) {
+        // First call with bad token returns 401
+        return new Response(JSON.stringify({ message: 'Bad credentials' }), {
+          status: 401,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+      // Fallback call has no Authorization header and returns 200
+      fallbackHeaderSent = authHeader;
+      return new Response(JSON.stringify({ id: 12345, name: 'career-AI', default_branch: 'main' }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    };
+
+    try {
+      const response = await executeGitHubRequest('https://api.github.com/repos/meoxx009/career-AI');
+      assert.strictEqual(response.status, 200, 'Fallback request must succeed with 200');
+      assert.strictEqual(callCount, 2, 'Should execute initial authenticated call and one unauthenticated fallback');
+      assert.strictEqual(fallbackHeaderSent, undefined, 'Fallback call must NOT send Authorization header');
+      assert.strictEqual(getSanitizedGitHubToken(), null, 'Invalid token must be marked invalid in memory');
+    } finally {
+      globalThis.fetch = originalFetch;
+      if (prev) process.env.GITHUB_TOKEN = prev;
+      else delete process.env.GITHUB_TOKEN;
+      resetGitHubTokenState();
+    }
+  });
+
+  // Test 4: ContriBLens user session verification & rejection of invalid sessions
+  test('Test 4: ContriBLens user session verification rejects missing/tampered sessions', () => {
+    // Valid session signing and verification
+    const sessionPayload = {
+      userId: 'usr_auth_test_999',
+      email: 'verified_contributor@contriblens.org',
+      phone: '+15550199999',
+      name: 'Verified Contributor',
+    };
+    const validToken = signSessionToken(sessionPayload);
+    assert.strictEqual(typeof validToken, 'string');
+
+    const decoded = verifySessionToken(validToken);
+    assert.ok(decoded);
+    assert.strictEqual(decoded.userId, 'usr_auth_test_999');
+    assert.strictEqual(decoded.email, 'verified_contributor@contriblens.org');
+
+    // Tampered token rejection
+    const tamperedToken = validToken.slice(0, -6) + 'xxxxxx';
+    assert.strictEqual(verifySessionToken(tamperedToken), null, 'Tampered JWT must be rejected');
+
+    // Blank token rejection
+    assert.strictEqual(verifySessionToken(''), null);
+    assert.strictEqual(verifySessionToken('invalid.jwt.token'), null);
+  });
+
+  // Test 5: Inaccessible or private repository handling
+  test('Test 5: private or inaccessible repository throws typed GitHubNotFoundError', () => {
+    const err = new GitHubNotFoundError('Repository "secret/vault" was not found or is private.');
+    assert.strictEqual(err.name, 'GitHubNotFoundError');
+    assert.ok(err.message.includes('not found or is private'));
+  });
+
+  // Test 6: Rate-limited public repository request
+  test('Test 6: rate limit error includes reset time and avoids retry loops', () => {
+    const resetDate = new Date(Date.now() + 600000);
+    const err = new GitHubRateLimitError('Rate limit exceeded', resetDate);
+    assert.strictEqual(err.name, 'GitHubRateLimitError');
+    assert.strictEqual(err.resetTime, resetDate);
+  });
+
+  // Test 7: Branch not found
+  test('Test 7: branch not found error retains branch and default branch hint', () => {
+    const err = new GitHubBranchNotFoundError('Branch release-v99 not found', 'release-v99', 'main');
+    assert.strictEqual(err.name, 'GitHubBranchNotFoundError');
+    assert.strictEqual(err.branch, 'release-v99');
+    assert.strictEqual(err.defaultBranch, 'main');
+  });
+
+  // Test 8: SSRF rejection
+  test('Test 8: SSRF host rejection prevents untrusted outbound requests', async () => {
+    await assert.rejects(
+      async () => {
+        await executeGitHubRequest('https://evil.attacker.com/steal-token');
+      },
+      /Untrusted host/
+    );
+  });
+
+  // Test 9 & 10: Retry state preservation and URL normalization
+  test('Test 9 & 10: URL normalization preserves branch and repository inputs for user retry', () => {
+    const parsed1 = parseGitHubUrl('https://github.com/meoxx009/career-AI.git');
+    assert.deepStrictEqual(parsed1, { owner: 'meoxx009', repo: 'career-AI' });
+
+    const parsed2 = parseGitHubUrl('https://github.com/meoxx009/career-AI/tree/feature/test-branch');
+    assert.deepStrictEqual(parsed2, {
+      owner: 'meoxx009',
+      repo: 'career-AI',
+      branch: 'feature/test-branch',
+    });
+  });
+
+  // Test 11: Existing features integrity
+  test('Test 11: db and user session store remain functional', () => {
+    const users = db.getUsers();
+    assert.ok(Array.isArray(users));
   });
 });

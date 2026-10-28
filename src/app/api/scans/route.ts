@@ -70,8 +70,11 @@ export async function POST(req: Request) {
     if (!user) {
       return NextResponse.json(
         {
-          error: 'Authentication required to scan a repository.',
+          error: 'Authentication required. Please sign in to ContriBLens to scan a repository.',
           errorCode: 'AUTH_INVALID_CREDENTIALS' as ContribLensErrorCode,
+          correlationId: `CS-ERR-${Math.random().toString(36).substring(2, 8).toUpperCase()}`,
+          ok: false,
+          success: false,
         },
         { status: 401 }
       );

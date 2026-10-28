@@ -13,6 +13,7 @@
  */
 
 import { isSupabaseConfigured, getSupabaseBrowserClient } from './supabase.ts';
+import { getSanitizedGitHubToken } from './scanner/github.ts';
 import { db } from './db.ts';
 
 export interface IntegrationReport {
@@ -55,8 +56,8 @@ export async function checkIntegrations(): Promise<IntegrationReport> {
   }
 
   // 2. GitHub Token Check (server-only)
-  const ghToken = process.env.GITHUB_TOKEN;
-  if (ghToken && ghToken.trim() !== '' && ghToken !== 'your_github_token_here') {
+  const ghToken = getSanitizedGitHubToken();
+  if (ghToken) {
     report.github = 'token configured';
   } else {
     report.github = 'public-only mode';

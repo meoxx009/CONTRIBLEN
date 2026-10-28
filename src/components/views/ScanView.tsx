@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useApp } from '@/components/AppContext';
 import {
@@ -34,6 +35,7 @@ type ScanStage =
 
 interface FailureDetails {
   type:
+    | 'auth_required'
     | 'invalid_url'
     | 'not_found'
     | 'branch_not_found'
@@ -127,6 +129,20 @@ export default function ScanView() {
     const correlationId = correlationIdParam || `CS-ERR-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
     const lower = rawMessage.toLowerCase();
 
+    // 1. ContriBLens application session missing or expired
+    if (
+      errorCode === 'AUTH_INVALID_CREDENTIALS' ||
+      lower.includes('sign in') ||
+      lower.includes('session') ||
+      (lower.includes('authentication') && lower.includes('required'))
+    ) {
+      return {
+        type: 'auth_required',
+        userMessage: 'Your ContriBLens session has expired or authentication is required. Please sign in to scan repositories.',
+        correlationId,
+      };
+    }
+
     if (errorCode === 'GITHUB_INVALID_URL' || lower.includes('invalid') || lower.includes('format')) {
       return {
         type: 'invalid_url',
@@ -157,7 +173,7 @@ export default function ScanView() {
         correlationId,
       };
     }
-    if (errorCode === 'GITHUB_PRIVATE_OR_UNAVAILABLE' || lower.includes('private') || lower.includes('authentication')) {
+    if (errorCode === 'GITHUB_PRIVATE_OR_UNAVAILABLE' || lower.includes('private')) {
       return {
         type: 'private_or_unavailable',
         userMessage: rawMessage || 'The requested repository appears to be private or unavailable for public auditing.',
@@ -347,6 +363,14 @@ export default function ScanView() {
 
                 {/* Helpful Action Buttons */}
                 <div className="flex flex-wrap items-center gap-2 pt-2">
+                  {failure.type === 'auth_required' && (
+                    <Link
+                      href="/login?next=/app/scan"
+                      className="px-3 py-1 rounded-full bg-lemonChiffon text-black text-[11px] font-semibold hover:bg-sustainableLinen transition-colors inline-flex items-center gap-1"
+                    >
+                      Sign In to ContriBLens →
+                    </Link>
+                  )}
                   {failure.type === 'branch_not_found' && (
                     <button
                       type="button"
@@ -359,13 +383,15 @@ export default function ScanView() {
                       Use default branch ({failure.defaultBranch || 'main'})
                     </button>
                   )}
-                  <button
-                    type="button"
-                    onClick={() => handleScan()}
-                    className="px-3 py-1 rounded-full bg-black border border-lemonChiffon/40 text-lemonChiffon text-[11px] font-semibold hover:bg-lemonChiffon hover:text-black transition-colors"
-                  >
-                    Retry Scan
-                  </button>
+                  {failure.type !== 'auth_required' && (
+                    <button
+                      type="button"
+                      onClick={() => handleScan()}
+                      className="px-3 py-1 rounded-full bg-black border border-lemonChiffon/40 text-lemonChiffon text-[11px] font-semibold hover:bg-lemonChiffon hover:text-black transition-colors"
+                    >
+                      Retry Scan
+                    </button>
+                  )}
                 </div>
               </div>
             </div>

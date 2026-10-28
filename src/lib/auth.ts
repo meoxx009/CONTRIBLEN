@@ -82,15 +82,28 @@ export async function resolvePhoneToEmail(phoneInput: string): Promise<string | 
 
 export async function getCurrentUser(): Promise<User | null> {
   try {
-    const { cookies } = await import('next/headers');
+    const { cookies, headers } = await import('next/headers');
     const cookieStore = await cookies();
-    const token =
+    let token =
       cookieStore.get(AUTH_COOKIE_NAME)?.value ||
       cookieStore.get('contribshield_session')?.value;
+
+    if (!token) {
+      try {
+        const headerStore = await headers();
+        const authHeader = headerStore.get('authorization') || headerStore.get('Authorization');
+        if (authHeader && authHeader.startsWith('Bearer ')) {
+          token = authHeader.substring(7).trim();
+        }
+      } catch {
+        // headers() may not be available in non-request contexts
+      }
+    }
+
     if (!token) return null;
 
     const session = verifySessionToken(token);
-    if (!session) return null;
+    if (!session || !session.userId) return null;
 
     // 1. Try local DB
     const user = db.getUserById(session.userId);
@@ -120,6 +133,24 @@ export async function getCurrentUser(): Promise<User | null> {
           };
         }
       }
+    }
+
+    // 3. Stateless session reconstruction for serverless environments:
+    // If the JWT signature was verified using our JWT_SECRET, the session payload is authentic.
+    // Reconstruct the user and register in the local instance store so subsequent operations succeed.
+    if (session.email) {
+      const restoredUser: User = {
+        id: session.userId,
+        email: session.email,
+        phone: session.phone || '',
+        name: session.name || session.email.split('@')[0],
+        passwordHash: '',
+        termsAccepted: true,
+        createdAt: new Date().toISOString(),
+        settings: defaultSettings,
+      };
+      db.saveUser(restoredUser);
+      return restoredUser;
     }
 
     return null;

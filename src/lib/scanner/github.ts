@@ -155,24 +155,111 @@ export function parseGitHubUrl(rawUrl: string): { owner: string; repo: string; b
   }
 }
 
-function getGitHubHeaders(): HeadersInit {
+let isOptionalTokenInvalid = false;
+
+export function resetGitHubTokenState(): void {
+  isOptionalTokenInvalid = false;
+}
+
+export function getSanitizedGitHubToken(): string | null {
+  if (isOptionalTokenInvalid) return null;
+  const raw = process.env.GITHUB_TOKEN;
+  if (!raw || typeof raw !== 'string') return null;
+  const token = raw.trim();
+  if (
+    !token ||
+    token === 'your_github_token_here' ||
+    token === 'placeholder' ||
+    token === 'undefined' ||
+    token === 'null' ||
+    token.startsWith('ghp_xxxx')
+  ) {
+    return null;
+  }
+  return token;
+}
+
+export function getGitHubHeaders(includeAuth = true): HeadersInit {
   const headers: HeadersInit = {
-    'Accept': 'application/vnd.github.v3+json',
+    Accept: 'application/vnd.github.v3+json',
     'User-Agent': 'ContribLens-OSS-Scanner',
   };
-  if (process.env.GITHUB_TOKEN) {
-    headers['Authorization'] = `token ${process.env.GITHUB_TOKEN}`;
+  const token = includeAuth ? getSanitizedGitHubToken() : null;
+  if (token) {
+    headers['Authorization'] = `token ${token}`;
   }
   return headers;
 }
 
+export interface GitHubRequestOptions {
+  headers?: HeadersInit;
+  timeoutMs?: number;
+  skipAuth?: boolean;
+}
+
+/**
+ * Unified, resilient GitHub API request client.
+ * Strictly bounded with timeouts and SSRF host verification.
+ * Automatically and safely falls back to unauthenticated public access if the optional
+ * GITHUB_TOKEN receives HTTP 401 Bad Credentials.
+ */
+export async function executeGitHubRequest(
+  url: string,
+  options: GitHubRequestOptions = {}
+): Promise<Response> {
+  const parsed = new URL(url);
+  const hostname = parsed.hostname.toLowerCase();
+  if (hostname !== 'api.github.com' && hostname !== 'raw.githubusercontent.com') {
+    throw new Error(`Untrusted host for GitHub request: ${hostname}`);
+  }
+
+  const timeoutMs = options.timeoutMs || 15000;
+  const hasToken = !options.skipAuth && Boolean(getSanitizedGitHubToken());
+  const headers = options.headers || getGitHubHeaders(!options.skipAuth);
+
+  let response: Response;
+  try {
+    response = await fetch(url, {
+      headers,
+      signal: AbortSignal.timeout(timeoutMs),
+    });
+  } catch (err: any) {
+    if (err.name === 'TimeoutError' || err.message?.includes('timeout') || err.message?.includes('aborted')) {
+      throw new Error(`GitHub request timed out after ${timeoutMs}ms.`);
+    }
+    throw new Error(`Network failure connecting to GitHub: ${err.message || 'connection error'}`);
+  }
+
+  // Resilient public-data fallback: If authenticated request failed with 401 Bad credentials,
+  // the optional GITHUB_TOKEN is invalid. Retry once unauthenticated for public repository access.
+  if (response.status === 401 && hasToken) {
+    console.warn('[ContribLens Scanner] Optional GITHUB_TOKEN rejected with HTTP 401. Falling back to unauthenticated public access.');
+    isOptionalTokenInvalid = true;
+
+    const unauthHeaders = getGitHubHeaders(false);
+    try {
+      response = await fetch(url, {
+        headers: unauthHeaders,
+        signal: AbortSignal.timeout(timeoutMs),
+      });
+    } catch (retryErr: any) {
+      if (retryErr.name === 'TimeoutError' || retryErr.message?.includes('timeout')) {
+        throw new Error(`GitHub unauthenticated fallback request timed out after ${timeoutMs}ms.`);
+      }
+      throw new Error(`Network failure during GitHub unauthenticated fallback: ${retryErr.message || 'connection error'}`);
+    }
+  }
+
+  return response;
+}
+
 export async function fetchRepoMetadata(owner: string, repo: string): Promise<GitHubRepoMeta> {
   const url = `https://api.github.com/repos/${owner}/${repo}`;
-  const response = await fetch(url, { headers: getGitHubHeaders() });
+  const response = await executeGitHubRequest(url);
 
   if (!response.ok) {
     if (response.status === 401) {
-      throw new GitHubAuthError('GitHub API token is invalid or unauthorized. Please verify the configured GITHUB_TOKEN.');
+      throw new GitHubAuthError('GitHub API access was denied (HTTP 401).');
     }
     if (response.status === 403 || response.status === 429) {
       const resetHeader = response.headers.get('x-ratelimit-reset');
@@ -209,11 +296,11 @@ export async function fetchBoundedRepositoryTree(
   defaultBranch?: string
 ): Promise<{ files: BoundedFile[]; totalFilesIndexed: number; totalBytes: number; warnings: string[] }> {
   const treeUrl = `https://api.github.com/repos/${owner}/${repo}/git/trees/${encodeURIComponent(branch)}?recursive=1`;
-  const response = await fetch(treeUrl, { headers: getGitHubHeaders() });
+  const response = await executeGitHubRequest(treeUrl);
 
   if (!response.ok) {
     if (response.status === 401) {
-      throw new GitHubAuthError('GitHub API token is invalid or unauthorized.');
+      throw new GitHubAuthError('GitHub API access was denied while loading repository tree.');
     }
     if (response.status === 403 || response.status === 429) {
       const resetHeader = response.headers.get('x-ratelimit-reset');
@@ -295,8 +382,9 @@ export async function fetchBoundedRepositoryTree(
     try {
       // Fetch raw content
       const rawUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${blob.path}`;
-      const res = await fetch(rawUrl, {
+      const res = await executeGitHubRequest(rawUrl, {
         headers: { 'User-Agent': 'ContribLens-OSS-Scanner' },
+        skipAuth: true,
       });
 
       if (!res.ok) continue;

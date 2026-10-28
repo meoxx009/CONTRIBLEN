@@ -34,7 +34,11 @@ import {
   GitHubBranchNotFoundError,
   GitHubNotFoundError,
   GitHubAuthError,
+  getSanitizedGitHubToken,
+  resetGitHubTokenState,
+  getGitHubHeaders,
 } from '../src/lib/scanner/github.ts';
+import { signSessionToken, verifySessionToken } from '../src/lib/auth.ts';
 {
   const valid1 = parseGitHubUrl('https://github.com/expressjs/express');
   assert.deepStrictEqual(valid1, { owner: 'expressjs', repo: 'express' });
@@ -1633,6 +1637,56 @@ import { generateContributionPackMarkdown } from '../src/lib/scanner/learning.ts
   console.log('✓ Section 14 Regressions: URL normalization variants, branch extraction, and typed GitHub errors verified');
 }
 
+// 30. Section 13 Regression Suite: ContriBLens Session & GitHub Token Resiliency
+{
+  resetGitHubTokenState();
+  const prev = process.env.GITHUB_TOKEN;
+
+  // Test 1: Unauthenticated public request operates cleanly with no Authorization header
+  delete process.env.GITHUB_TOKEN;
+  assert.strictEqual(getSanitizedGitHubToken(), null);
+  const unauthHeaders = getGitHubHeaders(false);
+  assert.strictEqual(unauthHeaders['Authorization'], undefined);
+
+  // Test 2: Placeholder and whitespace tokens are safely ignored
+  process.env.GITHUB_TOKEN = 'your_github_token_here';
+  assert.strictEqual(getSanitizedGitHubToken(), null);
+
+  process.env.GITHUB_TOKEN = '  ';
+  assert.strictEqual(getSanitizedGitHubToken(), null);
+
+  // Test 3: Valid token attached as Bearer or token
+  process.env.GITHUB_TOKEN = 'ghp_secretTokenVal123';
+  assert.strictEqual(getSanitizedGitHubToken(), 'ghp_secretTokenVal123');
+  const authHeaders = getGitHubHeaders(true);
+  assert.ok(authHeaders['Authorization'].includes('ghp_secretTokenVal123'));
+
+  // Test 4: ContriBLens User Session (Application Authentication) signing & verification
+  const sessionData = {
+    userId: 'usr_serverless_coldstart',
+    email: 'serverless@contriblens.org',
+    phone: '+15551234567',
+    name: 'Serverless User',
+  };
+  const token = signSessionToken(sessionData);
+  assert.strictEqual(typeof token, 'string');
+  const verified = verifySessionToken(token);
+  assert.ok(verified);
+  assert.strictEqual(verified.userId, 'usr_serverless_coldstart');
+  assert.strictEqual(verified.email, 'serverless@contriblens.org');
+
+  // Test 5: Rejection of invalid/tampered sessions
+  assert.strictEqual(verifySessionToken('tampered.session.token'), null);
+  assert.strictEqual(verifySessionToken(''), null);
+
+  // Restore env
+  if (prev) process.env.GITHUB_TOKEN = prev;
+  else delete process.env.GITHUB_TOKEN;
+  resetGitHubTokenState();
+
+  console.log('✓ Section 13 Regressions: Application session validation & GitHub token resiliency verified');
+}
+
 console.log('\n=========================================');
-console.log('🎉 ALL 29 TEST SUITES PASSED CLEANLY (100%)');
+console.log('🎉 ALL 30 TEST SUITES PASSED CLEANLY (100%)');
 console.log('=========================================\n');
