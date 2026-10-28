@@ -27,6 +27,7 @@ import type {
   GeminiPlanResponse,
   TechnologySnapshot,
   GroundedExplanation,
+  RepositoryTechContext,
 } from '../types.ts';
 
 export type { GroundedExplanation };
@@ -583,10 +584,22 @@ export async function explainFinding(
   const safeEvidence = redactSecrets(finding.evidence || finding.redactedEvidence || '');
   const evidenceHash = finding.evidenceHash || hashString(safeEvidence);
 
+  // Extract verified repository technology context
+  const repoTechContext: RepositoryTechContext = {
+    primaryLanguage: scan.techStack?.languages?.[0]?.name,
+    languages: (scan.techStack?.languages || []).map((l) => l.name),
+    frameworks: (scan.techStack?.frameworks || []).map((f) => (f.version ? `${f.name} (v${f.version})` : f.name)),
+    packageManager:
+      scan.techStack?.packageManagers?.[0]?.name ||
+      (scan.techStack?.manifests?.some((m) => m.type === 'npm') ? 'npm' : undefined),
+    manifests: (scan.techStack?.manifests || []).map((m) => m.path),
+    tooling: (scan.techStack?.tooling || []).map((t) => t.name),
+  };
+
   // Check cache first
   const cached = getCachedAIResult('explain', evidenceHash);
   if (cached) {
-    return { ...cached, cached: true };
+    return { ...cached, repositoryContext: cached.repositoryContext || repoTechContext, cached: true };
   }
 
   const aiClient = getAiClient();
@@ -600,6 +613,12 @@ Explain this verified security/health finding in beginner-friendly, constructive
 
 DO NOT invent vulnerabilities or change the deterministic severity (${finding.severity}).
 Repository: ${scan.repoName}
+Primary Language: ${repoTechContext.primaryLanguage || 'Unknown'}
+Languages: ${repoTechContext.languages.join(', ') || 'None detected'}
+Frameworks: ${repoTechContext.frameworks.join(', ') || 'None detected'}
+Package Manager: ${repoTechContext.packageManager || 'None'}
+Manifest Files: ${repoTechContext.manifests.join(', ') || 'None detected'}
+Tooling & CI: ${repoTechContext.tooling.join(', ') || 'None detected'}
 Finding ID: ${finding.id}
 Finding Title: ${finding.title}
 Category: ${finding.category}
@@ -667,6 +686,7 @@ Provide your response in valid JSON matching this exact structure:
               : 'beginner',
             generatedBy: 'gemini',
             fallback: false,
+            repositoryContext: repoTechContext,
           };
           setCachedAIResult('explain', evidenceHash, result);
           return result;
@@ -701,6 +721,18 @@ function generateDeterministicExplanation(
     finding.ruleId === 'REPO-NO-TEST-SIGNAL' ||
     (!finding.file && (finding.title?.toLowerCase().includes('test') || (finding.category === 'repository-health' && finding.title?.toLowerCase().includes('test'))));
 
+  // Extract verified repository technology context
+  const repoTechContext: RepositoryTechContext = {
+    primaryLanguage: scan.techStack?.languages?.[0]?.name,
+    languages: (scan.techStack?.languages || []).map((l) => l.name),
+    frameworks: (scan.techStack?.frameworks || []).map((f) => (f.version ? `${f.name} (v${f.version})` : f.name)),
+    packageManager:
+      scan.techStack?.packageManagers?.[0]?.name ||
+      (scan.techStack?.manifests?.some((m) => m.type === 'npm') ? 'npm' : undefined),
+    manifests: (scan.techStack?.manifests || []).map((m) => m.path),
+    tooling: (scan.techStack?.tooling || []).map((t) => t.name),
+  };
+
   let difficulty: 'beginner' | 'intermediate' | 'advanced' = 'beginner';
   let estimatedEffort = '30-45 mins';
   const skillsNeeded = ['Git', 'GitHub'];
@@ -708,7 +740,14 @@ function generateDeterministicExplanation(
   if (finding.category === 'dependency') {
     difficulty = 'beginner';
     estimatedEffort = '20-30 mins';
-    skillsNeeded.push('Package Management', 'Dependency Updates', scan.techStack.languages[0]?.name || 'JavaScript');
+    skillsNeeded.push(
+      'Package Management',
+      'Dependency Updates',
+      repoTechContext.primaryLanguage || 'JavaScript'
+    );
+    if (repoTechContext.packageManager) {
+      skillsNeeded.push(repoTechContext.packageManager);
+    }
   } else if (finding.category === 'actions' || finding.category === 'github-actions') {
     difficulty = 'intermediate';
     estimatedEffort = '45-60 mins';
@@ -721,6 +760,10 @@ function generateDeterministicExplanation(
     difficulty = 'intermediate';
     estimatedEffort = '30-45 mins';
     skillsNeeded.push('Test Automation', 'CI/CD Pipelines', 'Automated Testing');
+    const testTool = repoTechContext.tooling.find((t) =>
+      ['Jest', 'Vitest', 'Pytest', 'Playwright', 'Cypress'].includes(t)
+    );
+    if (testTool) skillsNeeded.push(testTool);
   } else if (finding.category === 'health' || finding.category === 'repository-health') {
     difficulty = 'beginner';
     estimatedEffort = '20 mins';
@@ -729,17 +772,23 @@ function generateDeterministicExplanation(
 
   const targetLocation = finding.file || (isTestSignal ? 'test suite configuration' : 'repository configuration');
 
+  let contextualFix = finding.fixHint || 'Follow repository contribution standards and update the affected configuration.';
+  if (finding.category === 'dependency' && repoTechContext.packageManager) {
+    contextualFix = `${finding.fixHint} Use ${repoTechContext.packageManager} to update and lock the resolved version.`;
+  }
+
   const result = {
     findingId: finding.id,
     explanation: `This finding identifies "${finding.title}" located in ${targetLocation}. ${finding.impact}`,
     riskContext: `In ${scan.repoName}, leaving this unresolved risks degraded security hygiene, compliance gaps, or exposure during build and execution workflows.`,
-    recommendedFix: finding.fixHint || 'Follow repository contribution standards and update the affected configuration.',
+    recommendedFix: contextualFix,
     skillsNeeded,
     estimatedEffort,
     difficulty,
     generatedBy: 'deterministic' as const,
     fallback: true as const,
     fallbackReason,
+    repositoryContext: repoTechContext,
   };
 
   const safeEvidence = redactSecrets(finding.evidence || finding.redactedEvidence || '');

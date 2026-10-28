@@ -60,9 +60,9 @@ export function GlassStepRail({
       {/* Horizontal Stepper Rail for Desktop */}
       <div className="hidden md:grid grid-cols-4 gap-4 relative">
         {/* Connecting Progress Line behind nodes */}
-        <div className="absolute top-1/2 left-8 right-8 h-0.5 bg-koraCharcoal-border -translate-y-1/2 z-0" />
+        <div className="absolute top-1/2 left-8 right-8 h-0.5 bg-platinumSilver/15 -translate-y-1/2 z-0" />
         <div
-          className="absolute top-1/2 left-8 h-0.5 bg-gradient-to-r from-koraBurgundy via-koraRed to-koraOffWhite -translate-y-1/2 z-0 transition-all duration-500"
+          className="absolute top-1/2 left-8 h-0.5 bg-gradient-to-r from-electricTangerine to-lemonChiffon -translate-y-1/2 z-0 transition-all duration-500"
           style={{ width: `${(currentStep / (steps.length - 1)) * 82}%` }}
         />
 
@@ -78,22 +78,22 @@ export function GlassStepRail({
               onClick={() => onStepChange?.(idx)}
               className={`relative z-10 p-4 rounded-2xl text-left transition-all flex flex-col justify-between ${
                 isCurrent
-                  ? 'bg-koraBurgundy/30 border border-koraRed/60 shadow-glow-burgundy scale-[1.02]'
+                  ? 'liquid-glass-card border-lemonChiffon/60 shadow-liquid-glow scale-[1.02]'
                   : isPassed
-                  ? 'bg-koraCharcoal-card border border-emerald-500/30 text-koraOffWhite'
-                  : 'bg-koraCharcoal-surface/60 border border-koraCharcoal-border text-koraSecondary hover:border-koraSlate/40'
+                  ? 'bg-black/80 border border-emerald-500/30 text-platinumSilver'
+                  : 'bg-black/50 border border-platinumSilver/15 text-platinumSilver/60 hover:border-platinumSilver/30'
               }`}
             >
               <div className="flex items-center justify-between mb-3">
-                <span className={`text-xl font-mono font-bold ${isCurrent ? 'text-koraRed' : 'text-koraSecondary/50'}`}>
+                <span className={`text-xl font-mono font-bold ${isCurrent ? 'text-lemonChiffon' : 'text-platinumSilver/40'}`}>
                   {step.num}
                 </span>
                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
                   isCurrent
-                    ? 'bg-koraRed/20 text-koraRed border border-koraRed/40'
+                    ? 'bg-electricTangerine/20 text-electricTangerine border border-electricTangerine/40'
                     : isPassed
                     ? 'bg-emerald-950/40 text-emerald-400 border border-emerald-500/40'
-                    : 'bg-koraCharcoal-dark text-koraSecondary border border-koraCharcoal-border'
+                    : 'bg-white/5 text-platinumSilver/50 border border-white/10'
                 }`}>
                   <Icon className="w-4 h-4" />
                 </div>
@@ -101,14 +101,14 @@ export function GlassStepRail({
 
               <div>
                 <div className="flex items-center gap-1.5 mb-0.5">
-                  <h4 className="text-sm font-heading font-bold text-koraOffWhite">{step.title}</h4>
+                  <h4 className="text-sm font-bold text-textPrimary">{step.title}</h4>
                   {step.badge && (
-                    <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-koraCharcoal-dark text-koraSecondary border border-koraCharcoal-border">
+                    <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-white/5 text-platinumSilver/70 border border-white/10">
                       {step.badge}
                     </span>
                   )}
                 </div>
-                <p className="text-[11px] text-koraSecondary leading-snug line-clamp-2">
+                <p className="text-[11px] text-platinumSilver/70 leading-snug line-clamp-2">
                   {step.tagline}
                 </p>
               </div>
@@ -131,27 +131,27 @@ export function GlassStepRail({
               onClick={() => onStepChange?.(idx)}
               className={`w-full p-3.5 rounded-xl text-left transition-all flex items-center justify-between gap-3 ${
                 isCurrent
-                  ? 'bg-koraBurgundy/30 border border-koraRed/60 shadow-sm'
+                  ? 'liquid-glass-card border-lemonChiffon/60 shadow-sm'
                   : isPassed
-                  ? 'bg-koraCharcoal-card border border-emerald-500/30'
-                  : 'bg-koraCharcoal-surface/60 border border-koraCharcoal-border text-koraSecondary'
+                  ? 'bg-black/80 border border-emerald-500/30'
+                  : 'bg-black/50 border border-platinumSilver/15 text-platinumSilver/70'
               }`}
             >
               <div className="flex items-center gap-3">
-                <span className={`text-base font-mono font-bold ${isCurrent ? 'text-koraRed' : 'text-koraSecondary/50'}`}>
+                <span className={`text-base font-mono font-bold ${isCurrent ? 'text-lemonChiffon' : 'text-platinumSilver/40'}`}>
                   {step.num}
                 </span>
                 <div>
-                  <h4 className="text-xs font-heading font-bold text-koraOffWhite">{step.title}</h4>
-                  <p className="text-[10px] text-koraSecondary">{step.tagline}</p>
+                  <h4 className="text-xs font-bold text-textPrimary">{step.title}</h4>
+                  <p className="text-[10px] text-platinumSilver/60">{step.tagline}</p>
                 </div>
               </div>
               <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${
                 isCurrent
-                  ? 'bg-koraRed/20 text-koraRed'
+                  ? 'bg-electricTangerine/20 text-electricTangerine'
                   : isPassed
                   ? 'bg-emerald-950/40 text-emerald-400'
-                  : 'bg-koraCharcoal-dark text-koraSecondary'
+                  : 'bg-white/5 text-platinumSilver/40'
               }`}>
                 <Icon className="w-3.5 h-3.5" />
               </div>

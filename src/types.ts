@@ -224,12 +224,30 @@ export interface ManifestInfo {
   dependenciesCount: number;
 }
 
+export interface PackageManagerInfo {
+  name: string;
+  version?: string;
+  lockfile?: string | null;
+  status: 'detected' | 'inferred';
+  source: string;
+  confidence: number;
+}
+
+export interface DirectDependency {
+  name: string;
+  version?: string;
+  type: 'production' | 'dev' | 'peer';
+  sourceFile: string;
+}
+
 export interface TechStack {
   languages: { name: string; percentage: number; filesCount: number; sources?: string[]; confidence?: number }[];
   frameworks: { name: string; category: string; version?: string; sources?: string[]; confidence?: number }[];
   tooling: { name: string; category: string; sources?: string[]; confidence?: number }[];
   manifests: ManifestInfo[];
   confidenceScore: number;
+  packageManagers?: PackageManagerInfo[];
+  dependencies?: DirectDependency[];
 }
 
 export interface ContributionRoute {
@@ -392,6 +410,15 @@ export interface GeminiPlanResponse {
   issueMarkdown: string | null;
 }
 
+export interface RepositoryTechContext {
+  primaryLanguage?: string;
+  languages: string[];
+  frameworks: string[];
+  packageManager?: string;
+  manifests: string[];
+  tooling: string[];
+}
+
 export interface GroundedExplanation {
   findingId: string;
   explanation: string;
@@ -401,4 +428,5 @@ export interface GroundedExplanation {
   estimatedEffort: string;
   difficulty: 'beginner' | 'intermediate' | 'advanced';
   generatedBy: 'gemini' | 'deterministic';
+  repositoryContext?: RepositoryTechContext;
 }

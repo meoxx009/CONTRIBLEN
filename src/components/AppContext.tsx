@@ -178,18 +178,18 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         {toasts.map((toast) => (
           <div
             key={toast.id}
-            className={`pointer-events-auto flex items-center justify-between p-3.5 rounded-xl shadow-2xl text-xs sm:text-sm border font-medium transition-all duration-200 backdrop-blur-xl ${
+            className={`pointer-events-auto flex items-center justify-between p-3.5 rounded-lg shadow-lg text-sm border font-medium transition-all duration-200 ${
               toast.type === 'success'
-                ? 'bg-koraCharcoal-surface/95 text-koraOffWhite border-emerald-500/50'
+                ? 'bg-coffeeBean text-lemonChiffon border-electricTangerine/60'
                 : toast.type === 'error'
-                ? 'bg-koraBurgundy/90 text-koraOffWhite border-koraRed'
-                : 'bg-koraCharcoal-surface/95 text-koraOffWhite border-koraCharcoal-border'
+                ? 'bg-rosewood-dark text-cotton border-rosewood-alert'
+                : 'bg-coffeeBean text-linen border-botticelli-border'
             }`}
           >
             <span>{toast.message}</span>
             <button
               onClick={() => removeToast(toast.id)}
-              className="ml-3 text-koraSecondary hover:text-koraOffWhite text-xs px-1"
+              className="ml-3 text-botticelli hover:text-cotton text-xs px-1"
             >
               ✕
             </button>

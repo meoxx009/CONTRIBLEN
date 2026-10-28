@@ -21,28 +21,28 @@ export function Badge({
   };
 
   const variantStyles = {
-    // Critical: Kora Burgundy + Red
-    critical: 'bg-koraBurgundy/40 text-red-300 border border-koraRed/50 font-semibold',
-    // High: Kora Red
-    high: 'bg-koraRed/20 text-koraRed border border-koraRed/40 font-semibold',
-    // Medium: Kora Slate
-    medium: 'bg-koraSlate/40 text-blue-200 border border-koraSlate font-medium',
+    // Critical: Rosewood
+    critical: 'bg-rosewood/25 text-red-300 border border-rosewood/50 font-semibold',
+    // High: Electric Tangerine
+    high: 'bg-electricTangerine/20 text-electricTangerine border border-electricTangerine/40 font-semibold',
+    // Medium: Botticelli
+    medium: 'bg-botticelli/20 text-botticelli border border-botticelli/40 font-medium',
     // Low: Subtle Neutral
-    low: 'bg-white/10 text-koraSecondary border border-white/15 font-medium',
+    low: 'bg-white/10 text-textMuted border border-white/15 font-medium',
     // Info: Muted Blue
     info: 'bg-sky-950/40 text-sky-300 border border-sky-800/40 font-medium',
-    // Lemon / Accent: Kora Red / Burgundy accent
-    lemon: 'bg-koraBurgundy/30 text-koraOffWhite border border-koraRed/30 font-medium',
-    // Tech: Kora Slate Muted
-    tech: 'bg-koraSlate/25 text-koraOffWhite border border-koraSlate/40 font-mono font-medium',
-    // Neutral: Kora Charcoal card
-    neutral: 'bg-koraCharcoal-card text-koraOffWhite border border-koraCharcoal-border font-medium',
+    // Lemon: Lemon Chiffon
+    lemon: 'bg-coffeeBean text-lemonChiffon border border-lemonChiffon/30 font-medium',
+    // Tech: Botticelli Muted
+    tech: 'bg-botticelli/15 text-botticelli border border-botticelli/30 font-mono font-medium',
+    // Neutral: Black Hole glass
+    neutral: 'bg-blackHole text-textPrimary border border-borderDark font-medium',
     // Chrome: Metallic liquid chrome pill
-    chrome: 'liquid-chrome-pill text-koraOffWhite font-semibold',
+    chrome: 'liquid-chrome-pill text-platinumSilver font-semibold',
     // Lavender: Pale Lavender accent for AI & learning cues
-    lavender: 'bg-koraSlate/30 text-koraOffWhite border border-koraSlate/40 font-medium',
-    // Silver: Reflective chip
-    silver: 'bg-white/10 text-koraOffWhite border border-koraCharcoal-border font-medium',
+    lavender: 'bg-paleLavender/15 text-paleLavender border border-paleLavender/35 font-medium',
+    // Silver: Platinum Silver reflective chip
+    silver: 'bg-white/10 text-platinumSilver border border-platinumSilver/30 font-medium',
   };
 
   return (

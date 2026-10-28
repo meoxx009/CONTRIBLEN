@@ -13,22 +13,22 @@ export function Card({
   ...props
 }: CardProps) {
   const variantStyles = {
-    // Glass card: dark charcoal translucent surface with fine border
-    glass: 'bg-koraCharcoal-surface/85 backdrop-blur-md border border-koraCharcoal-border text-koraOffWhite shadow-glass-card',
+    // Glass card: dark translucent backdrop with fine border
+    glass: 'bg-blackHole/75 backdrop-blur-md border border-borderDark text-textPrimary shadow-glass-card',
     // Open widget: spacious, high-contrast framing
-    widget: 'bg-koraCharcoal-surface border border-koraCharcoal-border hover:border-koraRed/40 text-koraOffWhite shadow-2xl transition-all',
-    // Warm: Deep burgundy ambient card
-    warm: 'bg-koraBurgundy/25 backdrop-blur-lg border border-koraRed/30 text-koraOffWhite shadow-glow-burgundy',
-    // Linen: Editorial document surface for drafts & reports
-    linen: 'bg-koraCharcoal-card text-koraOffWhite border border-koraCharcoal-border shadow-md',
-    // Cotton: Warm editorial tone
-    cotton: 'bg-koraCharcoal-card text-koraOffWhite border border-koraCharcoal-border shadow-md',
-    // Liquid glass: high-translucency glass with fine specular rim
-    'liquid-glass': 'liquid-glass-card text-koraOffWhite',
+    widget: 'bg-blackHole border border-borderDark/80 hover:border-lemonChiffon/30 text-textPrimary shadow-2xl transition-all',
+    // Warm: Coffee Bean deep ambient card
+    warm: 'bg-coffeeBean/70 backdrop-blur-lg border border-electricTangerine/25 text-textPrimary shadow-glow-tangerine',
+    // Linen: Sustainable Linen document surface for drafts & reports
+    linen: 'bg-sustainableLinen text-neutral-900 border border-neutral-300 shadow-md',
+    // Cotton: Recycled Cotton warm tone
+    cotton: 'bg-recycledCotton text-neutral-900 border border-neutral-300/80 shadow-md',
+    // Liquid glass: high-translucency glass with Platinum Silver specular rim
+    'liquid-glass': 'liquid-glass-card text-textPrimary',
     // Liquid hero: elevated multi-stop glass with deep blur
-    'liquid-hero': 'liquid-glass-hero text-koraOffWhite',
+    'liquid-hero': 'liquid-glass-hero text-textPrimary',
     // Metric card: high-hierarchy metric panel with subtle glow
-    'metric-card': 'liquid-glass-card border-koraCharcoal-border hover:border-koraRed/40 text-koraOffWhite',
+    'metric-card': 'liquid-glass-card border-platinumSilver/25 hover:border-lemonChiffon/40 text-textPrimary',
   };
 
   return (
@@ -53,10 +53,10 @@ export function CardHeader({
   className?: string;
 }) {
   return (
-    <div className={`flex items-start justify-between gap-4 pb-4 border-b border-koraCharcoal-border mb-4 ${className}`}>
+    <div className={`flex items-start justify-between gap-4 pb-4 border-b border-borderDark/60 mb-4 ${className}`}>
       <div>
-        <h3 className="text-base font-semibold tracking-tight text-koraOffWhite">{title}</h3>
-        {subtitle && <p className="text-xs text-koraSecondary mt-0.5">{subtitle}</p>}
+        <h3 className="text-base font-semibold tracking-tight text-textPrimary">{title}</h3>
+        {subtitle && <p className="text-xs text-textMuted mt-0.5">{subtitle}</p>}
       </div>
       {action && <div className="shrink-0">{action}</div>}
     </div>

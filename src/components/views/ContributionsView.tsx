@@ -18,7 +18,11 @@ import {
   ExternalLink,
   Code2,
   FileCode,
+  Shield,
+  Filter,
+  Check,
   AlertCircle,
+  HelpCircle,
   Wrench,
   Download,
   RotateCw,
@@ -30,7 +34,7 @@ function ContributionsContent() {
   const searchParams = useSearchParams();
   const highlightedRouteId = searchParams.get('routeId');
 
-  const { activeScan, showToast } = useApp();
+  const { activeScan, setActiveScan, showToast } = useApp();
 
   const [routes, setRoutes] = useState<ContributionRoute[]>([]);
   const [findings, setFindings] = useState<Finding[]>([]);
@@ -44,6 +48,20 @@ function ContributionsContent() {
   // Filters
   const [difficultyFilter, setDifficultyFilter] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<string>('all');
+
+  // Automatically bind to most recent scan if activeScan is null on page load
+  useEffect(() => {
+    if (!activeScan) {
+      fetch('/api/scans')
+        .then((r) => (r.ok ? r.json() : null))
+        .then((data) => {
+          if (data?.scans?.[0]) {
+            setActiveScan(data.scans[0]);
+          }
+        })
+        .catch(() => {});
+    }
+  }, [activeScan, setActiveScan]);
 
   useEffect(() => {
     fetchData();
@@ -233,33 +251,33 @@ function ContributionsContent() {
   }, [activeRoute, findings]);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-10 text-textPrimary">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-10 bg-black text-textPrimary">
       
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-koraCharcoal-border">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-borderDark">
         <div>
-          <h1 className="text-2xl font-heading font-bold text-koraOffWhite flex items-center gap-2">
+          <h1 className="text-2xl font-heading font-bold text-textPrimary flex items-center gap-2">
             <span>Contributions + Technology Stack</span>
             {activeScan && (
-              <span className="text-xs font-mono font-medium text-koraOffWhite bg-koraBurgundy/40 px-3 py-1 rounded-full border border-koraBurgundy">
+              <span className="text-xs font-mono font-medium text-lemonChiffon bg-coffeeBean px-3 py-1 rounded-full border border-lemonChiffon/20">
                 {activeScan.repoName}
               </span>
             )}
           </h1>
-          <p className="text-xs text-koraSecondary mt-1">
+          <p className="text-xs text-textMuted mt-1">
             Merged architecture inspection and prioritized contributor tracks with concrete test plans and acceptance criteria.
           </p>
         </div>
 
         {/* Readiness Badge */}
         <div className="flex items-center gap-3">
-          <div className="p-3.5 rounded-2xl border border-koraCharcoal-border bg-koraCharcoal-surface/90 shadow-liquid-glass flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-koraBurgundy/40 border border-koraBurgundy flex items-center justify-center text-koraOffWhite font-bold text-base font-mono">
+          <div className="glass-panel p-3.5 rounded-2xl border border-borderDark flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-lemonChiffon/15 border border-lemonChiffon/30 flex items-center justify-center text-lemonChiffon font-bold text-base font-mono">
               {readinessScore}
             </div>
             <div>
-              <div className="text-xs font-bold text-koraOffWhite">Repository Readiness</div>
-              <div className="text-[11px] text-koraSecondary">
+              <div className="text-xs font-bold text-textPrimary">Repository Readiness</div>
+              <div className="text-[11px] text-textMuted">
                 {readinessScore >= 80 ? 'Excellent Onboarding' : readinessScore >= 60 ? 'Moderate Friction' : 'Needs Docs & Tooling'}
               </div>
             </div>
@@ -271,147 +289,213 @@ function ContributionsContent() {
       <section className="space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Layers className="w-4 h-4 text-koraRed" />
-            <h2 className="text-xs font-heading font-bold text-koraOffWhite uppercase tracking-wider">
+            <Layers className="w-4 h-4 text-electricTangerine" />
+            <h2 className="text-xs font-heading font-bold text-textPrimary uppercase tracking-wider">
               Detected Technology Stack &amp; Manifests
             </h2>
           </div>
           {techStack && (
-            <span className="text-[11px] font-mono text-koraOffWhite">
-              Confidence Score: {techStack.confidenceScore}% (Empirical Verification)
+            <span className="text-[11px] font-mono text-lemonChiffon">
+              Confidence Score: {techStack.confidenceScore}% {techStack.confidenceScore > 0 ? '(Empirical Verification)' : '(No Supported Manifests Detected)'}
             </span>
           )}
         </div>
 
         {techStack ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            
-            {/* Languages */}
-            <div className="p-5 rounded-2xl border border-koraCharcoal-border bg-koraCharcoal-surface/90 shadow-liquid-glass space-y-3">
-              <h3 className="text-xs font-heading font-semibold text-koraSecondary uppercase tracking-wider flex items-center justify-between">
-                <span>Languages</span>
-                <span className="text-koraOffWhite font-mono text-[11px]">{techStack.languages.length} detected</span>
-              </h3>
-              {techStack.languages.length > 0 ? (
-                <div className="space-y-3">
-                  {techStack.languages.map((l) => (
-                    <div key={l.name} className="space-y-1">
-                      <div className="flex justify-between text-xs text-koraOffWhite">
-                        <span className="font-semibold">{l.name}</span>
-                        <span className="font-mono text-koraOffWhite text-[11px]">
-                          {Math.round((l.confidence ?? 0.9) * 100)}% Conf
-                        </span>
-                      </div>
-                      <div className="w-full bg-koraCharcoal-dark h-1.5 rounded-full overflow-hidden">
-                        <div className="bg-gradient-to-r from-koraBurgundy to-koraRed h-full rounded-full" style={{ width: `${l.percentage}%` }} />
-                      </div>
-                      {l.sources && l.sources.length > 0 && (
-                        <div className="text-[10px] text-koraSecondary font-mono truncate" title={l.sources.join(', ')}>
-                          src: {l.sources.slice(0, 2).join(', ')}
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              
+              {/* Languages */}
+              <div className="glass-panel p-5 rounded-2xl border border-borderDark space-y-3">
+                <h3 className="text-xs font-heading font-semibold text-textMuted uppercase tracking-wider flex items-center justify-between">
+                  <span>Languages</span>
+                  <span className="text-lemonChiffon font-mono text-[11px]">{techStack.languages.length} detected</span>
+                </h3>
+                {techStack.languages.length > 0 ? (
+                  <div className="space-y-3">
+                    {techStack.languages.map((l) => (
+                      <div key={l.name} className="space-y-1">
+                        <div className="flex justify-between text-xs text-textPrimary">
+                          <span className="font-semibold">{l.name}</span>
+                          <span className="font-mono text-lemonChiffon text-[11px]">
+                            {Math.round((l.confidence ?? 0.9) * 100)}% Conf
+                          </span>
                         </div>
-                      )}
+                        <div className="w-full bg-black h-1.5 rounded-full overflow-hidden">
+                          <div className="bg-lemonChiffon h-full rounded-full" style={{ width: `${l.percentage}%` }} />
+                        </div>
+                        {l.sources && l.sources.length > 0 && (
+                          <div className="text-[10px] text-textMuted font-mono truncate" title={l.sources.join(', ')}>
+                            src: {l.sources.slice(0, 2).join(', ')}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-xs text-textMuted leading-relaxed">
+                    No supported programming languages detected in indexed scope.
+                  </p>
+                )}
+              </div>
+
+              {/* Frameworks */}
+              <div className="glass-panel p-5 rounded-2xl border border-borderDark space-y-3">
+                <h3 className="text-xs font-heading font-semibold text-textMuted uppercase tracking-wider flex items-center justify-between">
+                  <span>Frameworks</span>
+                  <span className="text-botticelli font-mono text-[11px]">{techStack.frameworks.length} found</span>
+                </h3>
+                {techStack.frameworks.length > 0 ? (
+                  <div className="space-y-2">
+                    {techStack.frameworks.map((f) => (
+                      <div
+                        key={f.name}
+                        className="p-2.5 rounded-xl bg-black border border-borderDark text-xs text-botticelli flex flex-col"
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-1.5 min-w-0">
+                            <span className="font-semibold text-textPrimary truncate">{f.name}</span>
+                            {f.version && (
+                              <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-lemonChiffon/15 text-lemonChiffon border border-lemonChiffon/30 shrink-0">
+                                v{f.version}
+                              </span>
+                            )}
+                          </div>
+                          <span className="font-mono text-[10px] text-lemonChiffon shrink-0">
+                            {Math.round((f.confidence ?? 0.95) * 100)}% Conf
+                          </span>
+                        </div>
+                        <span className="text-[10px] text-textMuted mt-0.5">{f.category}</span>
+                        {f.sources && f.sources.length > 0 && (
+                          <span className="text-[10px] font-mono text-lemonChiffon/70 truncate mt-0.5">
+                            via {f.sources[0]}
+                          </span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-xs text-textMuted">No major web framework detected.</p>
+                )}
+              </div>
+
+              {/* Tooling & Testing */}
+              <div className="glass-panel p-5 rounded-2xl border border-borderDark space-y-3">
+                <h3 className="text-xs font-heading font-semibold text-textMuted uppercase tracking-wider flex items-center justify-between">
+                  <span>Tooling &amp; CI</span>
+                  <span className="text-cotton font-mono text-[11px]">{techStack.tooling.length} found</span>
+                </h3>
+                {techStack.tooling.length > 0 ? (
+                  <div className="space-y-2">
+                    {techStack.tooling.map((t) => (
+                      <div
+                        key={t.name}
+                        className="p-2.5 rounded-xl bg-black border border-borderDark text-xs text-cotton flex flex-col"
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="font-semibold text-lemonChiffon">{t.name}</span>
+                          <span className="font-mono text-[10px] text-botticelli">
+                            {Math.round((t.confidence ?? 0.9) * 100)}% Conf
+                          </span>
+                        </div>
+                        <span className="text-[10px] text-textMuted mt-0.5">{t.category}</span>
+                        {t.sources && t.sources.length > 0 && (
+                          <span className="text-[10px] font-mono text-textMuted truncate mt-0.5">
+                            via {t.sources[0]}
+                          </span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-xs text-textMuted leading-relaxed">No CI/CD or build tooling detected in repository.</p>
+                )}
+              </div>
+
+              {/* Manifest Files & Package Managers */}
+              <div className="glass-panel p-5 rounded-2xl border border-borderDark space-y-3">
+                <h3 className="text-xs font-heading font-semibold text-textMuted uppercase tracking-wider flex items-center justify-between">
+                  <span>Manifests &amp; Managers</span>
+                  <span className="text-sustainableLinen font-mono text-[11px]">{techStack.manifests.length} files</span>
+                </h3>
+
+                {/* Package Managers if detected */}
+                {techStack.packageManagers && techStack.packageManagers.length > 0 && (
+                  <div className="space-y-1.5 pb-2 border-b border-borderDark/60">
+                    <span className="text-[10px] font-mono uppercase text-sustainableLinen font-semibold">
+                      Package Manager{techStack.packageManagers.length > 1 ? 's' : ''}:
+                    </span>
+                    <div className="flex flex-wrap gap-1.5">
+                      {techStack.packageManagers.map((pm) => (
+                        <span
+                          key={pm.name}
+                          className="inline-flex items-center gap-1 text-[11px] font-mono px-2 py-0.5 rounded-full bg-sustainableLinen/15 text-sustainableLinen border border-sustainableLinen/30"
+                          title={pm.lockfile ? `Lockfile: ${pm.lockfile}` : 'Inferred from manifest'}
+                        >
+                          <strong className="font-bold uppercase">{pm.name}</strong>
+                          {pm.version && <span>v{pm.version}</span>}
+                          <span className="text-[9px] opacity-75">({pm.status})</span>
+                        </span>
+                      ))}
                     </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-xs text-koraSecondary leading-relaxed">
-                  No supported programming languages detected in indexed scope.
-                </p>
-              )}
+                  </div>
+                )}
+
+                {techStack.manifests.length > 0 ? (
+                  <div className="space-y-2">
+                    {techStack.manifests.map((m) => (
+                      <div key={m.path} className="p-2.5 rounded-xl bg-black border border-borderDark text-xs">
+                        <div className="font-mono text-lemonChiffon truncate">{m.path}</div>
+                        <div className="text-[11px] text-textMuted mt-0.5 flex items-center justify-between">
+                          <span>Type: <strong className="text-textPrimary uppercase">{m.type}</strong></span>
+                          <span className="font-mono text-[10px] text-botticelli">
+                            {m.dependenciesCount} deps
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-xs text-textMuted">No standard package manifests found.</p>
+                )}
+              </div>
+
             </div>
 
-            {/* Frameworks */}
-            <div className="p-5 rounded-2xl border border-koraCharcoal-border bg-koraCharcoal-surface/90 shadow-liquid-glass space-y-3">
-              <h3 className="text-xs font-heading font-semibold text-koraSecondary uppercase tracking-wider flex items-center justify-between">
-                <span>Frameworks</span>
-                <span className="text-koraSlate font-mono text-[11px]">{techStack.frameworks.length} found</span>
-              </h3>
-              {techStack.frameworks.length > 0 ? (
-                <div className="space-y-2">
-                  {techStack.frameworks.map((f) => (
-                    <div
-                      key={f.name}
-                      className="p-2.5 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border text-xs text-koraOffWhite flex flex-col"
+            {/* Direct Dependencies preview strip */}
+            {techStack.dependencies && techStack.dependencies.length > 0 && (
+              <div className="glass-panel p-4 rounded-2xl border border-borderDark space-y-2">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-heading font-semibold text-textMuted uppercase tracking-wider">
+                    Direct Dependencies ({techStack.dependencies.length} declared)
+                  </span>
+                  <span className="text-[10px] font-mono text-lemonChiffon">
+                    Verified Package Manifests
+                  </span>
+                </div>
+                <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto">
+                  {techStack.dependencies.slice(0, 24).map((d, i) => (
+                    <span
+                      key={`${d.name}-${i}`}
+                      className="px-2 py-0.5 rounded-md bg-black border border-borderDark text-[11px] font-mono text-textPrimary flex items-center gap-1"
+                      title={`Source: ${d.sourceFile} (${d.type})`}
                     >
-                      <div className="flex items-center justify-between">
-                        <span className="font-semibold text-koraOffWhite">{f.name}</span>
-                        <span className="font-mono text-[10px] text-koraSecondary">
-                          {Math.round((f.confidence ?? 0.95) * 100)}% Conf
-                        </span>
-                      </div>
-                      <span className="text-[10px] text-koraSecondary mt-0.5">{f.category}</span>
-                      {f.sources && f.sources.length > 0 && (
-                        <span className="text-[10px] font-mono text-koraSecondary truncate mt-0.5">
-                          via {f.sources[0]}
-                        </span>
-                      )}
-                    </div>
+                      <span className="font-semibold text-botticelli">{d.name}</span>
+                      {d.version && <span className="text-[10px] text-textMuted">@{d.version}</span>}
+                      {d.type === 'dev' && <span className="text-[9px] text-sustainableLinen/70">(dev)</span>}
+                    </span>
                   ))}
+                  {techStack.dependencies.length > 24 && (
+                    <span className="px-2 py-0.5 rounded-md bg-black border border-borderDark text-[10px] font-mono text-textMuted flex items-center">
+                      +{techStack.dependencies.length - 24} more
+                    </span>
+                  )}
                 </div>
-              ) : (
-                <p className="text-xs text-koraSecondary">No major web framework detected.</p>
-              )}
-            </div>
-
-            {/* Tooling & Testing */}
-            <div className="p-5 rounded-2xl border border-koraCharcoal-border bg-koraCharcoal-surface/90 shadow-liquid-glass space-y-3">
-              <h3 className="text-xs font-heading font-semibold text-koraSecondary uppercase tracking-wider flex items-center justify-between">
-                <span>Tooling &amp; CI</span>
-                <span className="text-koraOffWhite font-mono text-[11px]">{techStack.tooling.length} found</span>
-              </h3>
-              {techStack.tooling.length > 0 ? (
-                <div className="space-y-2">
-                  {techStack.tooling.map((t) => (
-                    <div
-                      key={t.name}
-                      className="p-2.5 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border text-xs text-koraOffWhite flex flex-col"
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="font-semibold text-koraOffWhite">{t.name}</span>
-                        <span className="font-mono text-[10px] text-koraSlate">
-                          {Math.round((t.confidence ?? 0.9) * 100)}% Conf
-                        </span>
-                      </div>
-                      <span className="text-[10px] text-koraSecondary mt-0.5">{t.category}</span>
-                      {t.sources && t.sources.length > 0 && (
-                        <span className="text-[10px] font-mono text-koraSecondary truncate mt-0.5">
-                          via {t.sources[0]}
-                        </span>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-xs text-koraSecondary leading-relaxed">No CI/CD or build tooling detected in repository.</p>
-              )}
-            </div>
-
-            {/* Manifest Files */}
-            <div className="p-5 rounded-2xl border border-koraCharcoal-border bg-koraCharcoal-surface/90 shadow-liquid-glass space-y-3">
-              <h3 className="text-xs font-heading font-semibold text-koraSecondary uppercase tracking-wider flex items-center justify-between">
-                <span>Package Manifests</span>
-                <span className="text-koraOffWhite font-mono text-[11px]">{techStack.manifests.length} files</span>
-              </h3>
-              {techStack.manifests.length > 0 ? (
-                <div className="space-y-2">
-                  {techStack.manifests.map((m) => (
-                    <div key={m.path} className="p-2.5 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border text-xs">
-                      <div className="font-mono text-koraOffWhite truncate">{m.path}</div>
-                      <div className="text-[11px] text-koraSecondary mt-0.5">
-                        Type: <strong className="text-koraOffWhite uppercase">{m.type}</strong>
-                        {m.dependenciesCount > 0 && ` (${m.dependenciesCount} deps)`}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-xs text-koraSecondary">No standard package manifests found.</p>
-              )}
-            </div>
-
+              </div>
+            )}
           </div>
         ) : (
-          <div className="p-6 rounded-2xl border border-koraCharcoal-border bg-koraCharcoal-surface/90 text-xs text-koraSecondary text-center">
+          <div className="glass-panel p-6 rounded-2xl border border-borderDark text-xs text-textMuted text-center">
             Run a repository scan to automatically detect languages, frameworks, and tooling.
           </div>
         )}
@@ -422,28 +506,28 @@ function ContributionsContent() {
         <section className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-koraRed" />
-              <h2 className="text-xs font-heading font-bold text-koraOffWhite uppercase tracking-wider">
+              <Sparkles className="w-4 h-4 text-lemonChiffon" />
+              <h2 className="text-xs font-heading font-bold text-lemonChiffon uppercase tracking-wider">
                 Top Contribution Recommendation
               </h2>
             </div>
-            <span className="text-[11px] font-mono text-koraSecondary">
+            <span className="text-[11px] font-mono text-textMuted">
               Optimal First Contributor Track
             </span>
           </div>
 
-          <div className="p-6 sm:p-8 rounded-3xl border border-koraRed/40 bg-gradient-to-br from-koraCharcoal-surface via-koraCharcoal-surface to-koraBurgundy/30 shadow-liquid-glass space-y-6">
+          <div className="glass-panel p-6 sm:p-8 rounded-2xl border border-lemonChiffon/40 bg-gradient-to-br from-coffeeBean/40 to-black space-y-6 shadow-xl">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="px-3 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-koraBurgundy text-koraOffWhite border border-koraRed/40">
+                  <span className="px-3 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-lemonChiffon text-black">
                     {topRoute.difficulty} track
                   </span>
-                  <span className="text-xs font-medium text-koraSecondary flex items-center gap-1 font-mono">
-                    <Clock className="w-3.5 h-3.5 text-koraSlate" />
+                  <span className="text-xs font-medium text-textMuted flex items-center gap-1 font-mono">
+                    <Clock className="w-3.5 h-3.5 text-botticelli" />
                     Est. {topRoute.estimatedEffort || `${topRoute.estimatedMinutes || 30} mins`}
                   </span>
-                  <span className="text-xs font-mono text-koraOffWhite font-semibold">
+                  <span className="text-xs font-mono text-lemonChiffon font-semibold">
                     Task Readiness: {topRoute.contributionReadiness?.total ?? topRoute.readiness?.total ?? topRoute.readinessScore ?? 85}/100
                   </span>
                   {(topRoute.contributionReadiness?.label || topRoute.readinessLabel) && (
@@ -452,12 +536,12 @@ function ContributionsContent() {
                     </span>
                   )}
                   {topRoute.urgencyLabel && (
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-mono uppercase bg-koraBurgundy/30 text-koraRed border border-koraRed/40">
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-mono uppercase bg-rosewood/30 text-rosewood border border-rosewood/40">
                       Urg: {topRoute.urgencyLabel}
                     </span>
                   )}
                 </div>
-                <h3 className="text-xl sm:text-2xl font-heading font-bold text-koraOffWhite leading-snug">
+                <h3 className="text-xl sm:text-2xl font-heading font-bold text-textPrimary leading-snug">
                   {topRoute.title}
                 </h3>
               </div>
@@ -465,16 +549,16 @@ function ContributionsContent() {
               <div className="flex flex-wrap items-center gap-2">
                 <Link
                   href={`/app/contributions/${topRoute.id}`}
-                  className="px-4 py-2 rounded-full bg-koraCharcoal-dark hover:bg-koraCharcoal-card text-koraOffWhite text-xs font-semibold border border-koraCharcoal-border flex items-center gap-1.5 transition-colors"
+                  className="px-4 py-2 rounded-full bg-blackHole hover:bg-black text-textPrimary text-xs font-semibold border border-borderDark flex items-center gap-1.5 transition-colors"
                 >
                   <span>Route Blueprint</span>
-                  <ExternalLink className="w-3.5 h-3.5 text-koraSlate" />
+                  <ExternalLink className="w-3.5 h-3.5 text-botticelli" />
                 </Link>
 
                 <button
                   onClick={() => handleDownloadPack(topRoute.id)}
                   disabled={downloadingPackId === topRoute.id}
-                  className="px-4 py-2 rounded-full bg-koraCharcoal-dark hover:bg-koraCharcoal-card text-koraOffWhite text-xs font-semibold border border-koraCharcoal-border flex items-center gap-1.5 transition-colors disabled:opacity-50"
+                  className="px-4 py-2 rounded-full bg-blackHole hover:bg-black text-lemonChiffon text-xs font-semibold border border-lemonChiffon/30 flex items-center gap-1.5 transition-colors disabled:opacity-50"
                   title="Download self-contained Contribution Pack (.md)"
                 >
                   {downloadingPackId === topRoute.id ? (
@@ -486,15 +570,15 @@ function ContributionsContent() {
                 </button>
 
                 {topRoute.category === 'secret' ? (
-                  <div className="px-4 py-2 rounded-full bg-koraBurgundy/40 text-koraOffWhite text-xs font-semibold flex items-center gap-1.5 border border-koraBurgundy">
-                    <Lock className="w-3.5 h-3.5 text-koraRed" />
+                  <div className="px-4 py-2 rounded-full bg-rosewood/30 text-cotton text-xs font-semibold flex items-center gap-1.5 border border-rosewood">
+                    <Lock className="w-3.5 h-3.5 text-lemonChiffon" />
                     <span>Private Disclosure</span>
                   </div>
                 ) : (
                   <button
                     onClick={() => handleGenerateDraft(topRoute.id)}
                     disabled={generatingDraftId === topRoute.id}
-                    className="px-5 py-2 rounded-full bg-koraRed hover:bg-koraRed-hover text-white text-xs font-bold flex items-center gap-1.5 transition-all shadow-glow-red disabled:opacity-50"
+                    className="px-5 py-2 rounded-full bg-lemonChiffon hover:bg-sustainableLinen text-black text-xs font-bold flex items-center gap-1.5 transition-all shadow-md hover:shadow-lemonChiffon/20 disabled:opacity-50"
                   >
                     {generatingDraftId === topRoute.id ? (
                       <>
@@ -516,38 +600,38 @@ function ContributionsContent() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 pt-2 text-xs">
               
               {/* 1. What is wrong? */}
-              <div className="p-4 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border space-y-1.5">
-                <span className="font-bold text-koraRed uppercase tracking-wider text-[10px] flex items-center gap-1">
+              <div className="p-4 rounded-xl bg-black border border-electricTangerine/30 space-y-1.5">
+                <span className="font-bold text-electricTangerine uppercase tracking-wider text-[10px] flex items-center gap-1">
                   <AlertCircle className="w-3.5 h-3.5" /> 1. What is wrong?
                 </span>
-                <p className="text-koraSecondary leading-relaxed">
+                <p className="text-textMuted leading-relaxed">
                   {topRoute.summary || 'Security or repository health gap detected by deterministic scanner.'}
                 </p>
               </div>
 
               {/* 2. Where is it? */}
-              <div className="p-4 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border space-y-1.5">
-                <span className="font-bold text-koraSlate uppercase tracking-wider text-[10px] flex items-center gap-1">
+              <div className="p-4 rounded-xl bg-black border border-botticelli/30 space-y-1.5">
+                <span className="font-bold text-botticelli uppercase tracking-wider text-[10px] flex items-center gap-1">
                   <FileCode className="w-3.5 h-3.5" /> 2. Where is it?
                 </span>
-                <div className="font-mono text-koraOffWhite truncate">
+                <div className="font-mono text-cotton truncate">
                   {topRoute.files.join(', ') || 'Repository Root'}
                 </div>
                 {activeFinding && (
-                  <span className="text-[10px] text-koraSecondary block font-mono">
+                  <span className="text-[10px] text-textMuted block font-mono">
                     Rule: {activeFinding.ruleId}
                   </span>
                 )}
               </div>
 
               {/* 3. What skill is needed? */}
-              <div className="p-4 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border space-y-1.5">
-                <span className="font-bold text-koraOffWhite uppercase tracking-wider text-[10px] flex items-center gap-1">
+              <div className="p-4 rounded-xl bg-black border border-lemonChiffon/30 space-y-1.5">
+                <span className="font-bold text-lemonChiffon uppercase tracking-wider text-[10px] flex items-center gap-1">
                   <Wrench className="w-3.5 h-3.5" /> 3. What skill is needed?
                 </span>
                 <div className="flex flex-wrap gap-1">
                   {topRoute.skills.map((s, i) => (
-                    <span key={i} className="px-2 py-0.5 rounded bg-koraCharcoal-surface text-koraOffWhite text-[10px] font-mono border border-koraCharcoal-border">
+                    <span key={i} className="px-2 py-0.5 rounded bg-blackHole text-lemonChiffon text-[10px] font-mono border border-borderDark">
                       {s}
                     </span>
                   ))}
@@ -555,31 +639,31 @@ function ContributionsContent() {
               </div>
 
               {/* 4. What should I change? */}
-              <div className="p-4 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border space-y-1.5">
-                <span className="font-bold text-koraOffWhite uppercase tracking-wider text-[10px] flex items-center gap-1">
+              <div className="p-4 rounded-xl bg-black border border-sustainableLinen/30 space-y-1.5">
+                <span className="font-bold text-sustainableLinen uppercase tracking-wider text-[10px] flex items-center gap-1">
                   <Code2 className="w-3.5 h-3.5" /> 4. What should I change?
                 </span>
-                <p className="text-koraSecondary leading-relaxed">
+                <p className="text-cotton leading-relaxed">
                   {topRoute.suggestedChange || 'Update configuration to follow secure repository guidelines.'}
                 </p>
               </div>
 
               {/* 5. How do I test it? */}
-              <div className="p-4 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border space-y-1.5">
-                <span className="font-bold text-koraOffWhite uppercase tracking-wider text-[10px] flex items-center gap-1">
+              <div className="p-4 rounded-xl bg-black border border-borderDark space-y-1.5">
+                <span className="font-bold text-lemonChiffon uppercase tracking-wider text-[10px] flex items-center gap-1">
                   <Terminal className="w-3.5 h-3.5" /> 5. How do I test it?
                 </span>
-                <p className="text-koraSecondary leading-relaxed">
+                <p className="text-textMuted leading-relaxed">
                   {topRoute.testPlan[0] || 'Run local verification linter or test suite.'}
                 </p>
               </div>
 
               {/* 6. When is it complete? */}
-              <div className="p-4 rounded-xl bg-koraCharcoal-dark border border-emerald-500/30 space-y-1.5">
+              <div className="p-4 rounded-xl bg-black border border-emerald-500/30 space-y-1.5">
                 <span className="font-bold text-emerald-400 uppercase tracking-wider text-[10px] flex items-center gap-1">
                   <CheckCircle2 className="w-3.5 h-3.5" /> 6. When is it complete?
                 </span>
-                <p className="text-koraSecondary leading-relaxed">
+                <p className="text-textMuted leading-relaxed">
                   {topRoute.acceptanceCriteria[0] || 'CI passes and configuration changes are tested.'}
                 </p>
               </div>
@@ -589,105 +673,105 @@ function ContributionsContent() {
         </section>
       )}
 
-      {/* Part 3: Contribution Impact Graph */}
+      {/* Part 3: Contribution Impact Graph (Finding → File/Line → Technology/Skill → Task → Test → Issue) */}
       <section className="space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Compass className="w-4 h-4 text-koraRed" />
-            <h2 className="text-xs font-heading font-bold text-koraOffWhite uppercase tracking-wider">
+            <Compass className="w-4 h-4 text-electricTangerine" />
+            <h2 className="text-xs font-heading font-bold text-textPrimary uppercase tracking-wider">
               Contribution Impact Graph
             </h2>
           </div>
-          <span className="text-[11px] font-mono text-koraSecondary">
+          <span className="text-[11px] font-mono text-textMuted">
             Interactive Flow: Finding → Location → Skills → Task → Test → Draft
           </span>
         </div>
 
-        <div className="p-6 rounded-2xl border border-koraCharcoal-border bg-koraCharcoal-surface/90 shadow-liquid-glass overflow-x-auto scrollbar-thin scrollbar-thumb-koraCharcoal-border">
+        <div className="glass-panel p-6 rounded-2xl border border-borderDark overflow-x-auto scrollbar-thin scrollbar-thumb-borderDark">
           <div className="min-w-[900px] flex items-stretch justify-between gap-2.5 text-xs">
             
             {/* Stage 1: Finding */}
-            <div className="flex-1 min-w-[135px] p-3.5 rounded-xl bg-koraCharcoal-dark border border-koraRed/40 flex flex-col justify-between space-y-2">
+            <div className="flex-1 min-w-[135px] p-3.5 rounded-xl bg-black border border-electricTangerine/40 flex flex-col justify-between space-y-2">
               <div>
                 <div className="flex items-center gap-1.5 mb-1">
-                  <div className="w-2.5 h-2.5 rounded-full bg-koraRed shrink-0" />
-                  <span className="text-[10px] font-mono font-bold text-koraRed uppercase">
+                  <div className="w-2.5 h-2.5 rounded-full bg-electricTangerine shrink-0" />
+                  <span className="text-[10px] font-mono font-bold text-electricTangerine uppercase">
                     1. Finding
                   </span>
                 </div>
-                <div className="text-xs font-semibold text-koraOffWhite leading-snug line-clamp-2" title={activeFinding?.title || activeRoute?.title}>
+                <div className="text-xs font-semibold text-textPrimary leading-snug line-clamp-2" title={activeFinding?.title || activeRoute?.title}>
                   {activeFinding?.title || activeRoute?.title.replace('Fix: ', '') || 'Static Finding'}
                 </div>
               </div>
-              <span className="text-[10px] font-mono text-koraSecondary block truncate">
+              <span className="text-[10px] font-mono text-textMuted block truncate">
                 {activeFinding?.ruleId || 'DETERMINISTIC'}
               </span>
             </div>
 
-            <div className="flex items-center text-koraRed font-bold text-sm shrink-0 px-0.5">→</div>
+            <div className="flex items-center text-borderDark font-bold text-sm shrink-0 px-0.5">→</div>
 
             {/* Stage 2: Location */}
-            <div className="flex-1 min-w-[135px] p-3.5 rounded-xl bg-koraCharcoal-dark border border-koraSlate/40 flex flex-col justify-between space-y-2">
+            <div className="flex-1 min-w-[135px] p-3.5 rounded-xl bg-black border border-botticelli/40 flex flex-col justify-between space-y-2">
               <div>
                 <div className="flex items-center gap-1.5 mb-1">
-                  <div className="w-2.5 h-2.5 rounded-full bg-koraSlate shrink-0" />
-                  <span className="text-[10px] font-mono font-bold text-koraSlate uppercase">
+                  <div className="w-2.5 h-2.5 rounded-full bg-botticelli shrink-0" />
+                  <span className="text-[10px] font-mono font-bold text-botticelli uppercase">
                     2. Location
                   </span>
                 </div>
-                <div className="text-xs font-mono text-koraOffWhite leading-snug break-all" title={activeRoute?.files[0] || 'Repository Root'}>
+                <div className="text-xs font-mono text-cotton leading-snug break-all" title={activeRoute?.files[0] || 'Repository Root'}>
                   {activeRoute?.files[0] || 'Repository Root'}
                 </div>
               </div>
-              <span className="text-[10px] font-mono text-koraSlate block">
+              <span className="text-[10px] font-mono text-botticelli block">
                 {activeFinding?.lineStart ? `Line ${activeFinding.lineStart}` : 'Repository Scope'}
               </span>
             </div>
 
-            <div className="flex items-center text-koraRed font-bold text-sm shrink-0 px-0.5">→</div>
+            <div className="flex items-center text-borderDark font-bold text-sm shrink-0 px-0.5">→</div>
 
             {/* Stage 3: Skills Needed */}
-            <div className="flex-1 min-w-[135px] p-3.5 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border flex flex-col justify-between space-y-2">
+            <div className="flex-1 min-w-[135px] p-3.5 rounded-xl bg-black border border-lemonChiffon/40 flex flex-col justify-between space-y-2">
               <div>
                 <div className="flex items-center gap-1.5 mb-1">
-                  <div className="w-2.5 h-2.5 rounded-full bg-koraOffWhite shrink-0" />
-                  <span className="text-[10px] font-mono font-bold text-koraOffWhite uppercase">
+                  <div className="w-2.5 h-2.5 rounded-full bg-lemonChiffon shrink-0" />
+                  <span className="text-[10px] font-mono font-bold text-lemonChiffon uppercase">
                     3. Skills Needed
                   </span>
                 </div>
-                <div className="text-xs font-semibold text-koraOffWhite leading-snug break-words" title={activeRoute?.skills.join(', ')}>
+                <div className="text-xs font-semibold text-textPrimary leading-snug break-words" title={activeRoute?.skills.join(', ')}>
                   {activeRoute?.skills.slice(0, 3).join(', ') || 'Git, Code Review'}
                 </div>
               </div>
-              <span className="text-[10px] font-mono text-koraSecondary capitalize block">
+              <span className="text-[10px] font-mono text-lemonChiffon capitalize block">
                 {activeRoute?.difficulty || 'beginner'} track
               </span>
             </div>
 
-            <div className="flex items-center text-koraRed font-bold text-sm shrink-0 px-0.5">→</div>
+            <div className="flex items-center text-borderDark font-bold text-sm shrink-0 px-0.5">→</div>
 
             {/* Stage 4: Task */}
-            <div className="flex-1 min-w-[145px] p-3.5 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border flex flex-col justify-between space-y-2">
+            <div className="flex-1 min-w-[145px] p-3.5 rounded-xl bg-black border border-recycledCotton/40 flex flex-col justify-between space-y-2">
               <div>
                 <div className="flex items-center gap-1.5 mb-1">
-                  <div className="w-2.5 h-2.5 rounded-full bg-koraBurgundy shrink-0" />
-                  <span className="text-[10px] font-mono font-bold text-koraOffWhite uppercase">
+                  <div className="w-2.5 h-2.5 rounded-full bg-recycledCotton shrink-0" />
+                  <span className="text-[10px] font-mono font-bold text-recycledCotton uppercase">
                     4. Task
                   </span>
                 </div>
-                <div className="text-xs font-semibold text-koraSecondary line-clamp-3 leading-snug" title={activeRoute?.suggestedChange}>
+                <div className="text-xs font-semibold text-cotton line-clamp-3 leading-snug" title={activeRoute?.suggestedChange}>
                   {activeRoute?.suggestedChange || 'Update configuration per guidance'}
                 </div>
               </div>
-              <span className="text-[10px] font-mono text-koraSecondary block">
+              <span className="text-[10px] font-mono text-textMuted block">
                 Est. {activeRoute?.estimatedEffort || '30 mins'}
               </span>
             </div>
 
-            <div className="flex items-center text-koraRed font-bold text-sm shrink-0 px-0.5">→</div>
+            <div className="flex items-center text-borderDark font-bold text-sm shrink-0 px-0.5">→</div>
 
             {/* Stage 5: Test Plan */}
-            <div className="flex-1 min-w-[140px] p-3.5 rounded-xl bg-koraCharcoal-dark border border-emerald-500/40 flex flex-col justify-between space-y-2">
+            <div className="flex-1 min-w-[140px] p-3.5 rounded-xl bg-black border border-emerald-500/40 flex flex-col justify-between space-y-2">
               <div>
                 <div className="flex items-center gap-1.5 mb-1">
                   <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 shrink-0" />
@@ -695,7 +779,7 @@ function ContributionsContent() {
                     5. Test Plan
                   </span>
                 </div>
-                <div className="text-xs font-semibold text-koraOffWhite line-clamp-3 leading-snug" title={activeRoute?.testPlan[0]}>
+                <div className="text-xs font-semibold text-textPrimary line-clamp-3 leading-snug" title={activeRoute?.testPlan[0]}>
                   {activeRoute?.testPlan[0] || 'Verify change locally'}
                 </div>
               </div>
@@ -704,26 +788,26 @@ function ContributionsContent() {
               </span>
             </div>
 
-            <div className="flex items-center text-koraRed font-bold text-sm shrink-0 px-0.5">→</div>
+            <div className="flex items-center text-borderDark font-bold text-sm shrink-0 px-0.5">→</div>
 
             {/* Stage 6: Issue Draft */}
             <div className={`flex-1 min-w-[140px] p-3.5 rounded-xl border flex flex-col justify-between space-y-2 transition-all ${
               activeRoute?.draftId
-                ? 'bg-koraBurgundy/40 text-koraOffWhite border-koraRed shadow-glow-red/20'
-                : 'bg-koraCharcoal-dark text-koraSecondary border-koraCharcoal-border'
+                ? 'bg-sustainableLinen text-black border-sustainableLinen shadow-md'
+                : 'bg-black text-textPrimary border-lemonChiffon/30'
             }`}>
               <div>
                 <div className="flex items-center gap-1.5 mb-1">
-                  <div className={`w-2.5 h-2.5 rounded-full shrink-0 ${activeRoute?.draftId ? 'bg-koraRed' : 'bg-koraSecondary'}`} />
-                  <span className={`text-[10px] font-mono font-bold uppercase ${activeRoute?.draftId ? 'text-koraRed' : 'text-koraSecondary'}`}>
+                  <div className={`w-2.5 h-2.5 rounded-full shrink-0 ${activeRoute?.draftId ? 'bg-black' : 'bg-lemonChiffon'}`} />
+                  <span className={`text-[10px] font-mono font-bold uppercase ${activeRoute?.draftId ? 'text-black' : 'text-lemonChiffon'}`}>
                     6. Issue Draft
                   </span>
                 </div>
-                <div className="text-xs font-bold leading-snug text-koraOffWhite">
+                <div className="text-xs font-bold leading-snug">
                   {activeRoute?.draftId ? 'Draft Persisted' : 'Draft Not Generated'}
                 </div>
               </div>
-              <span className={`text-[10px] font-mono font-semibold block ${activeRoute?.draftId ? 'text-koraOffWhite/80' : 'text-koraSecondary'}`}>
+              <span className={`text-[10px] font-mono font-semibold block ${activeRoute?.draftId ? 'text-black/80' : 'text-textMuted'}`}>
                 {activeRoute?.draftId ? 'Saved & Reviewable' : 'Ready to Generate'}
               </span>
             </div>
@@ -736,24 +820,24 @@ function ContributionsContent() {
       <section className="space-y-4 pt-2">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <Compass className="w-4 h-4 text-koraRed" />
-            <h2 className="text-xs font-heading font-bold text-koraOffWhite uppercase tracking-wider">
+            <Compass className="w-4 h-4 text-electricTangerine" />
+            <h2 className="text-xs font-heading font-bold text-textPrimary uppercase tracking-wider">
               Available Contribution Routes ({filteredRoutes.length})
             </h2>
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
             {/* Filter by Difficulty */}
-            <div className="flex items-center gap-1 bg-koraCharcoal-dark p-1 rounded-full border border-koraCharcoal-border text-xs">
-              <span className="text-[10px] font-mono text-koraSecondary px-2">Track:</span>
+            <div className="flex items-center gap-1 bg-black p-1 rounded-full border border-borderDark text-xs">
+              <span className="text-[10px] font-mono text-textMuted px-2">Track:</span>
               {['all', 'beginner', 'intermediate', 'advanced'].map((d) => (
                 <button
                   key={d}
                   onClick={() => setDifficultyFilter(d)}
                   className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono capitalize transition-colors ${
                     difficultyFilter === d
-                      ? 'bg-koraRed text-white font-semibold shadow-glow-red'
-                      : 'text-koraSecondary hover:text-koraOffWhite'
+                      ? 'bg-lemonChiffon text-black font-semibold'
+                      : 'text-textMuted hover:text-textPrimary'
                   }`}
                 >
                   {d}
@@ -762,16 +846,16 @@ function ContributionsContent() {
             </div>
 
             {/* Filter by Status */}
-            <div className="flex items-center gap-1 bg-koraCharcoal-dark p-1 rounded-full border border-koraCharcoal-border text-xs">
-              <span className="text-[10px] font-mono text-koraSecondary px-2">Status:</span>
+            <div className="flex items-center gap-1 bg-black p-1 rounded-full border border-borderDark text-xs">
+              <span className="text-[10px] font-mono text-textMuted px-2">Status:</span>
               {['all', 'not-started', 'in-progress', 'completed'].map((st) => (
                 <button
                   key={st}
                   onClick={() => setStatusFilter(st)}
                   className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono capitalize transition-colors ${
                     statusFilter === st
-                      ? 'bg-koraBurgundy/60 text-koraOffWhite font-semibold border border-koraBurgundy'
-                      : 'text-koraSecondary hover:text-koraOffWhite'
+                      ? 'bg-coffeeBean text-lemonChiffon font-semibold border border-lemonChiffon/30'
+                      : 'text-textMuted hover:text-textPrimary'
                   }`}
                 >
                   {st.replace('-', ' ')}
@@ -783,12 +867,12 @@ function ContributionsContent() {
               <button
                 onClick={handleAutoGenerateRoutes}
                 disabled={generatingAllRoutes}
-                className="px-3.5 py-1.5 rounded-full bg-koraCharcoal-surface hover:bg-koraCharcoal-card text-koraOffWhite border border-koraCharcoal-border text-xs font-semibold flex items-center gap-1 transition-colors disabled:opacity-50"
+                className="px-3.5 py-1.5 rounded-full bg-coffeeBean hover:bg-coffeeBean/80 text-lemonChiffon border border-lemonChiffon/30 text-xs font-semibold flex items-center gap-1 transition-colors disabled:opacity-50"
               >
                 {generatingAllRoutes ? (
                   <Loader2 className="w-3 h-3 animate-spin" />
                 ) : (
-                  <Sparkles className="w-3 h-3 text-koraRed" />
+                  <Sparkles className="w-3 h-3 text-electricTangerine" />
                 )}
                 <span>+ Build routes from findings</span>
               </button>
@@ -797,9 +881,9 @@ function ContributionsContent() {
         </div>
 
         {loading ? (
-          <div className="text-center py-20 p-8 rounded-2xl border border-koraCharcoal-border bg-koraCharcoal-surface/90">
-            <Loader2 className="w-8 h-8 text-koraRed animate-spin mx-auto mb-2" />
-            <p className="text-xs text-koraSecondary font-mono">Loading contribution blueprints...</p>
+          <div className="text-center py-20 glass-panel rounded-2xl border border-borderDark">
+            <Loader2 className="w-8 h-8 text-lemonChiffon animate-spin mx-auto mb-2" />
+            <p className="text-xs text-textMuted font-mono">Loading contribution blueprints...</p>
           </div>
         ) : filteredRoutes.length > 0 ? (
           <div className="space-y-6">
@@ -813,10 +897,10 @@ function ContributionsContent() {
                 <div
                   key={route.id}
                   onClick={() => setSelectedRouteId(route.id)}
-                  className={`p-6 sm:p-8 rounded-2xl border transition-all space-y-6 cursor-pointer bg-koraCharcoal-surface/90 backdrop-blur-2xl ${
+                  className={`glass-panel p-6 sm:p-8 rounded-2xl border transition-all space-y-6 cursor-pointer ${
                     isSelected
-                      ? 'border-koraRed/70 ring-1 ring-koraRed/30 shadow-liquid-glass'
-                      : 'border-koraCharcoal-border hover:border-koraCharcoal-borderLight'
+                      ? 'border-lemonChiffon/70 ring-1 ring-lemonChiffon/30 shadow-xl'
+                      : 'border-borderDark hover:border-borderDark/80'
                   }`}
                 >
                   
@@ -827,10 +911,10 @@ function ContributionsContent() {
                         <span
                           className={`text-[10px] font-bold px-3 py-0.5 rounded-full border uppercase ${
                             route.difficulty === 'beginner'
-                              ? 'bg-koraBurgundy/40 text-koraOffWhite border-koraBurgundy'
+                              ? 'bg-black text-lemonChiffon border-lemonChiffon/40'
                               : route.difficulty === 'intermediate'
-                              ? 'bg-koraSlate/40 text-koraSecondary border-koraSlate'
-                              : 'bg-koraBurgundy text-koraOffWhite border-koraRed'
+                              ? 'bg-black text-electricTangerine border-electricTangerine/40'
+                              : 'bg-black text-rosewood border-rosewood/40'
                           }`}
                         >
                           {route.difficulty} track
@@ -839,19 +923,19 @@ function ContributionsContent() {
                         <span
                           className={`text-[10px] font-mono px-2.5 py-0.5 rounded-full border ${
                             route.generatedBy === 'gemini'
-                              ? 'bg-koraCharcoal-dark text-koraOffWhite border-koraCharcoal-border'
-                              : 'bg-koraBurgundy/40 text-koraOffWhite border-koraBurgundy'
+                              ? 'bg-black text-lemonChiffon border-lemonChiffon/30'
+                              : 'bg-coffeeBean text-lemonChiffon border-electricTangerine/40'
                           }`}
                         >
-                          {route.generatedBy === 'gemini' ? 'Gemini Grounded' : 'Fallback Used: Deterministic'}
+                          {route.generatedBy === 'gemini' ? 'Gamma 4 Grounded' : 'Fallback Used: Deterministic'}
                         </span>
 
-                        <span className="text-xs font-medium text-koraSecondary flex items-center gap-1 font-mono">
-                          <Clock className="w-3.5 h-3.5 text-koraSlate" />
-                          Est. Effort: <strong className="text-koraOffWhite">{route.estimatedEffort || '30 mins'}</strong>
+                        <span className="text-xs font-medium text-textMuted flex items-center gap-1 font-mono">
+                          <Clock className="w-3.5 h-3.5 text-botticelli" />
+                          Est. Effort: <strong className="text-textPrimary">{route.estimatedEffort || '30 mins'}</strong>
                         </span>
 
-                        <span className="text-xs font-mono text-koraOffWhite font-semibold">
+                        <span className="text-xs font-mono text-lemonChiffon font-semibold">
                           Task Readiness: {route.contributionReadiness?.total ?? route.readiness?.total ?? route.readinessScore ?? 80}/100
                         </span>
 
@@ -862,14 +946,14 @@ function ContributionsContent() {
                         )}
 
                         {route.urgencyLabel && (
-                          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-koraBurgundy/30 text-koraRed border border-koraRed/40 uppercase">
+                          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-rosewood/30 text-rosewood border border-rosewood/40 uppercase">
                             Urg: {route.urgencyLabel}
                           </span>
                         )}
                       </div>
 
-                      <h3 className="text-lg sm:text-xl font-heading font-bold text-koraOffWhite">{route.title}</h3>
-                      <p className="text-xs text-koraSecondary leading-relaxed max-w-3xl">
+                      <h3 className="text-lg sm:text-xl font-heading font-bold text-textPrimary">{route.title}</h3>
+                      <p className="text-xs text-textMuted leading-relaxed max-w-3xl">
                         {route.summary}
                       </p>
                     </div>
@@ -877,7 +961,7 @@ function ContributionsContent() {
                     <div className="flex flex-wrap items-center gap-2 shrink-0">
                       <Link
                         href={`/app/contributions/${route.id}`}
-                        className="p-2 rounded-full bg-koraCharcoal-dark hover:bg-koraCharcoal-card text-koraSecondary hover:text-koraOffWhite border border-koraCharcoal-border transition-colors"
+                        className="p-2 rounded-full bg-black hover:bg-blackHole text-textMuted hover:text-lemonChiffon border border-borderDark transition-colors"
                         title="Open Dedicated Route Blueprint"
                       >
                         <ExternalLink className="w-4 h-4" />
@@ -890,26 +974,26 @@ function ContributionsContent() {
                           handleDownloadPack(route.id);
                         }}
                         disabled={downloadingPackId === route.id}
-                        className="p-2 rounded-full bg-koraCharcoal-dark hover:bg-koraCharcoal-card text-koraSecondary hover:text-koraOffWhite border border-koraCharcoal-border transition-colors"
+                        className="p-2 rounded-full bg-black hover:bg-blackHole text-textMuted hover:text-lemonChiffon border border-borderDark transition-colors"
                         title="Download self-contained Contribution Pack (.md)"
                       >
                         {downloadingPackId === route.id ? (
-                          <Loader2 className="w-4 h-4 animate-spin text-koraRed" />
+                          <Loader2 className="w-4 h-4 animate-spin text-lemonChiffon" />
                         ) : (
                           <Download className="w-4 h-4" />
                         )}
                       </button>
 
                       {route.category === 'secret' ? (
-                        <div className="px-4 py-2 rounded-full bg-koraBurgundy/40 text-koraOffWhite text-xs font-semibold flex items-center gap-1.5 border border-koraBurgundy">
-                          <Lock className="w-3.5 h-3.5 text-koraRed" />
+                        <div className="px-4 py-2 rounded-full bg-rosewood/30 text-cotton text-xs font-semibold flex items-center gap-1.5 border border-rosewood">
+                          <Lock className="w-3.5 h-3.5 text-lemonChiffon" />
                           <span>Private Disclosure Required</span>
                         </div>
                       ) : route.draftId ? (
                         <div className="flex items-center gap-1.5">
                           <Link
                             href={`/app/issue-drafts?draftId=${route.draftId}`}
-                            className="px-5 py-2.5 rounded-full bg-koraRed hover:bg-koraRed-hover text-white text-xs font-semibold flex items-center gap-2 transition-all shadow-glow-red"
+                            className="px-5 py-2.5 rounded-full bg-lemonChiffon hover:bg-sustainableLinen text-black text-xs font-semibold flex items-center gap-2 transition-all shadow-md hover:shadow-lemonChiffon/20"
                           >
                             <FileText className="w-3.5 h-3.5" />
                             <span>View Saved Draft</span>
@@ -922,11 +1006,11 @@ function ContributionsContent() {
                               handleGenerateDraft(route.id);
                             }}
                             disabled={generatingDraftId === route.id}
-                            className="p-2 rounded-full bg-koraCharcoal-dark hover:bg-koraCharcoal-card text-koraSecondary hover:text-koraOffWhite border border-koraCharcoal-border transition-colors text-xs"
+                            className="p-2 rounded-full bg-black hover:bg-blackHole text-textMuted hover:text-lemonChiffon border border-borderDark transition-colors text-xs"
                             title="Regenerate maintainer draft"
                           >
                             {generatingDraftId === route.id ? (
-                              <Loader2 className="w-3.5 h-3.5 animate-spin text-koraRed" />
+                              <Loader2 className="w-3.5 h-3.5 animate-spin text-lemonChiffon" />
                             ) : (
                               <RotateCw className="w-3.5 h-3.5" />
                             )}
@@ -939,7 +1023,7 @@ function ContributionsContent() {
                             handleGenerateDraft(route.id);
                           }}
                           disabled={generatingDraftId === route.id}
-                          className="px-5 py-2.5 rounded-full bg-koraRed hover:bg-koraRed-hover text-white text-xs font-semibold flex items-center gap-2 transition-all shadow-glow-red disabled:opacity-50"
+                          className="px-5 py-2.5 rounded-full bg-lemonChiffon hover:bg-sustainableLinen text-black text-xs font-semibold flex items-center gap-2 transition-all shadow-md hover:shadow-lemonChiffon/20 disabled:opacity-50"
                         >
                           {generatingDraftId === route.id ? (
                             <>
@@ -960,22 +1044,22 @@ function ContributionsContent() {
 
                   {/* Beginner Guidance 4-Box Overview */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs pt-1">
-                    <div className="p-3 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border">
-                      <span className="text-koraSecondary text-[10px] uppercase font-bold block mb-1">
+                    <div className="p-3 rounded-xl bg-black border border-borderDark">
+                      <span className="text-textMuted text-[10px] uppercase font-bold block mb-1">
                         {route.files[0]?.includes('Repository Root') ? 'Target Area' : 'Target File'}
                       </span>
-                      <code className="text-koraOffWhite font-mono text-[11px] block break-all" title={route.files[0] || 'Repository Root'}>
+                      <code className="text-lemonChiffon font-mono text-[11px] block break-all" title={route.files[0] || 'Repository Root'}>
                         {route.files[0] || 'Repository Root'}
                       </code>
                     </div>
 
-                    <div className="p-3 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border">
-                      <span className="text-koraSecondary text-[10px] uppercase font-bold block mb-1">Required Skills</span>
+                    <div className="p-3 rounded-xl bg-black border border-borderDark">
+                      <span className="text-textMuted text-[10px] uppercase font-bold block mb-1">Required Skills</span>
                       <div className="flex flex-wrap gap-1">
                         {route.skills.map((skill, sIdx) => (
                           <span
                             key={sIdx}
-                            className="px-2 py-0.5 rounded bg-koraCharcoal-surface text-koraOffWhite border border-koraCharcoal-border text-[10px] font-semibold"
+                            className="px-2 py-0.5 rounded bg-blackHole text-cotton border border-borderDark text-[10px] font-semibold"
                           >
                             {skill}
                           </span>
@@ -983,9 +1067,9 @@ function ContributionsContent() {
                       </div>
                     </div>
 
-                    <div className="p-3 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border sm:col-span-2">
-                      <span className="text-koraSecondary text-[10px] uppercase font-bold block mb-1">Suggested Change</span>
-                      <p className="text-koraOffWhite text-[11px] leading-relaxed break-words" title={route.suggestedChange}>
+                    <div className="p-3 rounded-xl bg-black border border-borderDark sm:col-span-2">
+                      <span className="text-textMuted text-[10px] uppercase font-bold block mb-1">Suggested Change</span>
+                      <p className="text-textPrimary text-[11px] leading-relaxed break-words" title={route.suggestedChange}>
                         {route.suggestedChange || 'Apply fix per repository best practices.'}
                       </p>
                     </div>
@@ -993,18 +1077,18 @@ function ContributionsContent() {
 
                   {/* Deterministic Readiness Score Breakdown */}
                   {route.readiness && (
-                    <div className="p-3.5 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono">
-                      <span className="text-koraSecondary font-medium">Deterministic Readiness Breakdown:</span>
+                    <div className="p-3.5 rounded-xl bg-black/60 border border-borderDark/80 flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono">
+                      <span className="text-textMuted font-medium">Deterministic Readiness Breakdown:</span>
                       <div className="flex flex-wrap items-center gap-3">
-                        <span className="text-koraSlate">Security Impact: +{route.readiness.securityImpact}</span>
-                        <span className="text-koraCharcoal-borderLight">•</span>
-                        <span className="text-koraOffWhite">Evidence Conf: +{route.readiness.evidenceConfidence}</span>
-                        <span className="text-koraCharcoal-borderLight">•</span>
-                        <span className="text-koraSecondary">Test Signal: +{route.readiness.testAvailability}</span>
-                        <span className="text-koraCharcoal-borderLight">•</span>
-                        <span className="text-koraSecondary">Doc Clarity: +{route.readiness.documentationClarity}</span>
-                        <span className="text-koraCharcoal-borderLight">•</span>
-                        <span className="text-koraRed font-bold">Total: {route.readiness.total}/100</span>
+                        <span className="text-botticelli">Security Impact: +{route.readiness.securityImpact}</span>
+                        <span className="text-borderDark">•</span>
+                        <span className="text-cotton">Evidence Conf: +{route.readiness.evidenceConfidence}</span>
+                        <span className="text-borderDark">•</span>
+                        <span className="text-lemonChiffon">Test Signal: +{route.readiness.testAvailability}</span>
+                        <span className="text-borderDark">•</span>
+                        <span className="text-sustainableLinen">Doc Clarity: +{route.readiness.documentationClarity}</span>
+                        <span className="text-borderDark">•</span>
+                        <span className="text-electricTangerine font-bold">Total: {route.readiness.total}/100</span>
                       </div>
                     </div>
                   )}
@@ -1012,32 +1096,32 @@ function ContributionsContent() {
                   {/* Step-by-Step Test Plan & Acceptance Checklist */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                     {/* Test Plan */}
-                    <div className="p-4 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border space-y-2.5">
-                      <h4 className="font-heading font-semibold text-koraOffWhite uppercase tracking-wider text-[11px] flex items-center gap-1.5">
-                        <Terminal className="w-3.5 h-3.5 text-koraRed" />
+                    <div className="p-4 rounded-xl bg-black border border-borderDark space-y-2.5">
+                      <h4 className="font-heading font-semibold text-textPrimary uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+                        <Terminal className="w-3.5 h-3.5 text-lemonChiffon" />
                         Step-by-Step Verification Plan
                       </h4>
-                      <ul className="space-y-1.5 text-koraSecondary">
+                      <ul className="space-y-1.5 text-textMuted">
                         {route.testPlan.map((step, idx) => (
                           <li key={idx} className="flex items-start gap-2">
-                            <span className="text-koraOffWhite font-mono text-[11px] shrink-0">{idx + 1}.</span>
-                            <span className="leading-relaxed text-koraOffWhite">{step}</span>
+                            <span className="text-lemonChiffon font-mono text-[11px] shrink-0">{idx + 1}.</span>
+                            <span className="leading-relaxed text-textPrimary">{step}</span>
                           </li>
                         ))}
                       </ul>
                     </div>
 
                     {/* Acceptance Criteria */}
-                    <div className="p-4 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border space-y-2.5">
-                      <h4 className="font-heading font-semibold text-koraOffWhite uppercase tracking-wider text-[11px] flex items-center gap-1.5">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-koraRed" />
+                    <div className="p-4 rounded-xl bg-black border border-borderDark space-y-2.5">
+                      <h4 className="font-heading font-semibold text-textPrimary uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-electricTangerine" />
                         Maintainer Acceptance Criteria
                       </h4>
-                      <ul className="space-y-1.5 text-koraSecondary">
+                      <ul className="space-y-1.5 text-textMuted">
                         {route.acceptanceCriteria.map((crit, idx) => (
                           <li key={idx} className="flex items-start gap-2">
-                            <span className="text-koraRed font-mono text-[11px] shrink-0">✓</span>
-                            <span className="leading-relaxed text-koraOffWhite">{crit}</span>
+                            <span className="text-electricTangerine font-mono text-[11px] shrink-0">✓</span>
+                            <span className="leading-relaxed text-textPrimary">{crit}</span>
                           </li>
                         ))}
                       </ul>
@@ -1045,26 +1129,26 @@ function ContributionsContent() {
                   </div>
 
                   {/* Status Toggle & Persistence Bar */}
-                  <div className="pt-3 border-t border-koraCharcoal-border flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="pt-3 border-t border-borderDark flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs text-koraSecondary">Current Status:</span>
+                      <span className="text-xs text-textMuted">Current Status:</span>
                       <span
                         className={`text-xs font-bold font-mono px-3 py-0.5 rounded-full capitalize ${
                           isCompleted
-                            ? 'bg-emerald-950/70 text-emerald-300 border border-emerald-500/40'
+                            ? 'bg-lemonChiffon text-black'
                             : isInProgress
-                            ? 'bg-koraBurgundy text-koraOffWhite border border-koraRed'
+                            ? 'bg-electricTangerine text-black'
                             : isNeedsReview
-                            ? 'bg-koraSlate/50 text-koraOffWhite border border-koraSlate'
-                            : 'bg-koraCharcoal-dark text-koraSecondary border border-koraCharcoal-border'
+                            ? 'bg-botticelli text-black'
+                            : 'bg-coffeeBean text-lemonChiffon'
                         }`}
                       >
                         {(route.status || 'not-started').replace('-', ' ')}
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-1 bg-koraCharcoal-dark p-1 rounded-full border border-koraCharcoal-border">
-                      <span className="text-[10px] text-koraSecondary font-mono px-2">Update:</span>
+                    <div className="flex items-center gap-1 bg-blackHole p-1 rounded-full border border-borderDark">
+                      <span className="text-[10px] text-textMuted font-mono px-2">Update:</span>
                       {(['not-started', 'in-progress', 'needs-review', 'completed'] as const).map((st) => (
                         <button
                           key={st}
@@ -1076,13 +1160,13 @@ function ContributionsContent() {
                           className={`px-2.5 py-1 text-[10px] font-mono rounded-full capitalize transition-all ${
                             (route.status || 'not-started') === st
                               ? st === 'completed'
-                                ? 'bg-emerald-950 text-emerald-300 font-bold border border-emerald-500/40'
+                                ? 'bg-lemonChiffon text-black font-bold'
                                 : st === 'in-progress'
-                                ? 'bg-koraRed text-white font-bold shadow-glow-red'
+                                ? 'bg-electricTangerine text-black font-bold'
                                 : st === 'needs-review'
-                                ? 'bg-koraSlate text-white font-bold'
-                                : 'bg-koraBurgundy/60 text-koraOffWhite border border-koraBurgundy'
-                              : 'text-koraSecondary hover:text-koraOffWhite'
+                                ? 'bg-botticelli text-black font-bold'
+                                : 'bg-coffeeBean text-lemonChiffon border border-lemonChiffon/30'
+                              : 'text-textMuted hover:text-textPrimary'
                           }`}
                         >
                           {st.replace('-', ' ')}
@@ -1097,11 +1181,11 @@ function ContributionsContent() {
           </div>
         ) : (
           /* Empty State */
-          <div className="text-center py-16 p-8 rounded-2xl border border-dashed border-koraCharcoal-border bg-koraCharcoal-surface/60 px-4 space-y-4">
-            <Compass className="w-12 h-12 text-koraRed/60 mx-auto" />
+          <div className="text-center py-16 glass-panel rounded-2xl border border-dashed border-borderDark px-4 space-y-4">
+            <Compass className="w-12 h-12 text-lemonChiffon/60 mx-auto" />
             <div>
-              <h3 className="text-base font-heading font-bold text-koraOffWhite">No contribution routes created yet</h3>
-              <p className="text-xs text-koraSecondary mt-1 max-w-md mx-auto leading-relaxed">
+              <h3 className="text-base font-heading font-bold text-textPrimary">No contribution routes created yet</h3>
+              <p className="text-xs text-textMuted mt-1 max-w-md mx-auto leading-relaxed">
                 Contribution routes are actionable fix blueprints constructed from verified security findings and repository health gaps.
               </p>
             </div>
@@ -1109,13 +1193,13 @@ function ContributionsContent() {
             <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
               <Link
                 href="/app/findings"
-                className="px-5 py-2.5 rounded-full bg-koraRed text-white text-xs font-semibold hover:bg-koraRed-hover transition-colors shadow-glow-red"
+                className="px-5 py-2.5 rounded-full bg-lemonChiffon text-black text-xs font-semibold hover:bg-sustainableLinen transition-colors shadow-sm"
               >
                 Browse Verified Findings →
               </Link>
               <Link
                 href="/app/scan"
-                className="px-5 py-2.5 rounded-full bg-koraCharcoal-surface hover:bg-koraCharcoal-card text-koraOffWhite text-xs font-semibold border border-koraCharcoal-border transition-colors"
+                className="px-5 py-2.5 rounded-full bg-blackHole hover:bg-black text-textPrimary text-xs font-semibold border border-borderDark transition-colors"
               >
                 Scan Another Repository
               </Link>
@@ -1132,8 +1216,8 @@ export default function ContributionsView() {
   return (
     <Suspense
       fallback={
-        <div className="flex-1 flex items-center justify-center p-16">
-          <div className="w-8 h-8 border-2 border-koraRed border-t-transparent rounded-full animate-spin" />
+        <div className="flex-1 flex items-center justify-center p-16 bg-black">
+          <div className="w-8 h-8 border-2 border-lemonChiffon border-t-transparent rounded-full animate-spin" />
         </div>
       }
     >

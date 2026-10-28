@@ -21,10 +21,10 @@ export function GlassMetricCard({
 }: GlassMetricCardProps) {
   return (
     <div
-      className={`p-4 rounded-2xl flex items-center justify-between gap-3 border transition-all ${
+      className={`liquid-glass-card p-4 rounded-2xl flex items-center justify-between gap-3 ${
         isPrimary
-          ? 'bg-koraBurgundy/25 border-koraRed/40 text-koraOffWhite shadow-glow-burgundy'
-          : 'bg-koraCharcoal-surface/85 border-koraCharcoal-border text-koraOffWhite hover:border-koraRed/30'
+          ? 'border-lemonChiffon/40 bg-gradient-to-br from-blackHole to-coffeeBean/70 shadow-liquid-glow'
+          : 'border-platinumSilver/20'
       } ${className}`}
       {...props}
     >
@@ -32,17 +32,17 @@ export function GlassMetricCard({
         {icon && (
           <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 shadow-sm ${
             isPrimary
-              ? 'bg-koraBurgundy/50 border border-koraRed/40 text-koraRed'
-              : 'bg-koraCharcoal-dark border border-koraCharcoal-border text-koraSecondary'
+              ? 'bg-coffeeBean border border-lemonChiffon/40 text-lemonChiffon'
+              : 'bg-white/5 border border-platinumSilver/25 text-platinumSilver'
           }`}>
             {icon}
           </div>
         )}
         <div>
-          <div className={`text-xl font-heading font-extrabold ${isPrimary ? 'text-koraOffWhite' : 'text-koraOffWhite'}`}>
+          <div className={`text-xl font-extrabold ${isPrimary ? 'text-lemonChiffon' : 'text-textPrimary'}`}>
             {value}
           </div>
-          <div className="text-[11px] text-koraSecondary leading-tight">
+          <div className="text-[11px] text-platinumSilver/70 leading-tight">
             {label}
           </div>
         </div>

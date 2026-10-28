@@ -155,58 +155,60 @@ export default function ProfileView() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-6 text-koraOffWhite">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-6 bg-black text-textPrimary">
+      
       {/* Header */}
-      <div className="pb-6 border-b border-koraCharcoal-border">
-        <h1 className="text-2xl font-heading font-bold text-koraOffWhite flex items-center gap-2">
-          <UserIcon className="w-6 h-6 text-koraRed" />
+      <div className="pb-6 border-b border-borderDark">
+        <h1 className="text-2xl font-heading font-bold text-textPrimary flex items-center gap-2">
+          <UserIcon className="w-6 h-6 text-electricTangerine" />
           <span>Profile &amp; Safety Controls</span>
         </h1>
-        <p className="text-xs text-koraSecondary mt-1">
+        <p className="text-xs text-textMuted mt-1">
           Safety policies, visual accessibility preferences, and local data retention settings.
         </p>
       </div>
 
       {/* Accordion 1: Safety & AI Guardrails */}
-      <div className="bg-koraCharcoal-surface/90 rounded-2xl border border-koraCharcoal-border overflow-hidden shadow-xl backdrop-blur-xl">
+      <div className="glass-panel rounded-2xl border border-borderDark overflow-hidden">
         <button
           onClick={() => setOpenSection(openSection === 'safety' ? ('' as any) : 'safety')}
-          className="w-full p-6 text-left flex items-center justify-between hover:bg-koraCharcoal-card/60 transition-colors"
+          className="w-full p-6 text-left flex items-center justify-between hover:bg-blackHole/40 transition-colors"
         >
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-koraCharcoal-dark flex items-center justify-center text-koraRed border border-koraCharcoal-border">
+            <div className="w-9 h-9 rounded-xl bg-coffeeBean flex items-center justify-center text-electricTangerine border border-borderDark">
               <Shield className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-sm font-heading font-bold text-koraOffWhite">Safety &amp; Evidence Grounding Controls</h2>
-              <span className="text-xs text-koraSecondary">Secret masking, AI grounding policy, and external safety rules</span>
+              <h2 className="text-sm font-heading font-bold text-textPrimary">Safety &amp; Evidence Grounding Controls</h2>
+              <span className="text-xs text-textMuted">Secret masking, AI grounding policy, and external safety rules</span>
             </div>
           </div>
           <ChevronDown
-            className={`w-5 h-5 text-koraSecondary transition-transform ${
-              openSection === 'safety' ? 'rotate-180 text-koraRed' : ''
+            className={`w-5 h-5 text-botticelli transition-transform ${
+              openSection === 'safety' ? 'rotate-180 text-lemonChiffon' : ''
             }`}
           />
         </button>
 
         {openSection === 'safety' && (
-          <div className="p-6 pt-2 border-t border-koraCharcoal-border space-y-4 text-xs">
+          <div className="p-6 pt-2 border-t border-borderDark space-y-4 text-xs">
+            
             {/* Always ON: Secret Masking */}
-            <div className="p-4 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border flex items-center justify-between">
+            <div className="p-4 rounded-xl bg-black border border-borderDark flex items-center justify-between">
               <div>
-                <span className="font-semibold text-koraOffWhite block">Strict Secret Masking</span>
-                <span className="text-koraSecondary">API tokens, AWS keys, and private keys are masked with asterisks before model calls or database writes.</span>
+                <span className="font-semibold text-textPrimary block">Strict Secret Masking</span>
+                <span className="text-textMuted">API tokens, AWS keys, and private keys are masked with asterisks before model calls or database writes.</span>
               </div>
-              <span className="text-koraOffWhite font-bold px-3 py-1 rounded-full bg-koraBurgundy/40 border border-koraRed/40 text-[10px]">
+              <span className="text-lemonChiffon font-bold px-3 py-1 rounded-full bg-coffeeBean border border-lemonChiffon/30 text-[10px]">
                 ALWAYS ON
               </span>
             </div>
 
             {/* Toggle: Gemini Grounding Policy */}
-            <div className="p-4 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border flex items-center justify-between">
+            <div className="p-4 rounded-xl bg-black border border-borderDark flex items-center justify-between">
               <div>
-                <span className="font-semibold text-koraOffWhite block">Gemini Evidence Grounding Policy</span>
-                <span className="text-koraSecondary">Restricts AI explanations strictly to verified finding IDs with deterministic fallback on failure.</span>
+                <span className="font-semibold text-textPrimary block">Gemini Evidence Grounding Policy</span>
+                <span className="text-textMuted">Restricts AI explanations strictly to verified finding IDs with deterministic fallback on failure.</span>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
                 <input
@@ -215,65 +217,65 @@ export default function ProfileView() {
                   onChange={(e) => updateSettings({ geminiGroundingPolicy: e.target.checked })}
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-koraCharcoal-card peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-koraBg after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-koraOffWhite after:border-koraCharcoal-border after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-koraRed" />
+                <div className="w-11 h-6 bg-blackHole peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-black after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-cotton after:border-borderDark after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-lemonChiffon" />
               </label>
             </div>
 
-            {/* Sensitive Publishing Control (Enforced) */}
-            <div className="p-4 rounded-xl bg-koraBurgundy/20 border border-koraRed/30 flex items-center justify-between">
+            {/* Sensitive Publishing Control (Tangerine toggle) */}
+            <div className="p-4 rounded-xl bg-coffeeBean/70 border border-borderDark flex items-center justify-between">
               <div>
-                <span className="font-semibold text-koraOffWhite block">Human Review Enforcement</span>
-                <span className="text-koraSecondary">Prohibits automatic PR creation and forces human maintainer review for all issue drafts.</span>
+                <span className="font-semibold text-textPrimary block">Human Review Enforcement</span>
+                <span className="text-textMuted">Prohibits automatic PR creation and forces human maintainer review for all issue drafts.</span>
               </div>
-              <span className="text-koraRed font-bold px-3 py-1 rounded-full bg-koraCharcoal-dark border border-koraRed/40 text-[10px]">
+              <span className="text-electricTangerine font-bold px-3 py-1 rounded-full bg-black border border-electricTangerine/40 text-[10px]">
                 ENFORCED
               </span>
             </div>
 
             {/* Live Integration Status (Safe enum report) */}
             {integrationStatus && (
-              <div className="p-4 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border space-y-3">
+              <div className="p-4 rounded-xl bg-black border border-borderDark space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-koraOffWhite text-xs block">
+                  <span className="font-semibold text-textPrimary text-xs block">
                     Verified Integration Status
                   </span>
-                  <span className="text-[10px] text-koraSecondary font-mono">Zero secrets exposed</span>
+                  <span className="text-[10px] text-textMuted font-mono">Zero secrets exposed</span>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                  <div className="p-2.5 rounded-lg bg-koraCharcoal-card border border-koraCharcoal-border">
-                    <span className="text-[10px] text-koraSecondary block">Supabase</span>
+                  <div className="p-2.5 rounded-lg bg-blackHole border border-borderDark">
+                    <span className="text-[10px] text-textMuted block">Supabase</span>
                     <span className={`text-[11px] font-mono font-bold capitalize ${
-                      integrationStatus.supabase === 'configured' ? 'text-emerald-400' : 'text-koraSecondary'
+                      integrationStatus.supabase === 'configured' ? 'text-lemonChiffon' : 'text-textMuted'
                     }`}>
                       {integrationStatus.supabase}
                     </span>
                   </div>
-                  <div className="p-2.5 rounded-lg bg-koraCharcoal-card border border-koraCharcoal-border">
-                    <span className="text-[10px] text-koraSecondary block">GitHub API</span>
+                  <div className="p-2.5 rounded-lg bg-blackHole border border-borderDark">
+                    <span className="text-[10px] text-textMuted block">GitHub API</span>
                     <span className={`text-[11px] font-mono font-bold capitalize ${
-                      integrationStatus.github === 'token configured' ? 'text-koraRed' : 'text-koraSecondary'
+                      integrationStatus.github === 'token configured' ? 'text-electricTangerine' : 'text-botticelli'
                     }`}>
                       {integrationStatus.github}
                     </span>
                   </div>
-                  <div className="p-2.5 rounded-lg bg-koraCharcoal-card border border-koraCharcoal-border">
-                    <span className="text-[10px] text-koraSecondary block">OSV Engine</span>
+                  <div className="p-2.5 rounded-lg bg-blackHole border border-borderDark">
+                    <span className="text-[10px] text-textMuted block">OSV Engine</span>
                     <span className={`text-[11px] font-mono font-bold capitalize ${
-                      integrationStatus.osv === 'reachable' ? 'text-emerald-400' : 'text-koraBurgundy'
+                      integrationStatus.osv === 'reachable' ? 'text-emerald-400' : 'text-rosewood'
                     }`}>
                       {integrationStatus.osv}
                     </span>
                   </div>
-                  <div className="p-2.5 rounded-lg bg-koraCharcoal-card border border-koraCharcoal-border">
-                    <span className="text-[10px] text-koraSecondary block">Gemini AI</span>
+                  <div className="p-2.5 rounded-lg bg-blackHole border border-borderDark">
+                    <span className="text-[10px] text-textMuted block">Gemini AI</span>
                     <span className={`text-[11px] font-mono font-bold capitalize ${
-                      integrationStatus.gemini === 'configured' ? 'text-emerald-400' : 'text-koraRed'
+                      integrationStatus.gemini === 'configured' ? 'text-lemonChiffon' : 'text-electricTangerine'
                     }`}>
                       {integrationStatus.gemini}
                     </span>
                   </div>
-                  <div className="p-2.5 rounded-lg bg-koraCharcoal-card border border-koraCharcoal-border">
-                    <span className="text-[10px] text-koraSecondary block">Persistence DB</span>
+                  <div className="p-2.5 rounded-lg bg-blackHole border border-borderDark">
+                    <span className="text-[10px] text-textMuted block">Persistence DB</span>
                     <span className="text-[11px] font-mono font-bold text-emerald-400">
                       {integrationStatus.database}
                     </span>
@@ -283,67 +285,68 @@ export default function ProfileView() {
             )}
 
             {/* Privacy & Safety Center Documentation Links */}
-            <div className="pt-2 border-t border-koraCharcoal-border flex flex-wrap items-center justify-between gap-3 text-xs">
-              <span className="text-koraSecondary">Official Safety &amp; Governance Center:</span>
+            <div className="pt-2 border-t border-borderDark flex flex-wrap items-center justify-between gap-3 text-xs">
+              <span className="text-textMuted">Official Safety &amp; Governance Center:</span>
               <div className="flex items-center gap-4">
                 <Link
                   href="/security"
-                  className="text-koraRed hover:text-koraRed-hover hover:underline flex items-center gap-1 font-mono text-[11px]"
+                  className="text-lemonChiffon hover:underline flex items-center gap-1 font-mono text-[11px]"
                 >
                   <span>Security Model &amp; Disclosure Policy</span>
                   <ExternalLink className="w-3 h-3" />
                 </Link>
                 <Link
                   href="/privacy"
-                  className="text-koraRed hover:text-koraRed-hover hover:underline flex items-center gap-1 font-mono text-[11px]"
+                  className="text-lemonChiffon hover:underline flex items-center gap-1 font-mono text-[11px]"
                 >
                   <span>Privacy Notice &amp; Zero Retention</span>
                   <ExternalLink className="w-3 h-3" />
                 </Link>
               </div>
             </div>
+
           </div>
         )}
       </div>
 
       {/* Accordion 2: Profile Credentials */}
-      <div className="bg-koraCharcoal-surface/90 rounded-2xl border border-koraCharcoal-border overflow-hidden shadow-xl backdrop-blur-xl">
+      <div className="glass-panel rounded-2xl border border-borderDark overflow-hidden">
         <button
           onClick={() => setOpenSection(openSection === 'profile' ? ('' as any) : 'profile')}
-          className="w-full p-6 text-left flex items-center justify-between hover:bg-koraCharcoal-card/60 transition-colors"
+          className="w-full p-6 text-left flex items-center justify-between hover:bg-blackHole/40 transition-colors"
         >
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-koraCharcoal-dark flex items-center justify-center text-koraRed border border-koraCharcoal-border">
+            <div className="w-9 h-9 rounded-xl bg-coffeeBean flex items-center justify-center text-lemonChiffon border border-borderDark">
               <UserIcon className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-sm font-heading font-bold text-koraOffWhite">Profile &amp; Credentials</h2>
-              <span className="text-xs text-koraSecondary">Display name, email address, and phone number</span>
+              <h2 className="text-sm font-heading font-bold text-textPrimary">Profile &amp; Credentials</h2>
+              <span className="text-xs text-textMuted">Display name, email address, and phone number</span>
             </div>
           </div>
           <ChevronDown
-            className={`w-5 h-5 text-koraSecondary transition-transform ${
-              openSection === 'profile' ? 'rotate-180 text-koraRed' : ''
+            className={`w-5 h-5 text-botticelli transition-transform ${
+              openSection === 'profile' ? 'rotate-180 text-lemonChiffon' : ''
             }`}
           />
         </button>
 
         {openSection === 'profile' && (
-          <div className="p-6 pt-2 border-t border-koraCharcoal-border space-y-4">
+          <div className="p-6 pt-2 border-t border-borderDark space-y-4">
             <form onSubmit={handleUpdateName} className="space-y-4 max-w-lg">
               <div>
-                <label className="block text-xs font-medium text-koraSecondary mb-1.5">Display Name</label>
+                <label className="block text-xs font-medium text-textMuted mb-1">Display Name</label>
                 <div className="flex gap-2">
                   <input
                     type="text"
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
-                    className="flex-1 px-4 py-2 bg-koraCharcoal-dark border border-koraCharcoal-border rounded-xl text-sm text-koraOffWhite focus:outline-none focus:border-koraRed"
+                    className="flex-1 px-4 py-2 bg-black border border-borderDark rounded-xl text-sm text-textPrimary focus:outline-none focus:border-lemonChiffon"
                   />
                   <button
                     type="submit"
                     disabled={savingName}
-                    className="px-5 py-2 bg-koraRed hover:bg-koraRed-hover text-white text-xs font-semibold rounded-full transition-colors shadow-glow-red disabled:opacity-50"
+                    className="px-5 py-2 bg-lemonChiffon hover:bg-sustainableLinen text-black text-xs font-semibold rounded-full transition-colors disabled:opacity-50"
                   >
                     {savingName ? 'Saving...' : 'Save'}
                   </button>
@@ -351,13 +354,13 @@ export default function ProfileView() {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                <div className="p-3 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border">
-                  <span className="text-koraSecondary block mb-0.5">Email</span>
-                  <span className="text-koraOffWhite font-medium">{user?.email || 'N/A'}</span>
+                <div className="p-3 rounded-xl bg-black border border-borderDark">
+                  <span className="text-textMuted block mb-0.5">Email</span>
+                  <span className="text-textPrimary font-medium">{user?.email || 'N/A'}</span>
                 </div>
-                <div className="p-3 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border">
-                  <span className="text-koraSecondary block mb-0.5">Phone</span>
-                  <span className="text-koraOffWhite font-medium">{user?.phone || 'N/A'}</span>
+                <div className="p-3 rounded-xl bg-black border border-borderDark">
+                  <span className="text-textMuted block mb-0.5">Phone</span>
+                  <span className="text-textPrimary font-medium">{user?.phone || 'N/A'}</span>
                 </div>
               </div>
             </form>
@@ -366,32 +369,33 @@ export default function ProfileView() {
       </div>
 
       {/* Accordion 3: Appearance & Reduced Motion */}
-      <div className="bg-koraCharcoal-surface/90 rounded-2xl border border-koraCharcoal-border overflow-hidden shadow-xl backdrop-blur-xl">
+      <div className="glass-panel rounded-2xl border border-borderDark overflow-hidden">
         <button
           onClick={() => setOpenSection(openSection === 'appearance' ? ('' as any) : 'appearance')}
-          className="w-full p-6 text-left flex items-center justify-between hover:bg-koraCharcoal-card/60 transition-colors"
+          className="w-full p-6 text-left flex items-center justify-between hover:bg-blackHole/40 transition-colors"
         >
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-koraCharcoal-dark flex items-center justify-center text-koraRed border border-koraCharcoal-border">
+            <div className="w-9 h-9 rounded-xl bg-coffeeBean flex items-center justify-center text-botticelli border border-borderDark">
               <Sliders className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-sm font-heading font-bold text-koraOffWhite">Appearance &amp; Accessibility</h2>
-              <span className="text-xs text-koraSecondary">Theme, font scale, font stack, and reduced motion</span>
+              <h2 className="text-sm font-heading font-bold text-textPrimary">Appearance &amp; Accessibility</h2>
+              <span className="text-xs text-textMuted">Theme, font scale, font stack, and reduced motion</span>
             </div>
           </div>
           <ChevronDown
-            className={`w-5 h-5 text-koraSecondary transition-transform ${
-              openSection === 'appearance' ? 'rotate-180 text-koraRed' : ''
+            className={`w-5 h-5 text-botticelli transition-transform ${
+              openSection === 'appearance' ? 'rotate-180 text-lemonChiffon' : ''
             }`}
           />
         </button>
 
         {openSection === 'appearance' && (
-          <div className="p-6 pt-2 border-t border-koraCharcoal-border space-y-6">
+          <div className="p-6 pt-2 border-t border-borderDark space-y-6">
+            
             {/* Theme */}
             <div>
-              <label className="block text-xs font-medium text-koraSecondary mb-2">Theme Mode</label>
+              <label className="block text-xs font-medium text-textMuted mb-2">Theme Mode</label>
               <div className="grid grid-cols-3 gap-3 max-w-md">
                 {[
                   { id: 'dark', label: 'Dark Mode', icon: Moon },
@@ -407,8 +411,8 @@ export default function ProfileView() {
                       onClick={() => updateSettings({ theme: t.id as any })}
                       className={`p-3 rounded-xl border flex flex-col items-center gap-1.5 text-xs font-medium transition-all ${
                         isSelected
-                          ? 'bg-koraBurgundy/40 border-koraRed text-koraOffWhite shadow-sm'
-                          : 'bg-koraCharcoal-dark border-koraCharcoal-border text-koraSecondary hover:text-koraOffWhite'
+                          ? 'bg-coffeeBean border-lemonChiffon text-lemonChiffon'
+                          : 'bg-black border-borderDark text-textMuted hover:text-textPrimary'
                       }`}
                     >
                       <Icon className="w-4 h-4" />
@@ -421,7 +425,7 @@ export default function ProfileView() {
 
             {/* Font Scale */}
             <div>
-              <label className="block text-xs font-medium text-koraSecondary mb-2">Font Scale</label>
+              <label className="block text-xs font-medium text-textMuted mb-2">Font Scale</label>
               <div className="grid grid-cols-3 gap-3 max-w-md">
                 {[
                   { id: 'small', label: 'Compact' },
@@ -436,8 +440,8 @@ export default function ProfileView() {
                       onClick={() => updateSettings({ fontSize: fs.id as any })}
                       className={`py-2 px-3 rounded-full border text-xs font-medium transition-colors ${
                         isSelected
-                          ? 'bg-koraRed text-white font-semibold border-koraRed shadow-sm'
-                          : 'bg-koraCharcoal-dark border-koraCharcoal-border text-koraSecondary hover:text-koraOffWhite'
+                          ? 'bg-lemonChiffon text-black font-semibold'
+                          : 'bg-black border-borderDark text-textMuted hover:text-textPrimary'
                       }`}
                     >
                       {fs.label}
@@ -449,7 +453,7 @@ export default function ProfileView() {
 
             {/* Font Family */}
             <div>
-              <label className="block text-xs font-medium text-koraSecondary mb-2">Typography Stack</label>
+              <label className="block text-xs font-medium text-textMuted mb-2">Typography Stack</label>
               <div className="grid grid-cols-3 gap-3 max-w-md">
                 {[
                   { id: 'sans', label: 'Inter Sans' },
@@ -464,8 +468,8 @@ export default function ProfileView() {
                       onClick={() => updateSettings({ fontFamily: ff.id as any })}
                       className={`py-2 px-3 rounded-full border text-xs font-medium transition-colors ${
                         isSelected
-                          ? 'bg-koraRed text-white font-semibold border-koraRed shadow-sm'
-                          : 'bg-koraCharcoal-dark border-koraCharcoal-border text-koraSecondary hover:text-koraOffWhite'
+                          ? 'bg-lemonChiffon text-black font-semibold'
+                          : 'bg-black border-borderDark text-textMuted hover:text-textPrimary'
                       }`}
                     >
                       {ff.label}
@@ -482,46 +486,47 @@ export default function ProfileView() {
                   type="checkbox"
                   checked={settings.reducedMotion}
                   onChange={(e) => updateSettings({ reducedMotion: e.target.checked })}
-                  className="rounded bg-koraCharcoal-dark border-koraCharcoal-border text-koraRed focus:ring-koraRed"
+                  className="rounded bg-black border-borderDark text-lemonChiffon focus:ring-lemonChiffon"
                 />
-                <span className="text-xs text-koraOffWhite">
+                <span className="text-xs text-textPrimary">
                   Enable Reduced Motion (disables CSS animations &amp; ambient float effects)
                 </span>
               </label>
             </div>
+
           </div>
         )}
       </div>
 
       {/* Accordion 4: Activity History & Audit Trail */}
-      <div className="bg-koraCharcoal-surface/90 rounded-2xl border border-koraCharcoal-border overflow-hidden shadow-xl backdrop-blur-xl">
+      <div className="glass-panel rounded-2xl border border-borderDark overflow-hidden">
         <button
           onClick={() => setOpenSection(openSection === 'activity' ? ('' as any) : 'activity')}
-          className="w-full p-6 text-left flex items-center justify-between hover:bg-koraCharcoal-card/60 transition-colors"
+          className="w-full p-6 text-left flex items-center justify-between hover:bg-blackHole/40 transition-colors"
         >
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-koraCharcoal-dark flex items-center justify-center text-koraRed border border-koraCharcoal-border">
+            <div className="w-9 h-9 rounded-xl bg-coffeeBean flex items-center justify-center text-electricTangerine border border-borderDark">
               <Activity className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-sm font-heading font-bold text-koraOffWhite">Activity History &amp; Audit Trail</h2>
-              <span className="text-xs text-koraSecondary">Local timeline of scans, generated routes, and issue draft exports</span>
+              <h2 className="text-sm font-heading font-bold text-textPrimary">Activity History &amp; Audit Trail</h2>
+              <span className="text-xs text-textMuted">Local timeline of scans, generated routes, and issue draft exports</span>
             </div>
           </div>
           <ChevronDown
-            className={`w-5 h-5 text-koraSecondary transition-transform ${
-              openSection === 'activity' ? 'rotate-180 text-koraRed' : ''
+            className={`w-5 h-5 text-botticelli transition-transform ${
+              openSection === 'activity' ? 'rotate-180 text-lemonChiffon' : ''
             }`}
           />
         </button>
 
         {openSection === 'activity' && (
-          <div className="p-6 pt-2 border-t border-koraCharcoal-border space-y-3">
+          <div className="p-6 pt-2 border-t border-borderDark space-y-3">
             {activities.length === 0 ? (
-              <div className="text-center py-8 text-koraSecondary text-xs">
-                <Clock className="w-6 h-6 mx-auto mb-2 text-koraSecondary/60" />
+              <div className="text-center py-8 text-textMuted text-xs">
+                <Clock className="w-6 h-6 mx-auto mb-2 text-textMuted/60" />
                 <p>No activity recorded yet.</p>
-                <p className="text-[11px] text-koraSecondary/70 mt-1">
+                <p className="text-[11px] text-textMuted/70 mt-1">
                   Run a repository scan or create contribution routes to begin tracking actions.
                 </p>
               </div>
@@ -531,23 +536,23 @@ export default function ProfileView() {
                   const getBadge = (type: string) => {
                     switch (type) {
                       case 'scan':
-                        return 'bg-koraSlate/40 text-koraOffWhite border-koraSlate';
+                        return 'bg-botticelli/20 text-botticelli border-botticelli/30';
                       case 'route_created':
-                        return 'bg-koraBurgundy/40 text-koraOffWhite border-koraRed/40';
+                        return 'bg-lemonChiffon/20 text-lemonChiffon border-lemonChiffon/30';
                       case 'draft_generated':
-                        return 'bg-koraRed/20 text-koraOffWhite border-koraRed/50';
+                        return 'bg-electricTangerine/20 text-electricTangerine border-electricTangerine/30';
                       case 'route_updated':
                       case 'route_completed':
-                        return 'bg-emerald-950/40 text-emerald-300 border-emerald-800';
+                        return 'bg-sustainableLinen/20 text-sustainableLinen border-sustainableLinen/30';
                       default:
-                        return 'bg-koraCharcoal-card text-koraOffWhite border-koraCharcoal-border';
+                        return 'bg-coffeeBean text-cotton border-borderDark';
                     }
                   };
 
                   return (
                     <div
                       key={act.id}
-                      className="p-3.5 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border flex flex-col sm:flex-row sm:items-center justify-between gap-2"
+                      className="p-3.5 rounded-xl bg-black border border-borderDark flex flex-col sm:flex-row sm:items-center justify-between gap-2"
                     >
                       <div className="flex items-start sm:items-center gap-2.5">
                         <span
@@ -559,13 +564,13 @@ export default function ProfileView() {
                         </span>
                         <div>
                           <div className="flex items-center gap-2">
-                            <span className="text-xs font-semibold text-koraOffWhite">{act.repoName}</span>
+                            <span className="text-xs font-semibold text-textPrimary">{act.repoName}</span>
                           </div>
-                          <p className="text-[11px] text-koraSecondary mt-0.5">{act.description}</p>
+                          <p className="text-[11px] text-textMuted mt-0.5">{act.description}</p>
                         </div>
                       </div>
-                      <div className="text-[10px] font-mono text-koraSecondary flex items-center gap-1 sm:self-center shrink-0">
-                        <Clock className="w-3 h-3 text-koraSecondary/80" />
+                      <div className="text-[10px] font-mono text-textMuted flex items-center gap-1 sm:self-center shrink-0">
+                        <Clock className="w-3 h-3 text-textMuted/80" />
                         <span>{new Date(act.timestamp).toLocaleString()}</span>
                       </div>
                     </div>
@@ -577,45 +582,45 @@ export default function ProfileView() {
         )}
       </div>
 
-      {/* Accordion 5: Data Retention & Export */}
-      <div className="bg-koraCharcoal-surface/90 rounded-2xl border border-koraCharcoal-border overflow-hidden shadow-xl backdrop-blur-xl">
+      {/* Accordion 4: Data Retention & Export */}
+      <div className="glass-panel rounded-2xl border border-borderDark overflow-hidden">
         <button
           onClick={() => setOpenSection(openSection === 'data' ? ('' as any) : 'data')}
-          className="w-full p-6 text-left flex items-center justify-between hover:bg-koraCharcoal-card/60 transition-colors"
+          className="w-full p-6 text-left flex items-center justify-between hover:bg-blackHole/40 transition-colors"
         >
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-koraCharcoal-dark flex items-center justify-center text-koraRed border border-koraCharcoal-border">
-              <Download className="w-5 h-5" />
+            <div className="w-9 h-9 rounded-xl bg-coffeeBean flex items-center justify-center text-rosewood border border-borderDark">
+              <Download className="w-5 h-5 text-lemonChiffon" />
             </div>
             <div>
-              <h2 className="text-sm font-heading font-bold text-koraOffWhite">Workspace Data &amp; Export</h2>
-              <span className="text-xs text-koraSecondary">Export scans as JSON, clear database history, or sign out</span>
+              <h2 className="text-sm font-heading font-bold text-textPrimary">Workspace Data &amp; Export</h2>
+              <span className="text-xs text-textMuted">Export scans as JSON, clear database history, or sign out</span>
             </div>
           </div>
           <ChevronDown
-            className={`w-5 h-5 text-koraSecondary transition-transform ${
-              openSection === 'data' ? 'rotate-180 text-koraRed' : ''
+            className={`w-5 h-5 text-botticelli transition-transform ${
+              openSection === 'data' ? 'rotate-180 text-lemonChiffon' : ''
             }`}
           />
         </button>
 
         {openSection === 'data' && (
-          <div className="p-6 pt-2 border-t border-koraCharcoal-border space-y-4">
+          <div className="p-6 pt-2 border-t border-borderDark space-y-4">
             <div className="flex flex-col sm:flex-row gap-3">
               <button
                 onClick={handleExportData}
-                className="px-5 py-2.5 rounded-full bg-koraCharcoal-card hover:bg-koraCharcoal-dark text-koraOffWhite text-xs font-semibold flex items-center justify-center gap-2 transition-colors border border-koraCharcoal-border hover:border-koraRed/40"
+                className="px-5 py-2.5 rounded-full bg-blackHole hover:bg-black text-textPrimary text-xs font-semibold flex items-center justify-center gap-2 transition-colors border border-borderDark"
               >
-                <Download className="w-4 h-4 text-koraRed" />
+                <Download className="w-4 h-4 text-lemonChiffon" />
                 <span>Export Scans &amp; Drafts (.JSON)</span>
               </button>
 
               {!confirmClear ? (
                 <button
                   onClick={() => setConfirmClear(true)}
-                  className="px-5 py-2.5 rounded-full bg-koraBurgundy/30 hover:bg-koraBurgundy/50 text-koraOffWhite text-xs font-semibold flex items-center justify-center gap-2 transition-colors border border-koraRed/50"
+                  className="px-5 py-2.5 rounded-full bg-rosewood/30 hover:bg-rosewood/50 text-textPrimary text-xs font-semibold flex items-center justify-center gap-2 transition-colors border border-rosewood"
                 >
-                  <Trash2 className="w-4 h-4 text-koraRed" />
+                  <Trash2 className="w-4 h-4 text-rosewood" />
                   <span>Clear History</span>
                 </button>
               ) : (
@@ -623,13 +628,13 @@ export default function ProfileView() {
                   <button
                     onClick={handleClearData}
                     disabled={clearing}
-                    className="px-5 py-2.5 rounded-full bg-koraRed text-white text-xs font-semibold transition-colors shadow-glow-red"
+                    className="px-5 py-2.5 rounded-full bg-rosewood text-cotton text-xs font-semibold transition-colors"
                   >
                     {clearing ? 'Clearing...' : 'Confirm Clear Data'}
                   </button>
                   <button
                     onClick={() => setConfirmClear(false)}
-                    className="px-4 py-2.5 rounded-full bg-koraCharcoal-dark border border-koraCharcoal-border text-koraSecondary text-xs hover:text-koraOffWhite"
+                    className="px-4 py-2.5 rounded-full bg-black border border-borderDark text-textMuted text-xs hover:text-textPrimary"
                   >
                     Cancel
                   </button>
@@ -639,7 +644,7 @@ export default function ProfileView() {
               {!confirmDeleteAccount ? (
                 <button
                   onClick={() => setConfirmDeleteAccount(true)}
-                  className="px-5 py-2.5 rounded-full bg-koraCharcoal-card hover:bg-koraBurgundy/40 text-red-400 text-xs font-semibold flex items-center justify-center gap-2 transition-colors border border-koraCharcoal-border hover:border-koraRed/50"
+                  className="px-5 py-2.5 rounded-full bg-black hover:bg-rosewood/20 text-rosewood text-xs font-semibold flex items-center justify-center gap-2 transition-colors border border-rosewood/50"
                 >
                   <AlertTriangle className="w-4 h-4" />
                   <span>Delete Account</span>
@@ -649,13 +654,13 @@ export default function ProfileView() {
                   <button
                     onClick={handleDeleteAccount}
                     disabled={deletingAccount}
-                    className="px-5 py-2.5 rounded-full bg-koraRed text-white text-xs font-bold transition-colors shadow-glow-red"
+                    className="px-5 py-2.5 rounded-full bg-rosewood text-cotton text-xs font-bold transition-colors"
                   >
                     {deletingAccount ? 'Deleting...' : 'Permanently Delete Account'}
                   </button>
                   <button
                     onClick={() => setConfirmDeleteAccount(false)}
-                    className="px-4 py-2.5 rounded-full bg-koraCharcoal-dark border border-koraCharcoal-border text-koraSecondary text-xs hover:text-koraOffWhite"
+                    className="px-4 py-2.5 rounded-full bg-black border border-borderDark text-textMuted text-xs hover:text-textPrimary"
                   >
                     Cancel
                   </button>
@@ -663,18 +668,19 @@ export default function ProfileView() {
               )}
             </div>
 
-            <div className="pt-4 border-t border-koraCharcoal-border">
+            <div className="pt-4 border-t border-borderDark">
               <button
                 onClick={handleLogout}
-                className="px-5 py-2.5 rounded-full bg-koraCharcoal-card hover:bg-koraBurgundy/30 text-koraOffWhite border border-koraCharcoal-border hover:border-koraRed/40 text-xs font-semibold flex items-center gap-2 transition-colors"
+                className="px-5 py-2.5 rounded-full bg-black hover:bg-blackHole text-rosewood border border-rosewood/40 text-xs font-semibold flex items-center gap-2 transition-colors"
               >
-                <LogOut className="w-4 h-4 text-koraRed" />
+                <LogOut className="w-4 h-4" />
                 <span>Sign Out of ContribLens</span>
               </button>
             </div>
           </div>
         )}
       </div>
+
     </div>
   );
 }

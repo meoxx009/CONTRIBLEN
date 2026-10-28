@@ -19,7 +19,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="block text-xs font-semibold uppercase tracking-wider text-koraSecondary"
+            className="block text-xs font-semibold uppercase tracking-wider text-textMuted"
           >
             {label}
           </label>
@@ -28,23 +28,23 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <input
             ref={ref}
             id={inputId}
-            className={`w-full px-4 py-2.5 rounded-xl bg-koraCharcoal-dark border text-koraOffWhite placeholder:text-koraSecondary/50 text-sm transition-all focus:outline-none focus:ring-1 ${
+            className={`w-full px-4 py-2.5 rounded-xl bg-black border text-textPrimary placeholder:text-textMuted/50 text-sm transition-all focus:outline-none focus:ring-1 ${
               monospace ? 'font-mono' : 'font-sans'
             } ${
               error
-                ? 'border-koraRed focus:border-koraRed focus:ring-koraRed bg-koraBurgundy/10'
-                : 'border-koraCharcoal-border focus:border-koraRed/60 focus:ring-koraRed/60 hover:border-koraCharcoal-border/80'
+                ? 'border-rosewood focus:border-rosewood focus:ring-rosewood bg-rosewood/5'
+                : 'border-borderDark focus:border-lemonChiffon/60 focus:ring-lemonChiffon/60 hover:border-borderDark/80'
             } ${className}`}
             {...props}
           />
         </div>
         {error && (
-          <p className="flex items-center gap-1.5 text-xs text-koraRed font-medium">
+          <p className="flex items-center gap-1.5 text-xs text-rosewood font-medium">
             <AlertCircle className="w-3.5 h-3.5 shrink-0" />
             <span>{error}</span>
           </p>
         )}
-        {hint && !error && <p className="text-xs text-koraSecondary/70">{hint}</p>}
+        {hint && !error && <p className="text-xs text-textMuted/70">{hint}</p>}
       </div>
     );
   }

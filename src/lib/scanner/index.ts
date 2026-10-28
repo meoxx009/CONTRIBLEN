@@ -9,17 +9,17 @@ import {
   parseGitHubUrl,
   fetchRepoMetadata,
   fetchBoundedRepositoryTree,
-  BoundedFile,
-} from './github';
+  type BoundedFile,
+} from './github.ts';
 import {
   parsePackageJson,
   parseRequirementsTxt,
   parsePyprojectToml,
-  ParsedDependency,
-} from './manifests';
-import { queryOSVBatch } from './osv';
-import { scanGitHubActions } from './actions';
-import { checkRepositoryHealth } from './health';
+  type ParsedDependency,
+} from './manifests.ts';
+import { queryOSVBatch } from './osv.ts';
+import { scanGitHubActions } from './actions.ts';
+import { checkRepositoryHealth } from './health.ts';
 import { detectTechnologyStack } from './tech-detector.ts';
 import { detectSecretsInText } from '../redaction.ts';
 import { createFindingEvidence } from './evidence.ts';
@@ -59,7 +59,7 @@ export function scanRepositoryFiles(
   const runDependencies = shouldRunCheck('dependenc') || shouldRunCheck('manifest');
   const runActions = shouldRunCheck('action') || shouldRunCheck('workflow');
   const runHealth = shouldRunCheck('health');
-  const runTechnology = shouldRunCheck('technolog');
+  // Technology profiling runs unconditionally to populate repository architecture and readiness
 
   // 1. Scan files individually
   for (const file of files) {
@@ -126,25 +126,14 @@ export function scanRepositoryFiles(
     healthScore = healthResult.healthScore;
   }
 
-  // 3. Technology stack detection
-  let techStack: TechStack = {
-    languages: [],
-    frameworks: [],
-    tooling: [],
-    manifests: [],
-    confidenceScore: 100,
-  };
-  let techReadiness = 100;
-
-  if (runTechnology) {
-    const detected = detectTechnologyStack(
-      files,
-      packageJsonData,
-      pythonDeps
-    );
-    techStack = detected.techStack;
-    techReadiness = detected.readinessScore;
-  }
+  // 3. Technology stack detection (unconditional repository profiling)
+  const detected = detectTechnologyStack(
+    files,
+    packageJsonData,
+    pythonDeps
+  );
+  const techStack: TechStack = detected.techStack;
+  const techReadiness = detected.readinessScore;
 
   // Blended Contribution Readiness Score (0 to 100)
   const combinedReadiness = Math.round((healthScore * 0.5) + (techReadiness * 0.5));

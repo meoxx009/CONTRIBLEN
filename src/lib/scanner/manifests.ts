@@ -15,14 +15,19 @@ export function parsePackageJson(filePath: string, content: string): {
   dependencies: ParsedDependency[];
   scripts: Record<string, string>;
   hasSecurityTools: boolean;
+  packageManager?: string;
 } {
   const dependencies: ParsedDependency[] = [];
   let scripts: Record<string, string> = {};
   let hasSecurityTools = false;
+  let packageManager: string | undefined = undefined;
 
   try {
     const json = JSON.parse(content);
     scripts = json.scripts || {};
+    if (typeof json.packageManager === 'string' && json.packageManager.trim()) {
+      packageManager = json.packageManager.trim();
+    }
 
     if (json.dependencies && typeof json.dependencies === 'object') {
       for (const [name, versionSpec] of Object.entries(json.dependencies)) {
@@ -62,7 +67,7 @@ export function parsePackageJson(filePath: string, content: string): {
     // Malformed JSON handled gracefully
   }
 
-  return { dependencies, scripts, hasSecurityTools };
+  return { dependencies, scripts, hasSecurityTools, packageManager };
 }
 
 export function parseRequirementsTxt(filePath: string, content: string): ParsedDependency[] {

@@ -47,8 +47,8 @@ export function Accordion({
             key={item.id}
             className={`rounded-xl border transition-all ${
               isExpanded
-                ? 'bg-koraCharcoal-surface border-koraCharcoal-border shadow-md'
-                : 'bg-koraCharcoal-surface/60 border-koraCharcoal-border/70 hover:border-koraSlate/40'
+                ? 'bg-blackHole border-borderDark/90 shadow-md'
+                : 'bg-blackHole/50 border-borderDark/40 hover:border-borderDark/70'
             }`}
           >
             <h3>
@@ -57,15 +57,15 @@ export function Accordion({
                 aria-controls={panelId}
                 aria-expanded={isExpanded}
                 onClick={() => toggleItem(item.id)}
-                className="w-full flex items-center justify-between p-4 text-left font-medium text-koraOffWhite text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-koraRed rounded-xl"
+                className="w-full flex items-center justify-between p-4 text-left font-medium text-textPrimary text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lemonChiffon rounded-xl"
               >
                 <div className="flex items-center gap-2.5">
-                  <span className="font-heading font-semibold">{item.title}</span>
+                  <span>{item.title}</span>
                   {item.badge}
                 </div>
                 <ChevronDown
-                  className={`w-4 h-4 text-koraSecondary transition-transform duration-200 shrink-0 ${
-                    isExpanded ? 'rotate-180 text-koraRed' : ''
+                  className={`w-4 h-4 text-textMuted transition-transform duration-200 shrink-0 ${
+                    isExpanded ? 'rotate-180 text-electricTangerine' : ''
                   }`}
                 />
               </button>
@@ -76,7 +76,7 @@ export function Accordion({
                 id={panelId}
                 role="region"
                 aria-labelledby={headerId}
-                className="px-4 pb-4 pt-1 text-xs text-koraSecondary leading-relaxed border-t border-koraCharcoal-border/60"
+                className="px-4 pb-4 pt-1 text-xs text-textMuted leading-relaxed border-t border-borderDark/30"
               >
                 {item.content}
               </div>

@@ -5,7 +5,7 @@
  * Maps CVEs / GHSAs to normalized Findings with exact severity, confidence, and fix recommendations.
  */
 
-import { ParsedDependency } from './manifests';
+import type { ParsedDependency } from './manifests.ts';
 import type { Finding, Severity } from '../../types';
 
 interface OSVVulnerability {

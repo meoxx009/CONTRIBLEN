@@ -1,207 +1,247 @@
-# ContribLens OSS
+# ContriBLens OSS
 
-> **Formal Name**: ContribLens OSS  
-> **Tagline**: *Scan. Understand. Contribute.*
+> **Scan. Understand. Contribute.**  
+> An open-source security intelligence and contribution navigator that empowers developers to inspect public repositories, verify vulnerabilities and hygiene gaps deterministically, understand technical risks with grounded AI explanations, and produce maintainer-ready contribution blueprints.
 
-ContribLens helps beginners discover meaningful open-source contribution opportunities by scanning public GitHub repositories, verifying security/dependency/health findings via deterministic analysis & OSV, explaining them in plain English with grounded Gemini, and turning verified findings into actionable contribution plans and maintainer issue drafts.
+[![Next.js](https://img.shields.io/badge/Next.js-15.5.28-black?style=flat&logo=next.js)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19.0.0-blue?style=flat&logo=react)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.8.2-blue?style=flat&logo=typescript)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4.17-38bdf8?style=flat&logo=tailwind-css)](https://tailwindcss.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+**Live Application:** [https://contri-b-lens.vercel.app/](https://contri-b-lens.vercel.app/)  
+**GitHub Repository:** [https://github.com/meoxx009/CONTRIBLEN](https://github.com/meoxx009/CONTRIBLEN)
 
 ---
 
-## 🧭 The Problem ContribLens Solves
+## 🧭 Overview & Core Architecture
 
 New contributors often struggle with two major obstacles when approaching open source:
-1. **Uncertainty about where to start**: Large codebases are intimidating, and finding bite-sized, high-impact issues is challenging without deep repository context.
-2. **Hallucination & security risks**: Generic AI tools invent code issues, propose unverified security claims, or risk leaking repository secrets and executing untrusted code.
+1. **Uncertainty about where to start**: Massive codebases can be intimidating. Identifying approachable, verified issues with clear test plans and acceptance criteria is difficult.
+2. **Hallucination & security risks**: Generic generative AI tools often invent vulnerabilities, fabricate file paths, or risk leaking repository credentials.
 
-ContribLens bridges this gap with an **evidence-first pipeline**:
+ContriBLens solves this with an **evidence-first, read-only analysis pipeline**:
 ```text
-Public GitHub Scan → Deterministic Verification → OSV Enrichment → Grounded AI Explanation → Contribution Route → Test Plan → Maintainer-Ready Issue Draft
+Public GitHub Scan ──► Deterministic AST/Manifest Verification ──► OSV Vulnerability Query
+                                                                         │
+                                                                         ▼
+Maintainer-Ready Issue Draft ◄── Test Plan & Acceptance ◄── Grounded Gemini Explanation
 ```
 
 ---
 
-## 🗺️ User Journey & Key Features
+## ✨ Implemented Core Features
 
-1. **Reference Landing Page (`/`)**: Explains the 4-step workflow (Scan, Verify, Understand, Contribute) with code-faded visual motifs and trust messaging.
-2. **Robust Multi-Identifier Auth (`/signup`, `/login`)**:
-   - Supabase Auth with PostgreSQL Row Level Security (RLS).
-   - Multi-field registration: Email, E.164 normalized Phone number, Password with live strength meter, and Terms & Conditions consent.
-   - Dual-identifier login: sign in with either Email or Phone number + Password. Generic error responses prevent account enumeration.
-3. **Command Dashboard (`/dashboard`)**: Displays repository scan history, verified findings breakdown, active contribution routes, and technology snapshot.
-4. **Bounded Repository Scanner (`/scan`)**:
-   - Accepts public GitHub URLs.
-   - Enforces strict read-only bounds: max 60 files, 180 KB per file, 3 MB total, 20,000 tree entries.
-   - **Never executes repository code.**
-5. **Verified Findings Detail (`/findings/[findingId]`)**:
-   - Complete 18-point verification breakdown: evidence, rule ID, confidence, severity, scanner limits, required skills, target files, verification tests, and acceptance criteria.
-6. **AI Grounded Explanations**:
-   - Server-only Gemini API integration that strictly requires pre-verified evidence.
-   - Rejects unevidenced claims and unknown finding references.
-   - Deterministic template fallback when API keys are absent.
-7. **Contributions + Stack (`/contributions`)**:
-   - Interactive Contribution Impact Graph and deterministic Contribution Readiness scoring (0–100).
-   - Technology stack signals with tracked file sources and confidence ratings.
-8. **Issue Drafts Management (`/drafts`)**:
-   - Full CRUD: Create, Edit title, Edit markdown body, Edit labels, Save draft, Copy to clipboard, Download `.md`, and Delete.
-   - **Safety Disclosure Block**: Findings with secrets or critical vulnerabilities automatically enter `DISCLOSURE_BLOCKED` state to prevent accidental public disclosure.
-   - Clear banner stating drafts are for human review and never auto-published.
-9. **Profile & Safety Center (`/profile`, `/security`, `/safety`)**:
-   - User settings, theme toggles, font size/family, reduced-motion controls.
-   - Live Integration Diagnostics status card.
-   - Account activity log and data export/clear controls.
+1. **Deterministic Repository Scanner (`/scan`)**:
+   - Ingests public repositories via GitHub REST API with strict safety bounds (max 60 files, 180 KB per file, 3 MB total size, 20,000 tree entries).
+   - **Zero code execution guarantee**: ContriBLens never executes repository scripts (`npm install`, `setup.py`, arbitrary shell).
+   - Instant in-memory secret masking with SHA-256 evidence hashing before any storage or external transmission.
+
+2. **Technology Stack Detection & Architecture Profiling (`/contributions`)**:
+   - Detects programming languages with file count, percentage, and confidence metrics.
+   - Extracts web and backend frameworks with exact declared versions (`Next.js`, `React`, `Vue.js`, `Nuxt`, `Svelte`, `Express`, `FastAPI`, `Django`, `Flask`).
+   - Identifies package managers (`pnpm`, `Yarn`, `Bun`, `npm`, `Poetry`, `pip`, `Cargo`, `Go modules`) from lockfiles and `packageManager` manifest fields.
+   - Parses package manifests and catalogs declared production, development, and peer dependencies.
+   - Audits development tooling: Linters (`ESLint`, `Biome`, `Ruff`), Formatters (`Prettier`, `Black`), Testing suites (`Jest`, `Vitest`, `Playwright`, `Cypress`, `Pytest`), and CI/CD (`GitHub Actions`, `GitLab CI`).
+
+3. **18-Point Verified Finding Breakdown (`/findings/[findingId]`)**:
+   - Traceable Evidence Chain (8 verifiable trust steps).
+   - Explicit scope confirmation: clearly documents what was verified vs. what is not confirmed (e.g. runtime exploitability).
+   - Depth-tailored perspectives: explanations adjusted for Beginner, Developer, and Maintainer mindsets without modifying deterministic severity.
+
+4. **Grounded AI Explanations & Repository Context**:
+   - Powered by Google Gemini (`@google/genai`) with low temperature (0.2) and strict JSON schema validation.
+   - Rejects hallucinated findings, unknown IDs, and invented file paths.
+   - Automatically injects verified repository context (languages, frameworks, package managers, tools) into explanations.
+   - 100% resilient offline fallback engine when API keys are not provided.
+
+5. **Actionable Contribution Routes (`/contributions/[routeId]`)**:
+   - Contribution Readiness scoring (0–100) based on test suite signals, linter presence, CI configuration, and documentation clarity.
+   - Step-by-step verification plans and acceptance criteria tailored to contributor experience level.
+   - One-click exportable Contribution Packs (`.md`) and maintainer-reviewable issue drafts.
+
+6. **Issue Drafts Management (`/drafts`)**:
+   - Full draft lifecycle: creation, editing, Markdown preview, and clipboard export.
+   - **Safety Disclosure Guard**: Automatically blocks public issue draft generation for credentials, raw tokens, and high-risk exploitable vulnerabilities to prevent accidental public disclosure.
+
+7. **Multi-Identifier Authentication & User Settings (`/login`, `/signup`, `/profile`)**:
+   - Dual-identifier authentication supporting both Email and E.164 normalized Phone numbers.
+   - Real-time password strength meter and explicit Terms of Service consent tracking.
+   - User preferences: dark/light theme, font scale, typography modes, and reduced motion.
+   - Integration Diagnostics panel reporting real-time connectivity status for Supabase, GitHub, OSV, and Gemini.
 
 ---
 
-## 🏛️ System Architecture
+## 🏛️ Technology Stack
 
-```mermaid
-flowchart TD
-    Client["Client Browser\n(Next.js App Router / Tailwind CSS)"]
-    API["ContribLens API Route Handlers\n(Server-Side Only)"]
-    Scanner["Deterministic Scanner Engine\n(Manifests, Health, Actions, Redaction)"]
-    OSV["OSV.dev Batch API\n(No API Key Required)"]
-    GitHub["GitHub REST API\n(Read-Only Bounded Ingestion)"]
-    Gemini["Google Gemini API\n(Grounded Explanations)"]
-    DB["Dual-Mode Persistence\n(Supabase PostgreSQL RLS / Local DB)"]
+| Layer | Technologies |
+| :--- | :--- |
+| **Framework** | Next.js 15.5 (App Router, Server Actions, Dynamic API Routes) |
+| **Frontend** | React 19, TypeScript 5.8, Tailwind CSS 3.4, Lucide Icons |
+| **Typography** | Berkelium Sans & Ferdinand styling with resilient system fallbacks |
+| **AI Integration** | Google Gemini API (`@google/genai`) with schema enforcement & deterministic fallback |
+| **Security & Auditing**| Deterministic AST patterns, OSV.dev Batch API, SHA-256 evidence hashing |
+| **Data Persistence** | Dual-mode: Supabase PostgreSQL (Row-Level Security) & Local JSON store |
+| **Deployment** | Vercel (Edge-compatible headers, serverless API execution) |
 
-    Client -->|HTTPS Requests + Session Cookie| API
-    API -->|Read-only File Tree| GitHub
-    API -->|Parse & Audit Code| Scanner
-    Scanner -->|Dependency Vulnerability Query| OSV
-    API -->|Redacted Evidence Bundle| Gemini
-    API -->|Persist Users, Scans, Findings, Drafts| DB
+---
+
+## 📁 Repository Directory Structure
+
+```text
+CONTRIBLEN/
+├── public/                 # Static assets, SVG branding, and font documentation
+│   ├── fonts/              # Licensing guide and specifications for webfonts
+│   ├── contrilens-logo.svg # Vector brandmark
+│   └── favicon.svg         # Favicon icon
+├── scripts/                # Verification, testing, and diagnostic scripts
+│   ├── run-tests.mjs       # Comprehensive 28-suite test orchestrator
+│   └── check-integrations.mjs # Non-secret connectivity diagnostics
+├── src/
+│   ├── app/                # Next.js App Router (pages and API endpoints)
+│   │   ├── api/            # Server-only REST route handlers (auth, scans, findings, routes, drafts)
+│   │   ├── app/            # Authenticated application views
+│   │   └── globals.css     # Global theme, font tokens, and utility classes
+│   ├── components/         # Reusable UI components and application views
+│   │   ├── ui/             # Glass panels, cards, step rails, badges, buttons
+│   │   └── views/          # ScanView, DashboardView, ContributionsView, FindingsView
+│   ├── lib/                # Core domain logic
+│   │   ├── scanner/        # Deterministic scanner, manifests, health, tech detector
+│   │   ├── gemini.ts       # Grounded AI adapter and fallback planners
+│   │   ├── redaction.ts    # In-memory secret detection and masking
+│   │   └── db.ts           # Unified data persistence adapter (Supabase + Local)
+│   └── types.ts            # Canonical TypeScript schemas and interfaces
+├── test/                   # Automated unit and fixture tests
+│   ├── fixtures/           # Bounded repository fixtures, manifests, workflows
+│   └── security-scanner.test.mjs # Dedicated scanner and tech-detector test suite
+├── .env.example            # Documented environment variable template
+├── next.config.mjs         # Production Next.js configuration with security headers
+├── package.json            # Scripts and project dependencies
+├── tailwind.config.ts      # Custom theme color tokens and typography configuration
+└── tsconfig.json           # Strict TypeScript configuration
 ```
 
 ---
 
-## 🔒 Security & Safety Model
-
-- **Read-Only Ingestion**: ContribLens NEVER executes code from scanned repositories (`npm install`, `python setup.py`, etc.).
-- **Zero Raw Secrets**:
-  - API keys (`GEMINI_API_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `GITHUB_TOKEN`) are strictly server-only.
-  - High-entropy tokens, PATs, AWS keys, and webhooks in scanned repos are masked immediately in memory (`ghp_****`, `[REDACTED_AWS_SECRET_KEY]`).
-  - Evidence hashes use SHA-256 digests over redacted strings.
-- **AI Grounding Guarantees**:
-  - Gemini receives only pre-verified findings with redacted evidence.
-  - Gemini cannot change severity, cannot change confidence, and cannot introduce new findings.
-- **Manual Maintainer Review**:
-  - ContribLens never auto-publishes issues or auto-opens pull requests on external repositories.
-
----
-
-## 📋 Deterministic Scanner Rules
-
-| Rule ID | Category | Detection Method |
-| :--- | :--- | :--- |
-| `GH-ACTIONS-WRITE-ALL` | CI/CD Supply Chain | Flags top-level or job `permissions: write-all` |
-| `GH-ACTIONS-UNPINNED` | CI/CD Supply Chain | Flags actions referenced by mutable tags (e.g., `@v3`) rather than full 40-char commit SHAs |
-| `GH-ACTIONS-PULL-REQUEST-TARGET`| CI/CD Supply Chain | Flags untrusted checkout triggers with PR target context |
-| `GH-ACTIONS-CURL-PIPE-SHELL` | CI/CD Supply Chain | Flags unverified `curl \| bash` or `wget \| sh` pipelines |
-| `GH-ACTIONS-SCRIPT-INJECTION` | CI/CD Supply Chain | Flags unescaped inline template expansions in run scripts (`${{ github.event.* }}`) |
-| `REPO-MISSING-SECURITY` | Governance | Missing `SECURITY.md` or `.github/SECURITY.md` |
-| `REPO-MISSING-LICENSE` | Governance | Missing `LICENSE` or `LICENSE.md` |
-| `REPO-MISSING-CONTRIBUTING` | Governance | Missing `CONTRIBUTING.md` |
-| `REPO-WEAK-README` | Governance | `README.md` is empty or under 50 characters |
-| `REPO-NO-TEST-SIGNAL` | Repository Health | Absence of test directories or test scripts |
-| `SECRET-PATTERN-*` | Credentials | High-entropy secrets and credential regexes (PATs, AWS keys, Slack tokens) |
-| `OSV-VULN-*` | Dependencies | Bounded manifest parsing (`package.json`, `requirements.txt`, `pyproject.toml`) queried against OSV.dev |
-
----
-
-## ⚡ Prerequisites & Quickstart
+## ⚙️ Installation & Local Setup
 
 ### Prerequisites
-- Node.js >= 20.0.0
-- npm >= 10.0.0
+- **Node.js**: `>= 20.0.0`
+- **npm**: `>= 10.0.0` (or `pnpm` / `yarn`)
 
-### 1. Clone & Install
+### 1. Clone the Repository
 ```bash
-git clone https://github.com/contriblens/contriblens.git
-cd contriblens
+git clone https://github.com/meoxx009/CONTRIBLEN.git
+cd CONTRIBLEN
+```
+
+### 2. Install Dependencies
+```bash
 npm install
 ```
 
-### 2. Configure Environment
-Copy the example environment template:
+### 3. Configure Environment Variables
+Copy `.env.example` to create your local `.env.local` configuration:
 ```bash
 cp .env.example .env.local
 ```
 
-Populate the canonical variables in `.env.local`:
+Edit `.env.local` with your configuration:
 ```env
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+
+# Optional: Supabase credentials (defaults to local database if omitted)
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
 SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
 
+# Optional: Google Gemini API (defaults to deterministic planner if omitted)
 GEMINI_API_KEY=your-gemini-api-key
-GEMINI_MODEL=gemini-2.5-flash
+GEMINI_MODEL=gamma-4
 
+# Optional: GitHub token to increase API rate limit (60 -> 5,000 req/hr)
 GITHUB_TOKEN=your-github-personal-access-token
-
-NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
-> **Note on Local Development**: If Supabase or Gemini keys are omitted, ContribLens operates seamlessly in local development mode using local JSON persistence (`src/lib/db.ts`) and deterministic explanation fallbacks.
+> **Zero-Config Local Development**: You can run ContriBLens immediately without external accounts or credentials. The application automatically uses the local persistence engine (`.data/`) and deterministic rule engines when external keys are not provided.
 
-### 3. Run Integration Diagnostics
-Run the diagnostic command to check provider connectivity without exposing secrets:
+### 4. Run Diagnostics
+Verify environment integrity and integration availability:
 ```bash
 npm run check:integrations
 ```
 
-### 4. Start Development Server
+### 5. Launch the Development Server
 ```bash
 npm run dev
 ```
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Navigate to [http://localhost:3000](http://localhost:3000).
 
 ---
 
-## 🗄️ Supabase Setup & Migration Instructions
+## 🚀 Production Deployment (Vercel)
 
-To run ContribLens in production with Supabase PostgreSQL:
+ContriBLens is optimized for one-click deployment on [Vercel](https://vercel.com/):
 
-1. Create a project at [supabase.com](https://supabase.com).
-2. Go to **SQL Editor** in the Supabase Dashboard.
-3. Open and run the migration script:
-   [`supabase/migrations/002_contriblens_tables.sql`](supabase/migrations/002_contriblens_tables.sql)
-4. The migration creates 6 core tables with Row Level Security (RLS) enabled:
-   - `profiles`: User account data with unique phone numbers and terms consent.
-   - `scans`: Repository scan sessions linked to user profiles.
-   - `findings`: Verified findings with redacted evidence and rule IDs.
-   - `technologies`: Detected languages, frameworks, and tooling with confidence.
-   - `contribution_routes`: Difficulty-tiered contribution paths with test plans.
-   - `issue_drafts`: Maintainer issue drafts with disclosure guards.
-5. In **Authentication > Settings**, enable Email provider and disable email confirmation if you want instant account activation.
-6. Copy your project URL, anon key, and service role key into `.env.local`.
+### Option A: Deploy via Vercel Dashboard
 
----
+1. Push your repository to GitHub: `https://github.com/meoxx009/CONTRIBLEN`.
+2. Log in to [Vercel](https://vercel.com/) and click **Add New Project**.
+3. Import the `meoxx009/CONTRIBLEN` repository.
+4. Framework Preset will automatically detect **Next.js**.
+5. Configure the Environment Variables in the Vercel project settings:
+   - `NEXT_PUBLIC_APP_URL` — Your production domain (e.g. `https://contri-b-lens.vercel.app`)
+   - `NEXT_PUBLIC_SUPABASE_URL` — Supabase project URL
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY` — Supabase anonymous key
+   - `SUPABASE_SERVICE_ROLE_KEY` — Supabase service role key (Secret)
+   - `GEMINI_API_KEY` — Google Gemini API key (Secret)
+   - `GITHUB_TOKEN` — GitHub Personal Access Token (Secret)
+   - `JWT_SECRET` — A secure random string for session tokens
+6. Click **Deploy**.
 
-## 🧪 Available Scripts & Testing
-
-| Command | Purpose |
-| :--- | :--- |
-| `npm run check:integrations` | Checks Supabase, GitHub, OSV, and Gemini connections safely |
-| `npm run lint` | Runs Next.js ESLint checks |
-| `npm run typecheck` | Runs TypeScript compiler checks (`tsc --noEmit`) |
-| `npm run test` | Runs complete ContribLens unit and integration test suite |
-| `npm run test:scanner` | Runs deterministic scanner and fixture tests |
-| `npm run build` | Compiles Next.js production build |
-| `npm run start` | Starts Next.js production server |
-
-### Run Full Test Suite
+### Option B: Deploy via Vercel CLI
 ```bash
-npm run test
+npm install -g vercel
+vercel
+vercel --prod
 ```
-The test suite executes 18 verification suites covering secret redaction, GitHub Actions scanning, manifest parsing, OSV normalization, evidence hashing, phone normalization, phone-to-email resolution, draft editing/deletion CRUD, and disclosure guards.
 
 ---
 
-## 📄 License & Community
+## 🧪 Testing & Quality Assurance
 
-- **License**: [MIT License](LICENSE)
-- **Contributing**: [CONTRIBUTING.md](CONTRIBUTING.md)
-- **Code of Conduct**: [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
-- **Security Policy**: [SECURITY.md](SECURITY.md)
-- **Support**: [SUPPORT.md](SUPPORT.md)
-- **Changelog**: [CHANGELOG.md](CHANGELOG.md)
+ContriBLens enforces comprehensive testing across all critical data paths:
+
+| Test Script | Description |
+| :--- | :--- |
+| `npm run typecheck` | Strict TypeScript validation without emitting files (`tsc --noEmit`) |
+| `npm run lint` | Next.js ESLint validation |
+| `npm test` | Complete 28-suite integration test verifying redaction, URL validation, manifest parsing, actions auditing, readiness calculation, and issue generation |
+| `npm run test:scanner` | Dedicated 24-test suite validating repository boundaries, tech detector, lockfile detection, and Gemini explanation context |
+| `npm run build` | Compiles optimized Next.js production bundle and verifies all 43 static/dynamic routes |
+
+Execute all checks in sequence:
+```bash
+npm run typecheck
+npm run lint
+npm test
+npm run test:scanner
+npm run build
+```
+
+---
+
+## 🔒 Security Model & Secret Handling
+
+- **Immediate In-Memory Redaction**: Credentials (GitHub tokens, AWS keys, Slack tokens, private keys) are masked at ingestion using strict regular expressions.
+- **No Secret Persistence**: Raw secrets are never saved to disk, never stored in databases, and never transmitted to external APIs.
+- **Cryptographic Evidence Hashing**: Every finding's evidence is cryptographically digested with SHA-256 for integrity verification.
+- **Prompt Injection Defense**: Repository content is encapsulated within untrusted quotation boundaries when processed by AI models.
+- **Responsible Disclosure Guards**: Findings with secrets or critical vulnerabilities automatically block public draft generation.
+
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE).
+ContriBLens OSS — Copyright (c) 2026.

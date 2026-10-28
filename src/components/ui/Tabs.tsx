@@ -21,7 +21,7 @@ export function Tabs({ tabs, activeTab, onChange, className = '' }: TabsProps) {
     <div
       role="tablist"
       aria-label="Content Navigation Tabs"
-      className={`inline-flex items-center gap-1.5 p-1 rounded-full bg-koraCharcoal-dark border border-koraCharcoal-border ${className}`}
+      className={`inline-flex items-center gap-1.5 p-1 rounded-full bg-blackHole border border-borderDark ${className}`}
     >
       {tabs.map((tab) => {
         const isActive = tab.id === activeTab;
@@ -33,10 +33,10 @@ export function Tabs({ tabs, activeTab, onChange, className = '' }: TabsProps) {
             aria-controls={`panel-${tab.id}`}
             id={`tab-${tab.id}`}
             onClick={() => onChange(tab.id)}
-            className={`inline-flex items-center gap-2 px-4 py-1.5 text-xs font-semibold rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-koraRed select-none ${
+            className={`inline-flex items-center gap-2 px-4 py-1.5 text-xs font-semibold rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lemonChiffon select-none ${
               isActive
-                ? 'bg-koraRed text-white shadow-glow-red'
-                : 'text-koraSecondary hover:text-koraOffWhite hover:bg-white/5'
+                ? 'bg-lemonChiffon text-black shadow-md'
+                : 'text-textMuted hover:text-textPrimary hover:bg-white/5'
             }`}
           >
             {tab.icon && <span className="shrink-0">{tab.icon}</span>}

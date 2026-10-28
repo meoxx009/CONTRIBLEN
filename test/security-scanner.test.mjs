@@ -10,6 +10,8 @@ import { scanGitHubActions } from '../src/lib/scanner/actions.ts';
 import { checkRepositoryHealth } from '../src/lib/scanner/health.ts';
 import { detectTechnologyStack } from '../src/lib/scanner/tech-detector.ts';
 import { createFindingEvidence, convertToTechnologySnapshot } from '../src/lib/scanner/evidence.ts';
+import { scanRepositoryFiles } from '../src/lib/scanner/index.ts';
+import { explainFinding } from '../src/lib/gemini.ts';
 
 const FIXTURES_DIR = path.join(process.cwd(), 'test', 'fixtures');
 
@@ -310,5 +312,171 @@ describe('ContribLens Pure Domain Fixtures & Security Invariants (Prompt 08)', (
     const isBinary = (filePath) => /\.(png|jpg|jpeg|gif|ico|pdf|zip|tar|gz|exe|dll|so|dylib|bin)$/i.test(filePath);
     assert.strictEqual(isBinary(binaryPath), true, 'PNG file must be identified as binary');
     assert.strictEqual(isBinary('package.json'), false, 'package.json is text');
+  });
+});
+
+describe('ContribLens Technology Stack Detection Pipeline & Gemini Context Integration', () => {
+  test('empty repository returns 0% confidence score (not 100%)', () => {
+    const { techStack } = detectTechnologyStack([]);
+    assert.strictEqual(techStack.languages.length, 0);
+    assert.strictEqual(techStack.frameworks.length, 0);
+    assert.strictEqual(techStack.tooling.length, 0);
+    assert.strictEqual(techStack.manifests.length, 0);
+    assert.strictEqual(techStack.confidenceScore, 0, 'Empty repository must have 0% confidence, not 100%');
+  });
+
+  test('accurately detects Next.js, pnpm, versions, manifests, and direct dependencies', () => {
+    const files = [
+      {
+        path: 'package.json',
+        size: 500,
+        content: JSON.stringify({
+          name: 'varshanetra',
+          version: '1.0.0',
+          packageManager: 'pnpm@8.15.1',
+          dependencies: {
+            next: '^14.2.0',
+            react: '^18.2.0',
+            'react-dom': '^18.2.0',
+          },
+          devDependencies: {
+            typescript: '^5.4.0',
+            tailwindcss: '^3.4.1',
+            eslint: '^8.57.0',
+            jest: '^29.7.0',
+          },
+        }),
+      },
+      { path: 'pnpm-lock.yaml', size: 1000, content: 'lockfileVersion: 5.4' },
+      { path: 'tsconfig.json', size: 200, content: '{}' },
+      { path: 'src/app/page.tsx', size: 300, content: 'export default function Page() { return <h1>Test</h1>; }' },
+      { path: 'src/components/Header.tsx', size: 200, content: 'export const Header = () => null;' },
+      { path: '.github/workflows/ci.yml', size: 150, content: 'name: CI\non: push' },
+    ];
+
+    const { techStack, readinessScore } = detectTechnologyStack(files);
+
+    // Languages
+    const ts = techStack.languages.find((l) => l.name === 'TypeScript');
+    assert.ok(ts, 'TypeScript must be detected');
+    assert.strictEqual(ts.filesCount, 2);
+
+    // Frameworks with version extraction
+    const nextFw = techStack.frameworks.find((f) => f.name === 'Next.js');
+    assert.ok(nextFw, 'Next.js framework must be detected');
+    assert.strictEqual(nextFw.version, '14.2.0');
+    assert.strictEqual(nextFw.category, 'Full-stack Web Framework');
+
+    const reactFw = techStack.frameworks.find((f) => f.name === 'React');
+    assert.ok(reactFw, 'React must be detected');
+    assert.strictEqual(reactFw.version, '18.2.0');
+
+    // Package Manager
+    assert.ok(techStack.packageManagers && techStack.packageManagers.length > 0);
+    const pnpm = techStack.packageManagers.find((p) => p.name.toLowerCase() === 'pnpm');
+    assert.ok(pnpm, 'pnpm must be detected');
+    assert.strictEqual(pnpm.status, 'detected');
+    assert.strictEqual(pnpm.lockfile, 'pnpm-lock.yaml');
+    assert.strictEqual(pnpm.version, '8.15.1');
+
+    // Tooling
+    const tools = techStack.tooling.map((t) => t.name);
+    assert.ok(tools.includes('TypeScript'));
+    assert.ok(tools.includes('Tailwind CSS'));
+    assert.ok(tools.includes('ESLint'));
+    assert.ok(tools.includes('Jest'));
+    assert.ok(tools.includes('GitHub Actions'));
+
+    // Manifests
+    assert.strictEqual(techStack.manifests.length, 1);
+    assert.strictEqual(techStack.manifests[0].type, 'npm');
+    assert.strictEqual(techStack.manifests[0].dependenciesCount, 7);
+
+    // Direct dependencies
+    assert.ok(techStack.dependencies && techStack.dependencies.length === 7);
+    assert.ok(techStack.dependencies.some((d) => d.name === 'next' && d.version === '14.2.0' && d.type === 'production'));
+    assert.ok(techStack.dependencies.some((d) => d.name === 'typescript' && d.type === 'dev'));
+
+    // Confidence & readiness
+    assert.ok(techStack.confidenceScore >= 90);
+    assert.ok(readinessScore >= 70);
+  });
+
+  test('scanRepositoryFiles runs techStack detection unconditionally even when checks filter excludes technolog', () => {
+    const files = [
+      {
+        path: 'package.json',
+        size: 300,
+        content: JSON.stringify({
+          dependencies: { next: '14.0.0' },
+        }),
+      },
+      { path: 'package-lock.json', size: 500, content: '{}' },
+      { path: 'src/index.ts', size: 100, content: 'export const x = 1;' },
+    ];
+
+    // Simulate standard UI scan where checks = ['dependencies', 'actions', 'secrets', 'health']
+    const result = scanRepositoryFiles(files, 'scan_test_checks', undefined, ['dependencies', 'actions', 'secrets', 'health']);
+
+    assert.ok(result.techStack.languages.length > 0, 'Languages must be populated');
+    assert.ok(result.techStack.frameworks.some((f) => f.name === 'Next.js'), 'Next.js must be detected');
+    assert.ok(result.techStack.manifests.length > 0, 'Manifests must be detected');
+    assert.ok(result.techStack.confidenceScore > 0, 'Confidence score must be greater than 0');
+  });
+
+  test('explainFinding populates repositoryContext with verified languages, frameworks, and package manager', async () => {
+    const mockScan = {
+      id: 'scan_explain_test',
+      userId: 'usr_test',
+      repoUrl: 'https://github.com/meoxx009/varshanetra',
+      repoName: 'meoxx009/varshanetra',
+      owner: 'meoxx009',
+      branch: 'main',
+      scannedAt: new Date().toISOString(),
+      totalFiles: 10,
+      totalBytes: 5000,
+      status: 'completed',
+      readinessScore: 85,
+      findingsCount: { total: 1, critical: 0, high: 1, medium: 0, low: 0, info: 0 },
+      techStack: {
+        languages: [{ name: 'TypeScript', percentage: 90, filesCount: 9, confidence: 0.98 }],
+        frameworks: [{ name: 'Next.js', category: 'Full-stack Web Framework', version: '14.2.0', confidence: 0.98 }],
+        tooling: [{ name: 'ESLint', category: 'Linter', confidence: 0.95 }, { name: 'Jest', category: 'Testing', confidence: 0.95 }],
+        manifests: [{ path: 'package.json', type: 'npm', dependenciesCount: 5 }],
+        confidenceScore: 95,
+        packageManagers: [{ name: 'pnpm', version: '8.15.1', lockfile: 'pnpm-lock.yaml', status: 'detected', source: 'pnpm-lock.yaml', confidence: 0.98 }],
+      },
+    };
+
+    const mockFinding = {
+      id: 'fnd_dep_next_123',
+      scanId: 'scan_explain_test',
+      title: 'Vulnerable Dependency: next',
+      category: 'dependency',
+      severity: 'HIGH',
+      confidence: 0.95,
+      sourceTool: 'OSV Batch Advisory Query',
+      ruleId: 'DEP-OSV-ADVISORY',
+      file: 'package.json',
+      line: 5,
+      lineStart: 5,
+      lineEnd: 5,
+      evidence: '"next": "^14.2.0"',
+      redactedEvidence: '"next": "^14.2.0"',
+      impact: 'Denial of service or SSRF in unpatched Next.js server actions',
+      fixHint: 'Upgrade next to >= 14.2.15',
+      disclosureMode: 'maintainer-review',
+      createdAt: new Date().toISOString(),
+    };
+
+    const explanation = await explainFinding(mockFinding, mockScan);
+
+    assert.ok(explanation.repositoryContext, 'Explanation must include repositoryContext');
+    assert.strictEqual(explanation.repositoryContext.primaryLanguage, 'TypeScript');
+    assert.ok(explanation.repositoryContext.languages.includes('TypeScript'));
+    assert.ok(explanation.repositoryContext.frameworks.some((f) => f.includes('Next.js')));
+    assert.strictEqual(explanation.repositoryContext.packageManager, 'pnpm');
+    assert.ok(explanation.repositoryContext.tooling.includes('Jest'));
+    assert.ok(explanation.recommendedFix.includes('pnpm'), 'Recommended fix should leverage detected package manager');
   });
 });

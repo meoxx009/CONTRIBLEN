@@ -36,13 +36,13 @@ export default function ContriBLensMark({
     >
       <defs>
         <linearGradient id="cbl-c-hull" x1="16" y1="16" x2="80" y2="80" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#F9F6F2" />
-          <stop offset="50%" stopColor="#303A4C" />
-          <stop offset="100%" stopColor="#C02B18" />
+          <stop offset="0%" stopColor="#E5E4E2" />
+          <stop offset="50%" stopColor="#CDE3E8" />
+          <stop offset="100%" stopColor="#FF6D1F" />
         </linearGradient>
         <linearGradient id="cbl-lens-rim" x1="32" y1="32" x2="64" y2="64" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#C02B18" />
-          <stop offset="100%" stopColor="#F9F6F2" />
+          <stop offset="0%" stopColor="#FF6D1F" />
+          <stop offset="100%" stopColor="#FFF8CA" />
         </linearGradient>
       </defs>
 
@@ -59,11 +59,11 @@ export default function ContriBLensMark({
         r="14"
         stroke="url(#cbl-lens-rim)"
         strokeWidth="5.5"
-        fill="#120F0E"
+        fill="#161418"
       />
 
       {/* Lens Specular Glass Highlight */}
-      <circle cx="43.5" cy="43.5" r="3" fill="#F9F6F2" opacity="0.9" />
+      <circle cx="43.5" cy="43.5" r="3" fill="#FFF8CA" opacity="0.9" />
 
       {/* Magnifying Glass Diagonal Handle (45 degrees down-right) */}
       <line
@@ -71,7 +71,7 @@ export default function ContriBLensMark({
         y1="58"
         x2="78"
         y2="78"
-        stroke="#C02B18"
+        stroke="#FF6D1F"
         strokeWidth="6.5"
         strokeLinecap="round"
       />

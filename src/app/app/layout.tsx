@@ -19,9 +19,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   if (loading) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center min-h-[60vh] text-koraSecondary space-y-4">
-        <Loader2 className="w-8 h-8 animate-spin text-koraRed" />
-        <p className="text-xs font-mono text-koraOffWhite/80 tracking-wide">
+      <div className="flex-1 flex flex-col items-center justify-center min-h-[60vh] text-textMuted space-y-4">
+        <Loader2 className="w-8 h-8 animate-spin text-electricTangerine" />
+        <p className="text-xs font-mono text-lemonChiffon/80 tracking-wide">
           Verifying authenticated session...
         </p>
       </div>
@@ -33,7 +33,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="flex-1 flex flex-col w-full bg-transparent text-textPrimary">
+    <div className="flex-1 flex flex-col w-full bg-black text-textPrimary">
       {children}
     </div>
   );

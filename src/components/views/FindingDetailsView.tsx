@@ -15,26 +15,30 @@ import {
   Copy,
   Check,
   AlertTriangle,
+  ExternalLink,
   CheckCircle2,
   HelpCircle,
+  Wrench,
   BookOpen,
+  FileText,
   Info,
   TrendingUp,
   Layers,
+  GitCompare,
 } from 'lucide-react';
 import type { Finding, GroundedExplanation, ExplanationMode } from '@/types';
 
 const severityBadgeStyles: Record<string, string> = {
-  CRITICAL: 'bg-koraBurgundy text-koraOffWhite border border-koraRed',
-  HIGH: 'bg-koraBurgundy/60 text-koraRed border border-koraRed/40',
-  MEDIUM: 'bg-koraSlate/50 text-koraOffWhite border border-koraSlate',
-  LOW: 'bg-koraCharcoal-card text-koraSecondary border border-koraCharcoal-border',
-  INFO: 'bg-koraCharcoal-dark text-koraSecondary border border-koraCharcoal-border',
-  critical: 'bg-koraBurgundy text-koraOffWhite border border-koraRed',
-  high: 'bg-koraBurgundy/60 text-koraRed border border-koraRed/40',
-  medium: 'bg-koraSlate/50 text-koraOffWhite border border-koraSlate',
-  low: 'bg-koraCharcoal-card text-koraSecondary border border-koraCharcoal-border',
-  info: 'bg-koraCharcoal-dark text-koraSecondary border border-koraCharcoal-border',
+  CRITICAL: 'bg-[#6B0B0C] text-[#FFF8CA] border-[#6B0B0C]',
+  HIGH: 'bg-[#2D120D] text-[#FF6D1F] border-[#FF6D1F]/50',
+  MEDIUM: 'bg-[#222222] text-[#FFF8CA] border-[#FFF8CA]/30',
+  LOW: 'bg-[#222222] text-[#CDE3E8] border-[#CDE3E8]/30',
+  INFO: 'bg-[#222222] text-[#AAA9A1] border-[#AAA9A1]/30',
+  critical: 'bg-[#6B0B0C] text-[#FFF8CA] border-[#6B0B0C]',
+  high: 'bg-[#2D120D] text-[#FF6D1F] border-[#FF6D1F]/50',
+  medium: 'bg-[#222222] text-[#FFF8CA] border-[#FFF8CA]/30',
+  low: 'bg-[#222222] text-[#CDE3E8] border-[#CDE3E8]/30',
+  info: 'bg-[#222222] text-[#AAA9A1] border-[#AAA9A1]/30',
 };
 
 function getReadinessBadge(label?: string) {
@@ -42,12 +46,12 @@ function getReadinessBadge(label?: string) {
     case 'good-first-contribution':
       return 'bg-emerald-950/70 text-emerald-300 border-emerald-500/50';
     case 'beginner-friendly':
-      return 'bg-koraBurgundy/40 text-koraOffWhite border-koraBurgundy';
+      return 'bg-coffeeBean text-lemonChiffon border-lemonChiffon/40';
     case 'intermediate':
-      return 'bg-koraSlate/40 text-koraSecondary border-koraSlate/60';
+      return 'bg-[#2D120D] text-electricTangerine border-electricTangerine/40';
     case 'maintainer-assistance':
     default:
-      return 'bg-koraCharcoal-card text-koraSecondary border-koraCharcoal-border';
+      return 'bg-rosewood/30 text-cotton border-rosewood/40';
   }
 }
 
@@ -56,14 +60,14 @@ function getDiffStatusBadge(status?: string) {
     case 'new':
       return 'bg-emerald-950/60 text-emerald-300 border-emerald-500/40';
     case 'resolved':
-      return 'bg-koraSlate/60 text-koraOffWhite border-koraSlate';
+      return 'bg-blue-950/60 text-blue-300 border-blue-500/40';
     case 'changed':
-      return 'bg-koraBurgundy/50 text-koraRed border-koraRed/40';
+      return 'bg-coffeeBean text-electricTangerine border-electricTangerine/40';
     case 'needs-review':
-      return 'bg-koraBurgundy/40 text-koraOffWhite border-koraBurgundy';
+      return 'bg-rosewood/30 text-lemonChiffon border-rosewood/40';
     case 'unchanged':
     default:
-      return 'bg-koraCharcoal-dark text-koraSecondary border-koraCharcoal-border';
+      return 'bg-black text-textMuted border-borderDark';
   }
 }
 
@@ -211,25 +215,25 @@ export default function FindingDetailPage({
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center text-koraOffWhite">
-        <Loader2 className="w-8 h-8 text-koraRed animate-spin mb-4" />
-        <p className="text-sm text-koraSecondary font-mono">Loading finding evidence...</p>
+      <div className="min-h-screen bg-[#000000] flex flex-col items-center justify-center text-[#F5F3ED]">
+        <Loader2 className="w-8 h-8 text-[#FF6D1F] animate-spin mb-4" />
+        <p className="text-sm text-[#AAA9A1]">Loading finding evidence...</p>
       </div>
     );
   }
 
   if (!finding) {
     return (
-      <div className="min-h-screen text-koraOffWhite px-4 py-16">
+      <div className="min-h-screen bg-[#000000] text-[#F5F3ED] px-4 py-16">
         <div className="max-w-3xl mx-auto text-center space-y-4">
-          <AlertTriangle className="w-12 h-12 text-koraRed mx-auto" />
+          <AlertTriangle className="w-12 h-12 text-[#FF6D1F] mx-auto" />
           <h1 className="text-2xl font-heading font-bold">Finding Not Found</h1>
-          <p className="text-koraSecondary">
-            Finding ID <code className="text-koraOffWhite">{findingId}</code> could not be located in this workspace.
+          <p className="text-[#AAA9A1]">
+            Finding ID <code className="text-[#FFF8CA]">{findingId}</code> could not be located in this workspace.
           </p>
           <Link
             href="/app/findings"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-koraRed text-white font-medium text-sm hover:bg-koraRed-hover transition-colors shadow-glow-red"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#FFF8CA] text-[#000000] font-medium text-sm hover:opacity-90 transition-opacity"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Findings
@@ -252,14 +256,14 @@ export default function FindingDetailPage({
   const readiness = finding.readiness;
 
   return (
-    <div className="min-h-screen text-textPrimary px-4 sm:px-6 lg:px-8 py-10 relative">
+    <div className="min-h-screen bg-[#000000] text-[#F5F3ED] px-4 sm:px-6 lg:px-8 py-10 relative">
       <div className="max-w-4xl mx-auto space-y-8">
         
         {/* Navigation Breadcrumb */}
         <div>
           <Link
             href="/app/findings"
-            className="inline-flex items-center gap-2 text-sm text-koraSecondary hover:text-koraOffWhite transition-colors"
+            className="inline-flex items-center gap-2 text-sm text-[#AAA9A1] hover:text-[#FFF8CA] transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Findings
@@ -267,7 +271,7 @@ export default function FindingDetailPage({
         </div>
 
         {/* 1 & 2. What was found & Where it was found */}
-        <div className="p-6 sm:p-8 rounded-2xl bg-koraCharcoal-surface/90 border border-koraCharcoal-border shadow-liquid-glass space-y-4 backdrop-blur-2xl">
+        <div className="p-6 sm:p-8 rounded-2xl bg-[#222222]/80 border border-[#FAF3E1]/10 space-y-4 shadow-xl">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex flex-wrap items-center gap-2">
               <span
@@ -277,10 +281,10 @@ export default function FindingDetailPage({
               >
                 Severity: {finding.severity}
               </span>
-              <span className="text-xs px-2.5 py-1 rounded-md bg-koraCharcoal-dark text-koraSlate border border-koraCharcoal-border uppercase tracking-wider">
+              <span className="text-xs px-2.5 py-1 rounded-md bg-[#222222] text-[#CDE3E8] border border-[#CDE3E8]/30 uppercase tracking-wider">
                 Category: {finding.category}
               </span>
-              <span className="text-xs px-2.5 py-1 rounded-md bg-koraCharcoal-dark text-koraSecondary border border-koraCharcoal-border font-mono">
+              <span className="text-xs px-2.5 py-1 rounded-md bg-[#222222] text-[#AAA9A1] border border-white/10 font-mono">
                 Rule ID: {finding.ruleId || 'DETERMINISTIC'}
               </span>
               {finding.diffStatus && (
@@ -295,7 +299,7 @@ export default function FindingDetailPage({
                 className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold border transition-all ${
                   finding.reviewed
                     ? 'bg-emerald-950/60 text-emerald-300 border-emerald-600/50'
-                    : 'bg-koraCharcoal-card text-koraSecondary border-koraCharcoal-border hover:text-koraOffWhite'
+                    : 'bg-[#222222] text-[#AAA9A1] border-white/10 hover:text-[#FFF8CA] hover:border-[#FFF8CA]/30'
                 }`}
               >
                 {updatingReview ? (
@@ -303,36 +307,36 @@ export default function FindingDetailPage({
                 ) : finding.reviewed ? (
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
                 ) : (
-                  <span className="w-1.5 h-1.5 rounded-full bg-koraSecondary" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#AAA9A1]" />
                 )}
                 <span>{finding.reviewed ? 'Reviewed ✓' : 'Mark as Reviewed'}</span>
               </button>
             </div>
-            <div className="text-xs text-koraSecondary">
+            <div className="text-xs text-[#AAA9A1]">
               Scanned: {new Date(finding.createdAt).toLocaleString()}
             </div>
           </div>
 
           <div>
-            <span className="text-[11px] font-mono uppercase tracking-wider text-koraRed">
+            <span className="text-[11px] font-mono uppercase tracking-wider text-electricTangerine">
               1. What was found
             </span>
-            <h1 className="text-2xl sm:text-3xl font-heading font-semibold text-koraOffWhite leading-snug mt-1">
+            <h1 className="text-2xl sm:text-3xl font-heading font-semibold text-[#F5F3ED] leading-snug mt-1">
               {finding.title}
             </h1>
           </div>
 
           <div>
-            <span className="text-[11px] font-mono uppercase tracking-wider text-koraSecondary block mb-1">
+            <span className="text-[11px] font-mono uppercase tracking-wider text-textMuted block mb-1">
               2. Where it was found
             </span>
-            <div className="flex items-center gap-2 text-sm font-mono text-koraSecondary bg-koraCharcoal-dark px-3 py-2 rounded-lg border border-koraCharcoal-border overflow-x-auto">
-              <FileCode className="w-4 h-4 text-koraRed shrink-0" />
+            <div className="flex items-center gap-2 text-sm font-mono text-[#AAA9A1] bg-[#000000]/60 px-3 py-2 rounded-lg border border-white/5 overflow-x-auto">
+              <FileCode className="w-4 h-4 text-[#FF6D1F] shrink-0" />
               <span>
                 {finding.file || (finding.ruleId === 'REPO-NO-TEST-SIGNAL' ? 'Repository Root (Test Suite Configuration)' : 'Repository Root (Configuration)')}
               </span>
               {(finding.lineStart || finding.line) && (
-                <span className="text-koraOffWhite font-semibold">
+                <span className="text-[#FFF8CA] font-semibold">
                   :Line {finding.lineStart || finding.line}
                   {finding.lineEnd && finding.lineEnd !== finding.lineStart ? `-${finding.lineEnd}` : ''}
                 </span>
@@ -341,67 +345,67 @@ export default function FindingDetailPage({
           </div>
 
           {/* 5, 6, 7, 8. Severity, Confidence, Verification, Detection Source */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-koraCharcoal-border text-xs">
-            <div className="p-3 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border">
-              <span className="text-koraSecondary block mb-0.5">5. Severity</span>
-              <span className="font-bold text-koraOffWhite uppercase">{finding.severity}</span>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-borderDark text-xs">
+            <div className="p-3 rounded-xl bg-black/50 border border-borderDark">
+              <span className="text-textMuted block mb-0.5">5. Severity</span>
+              <span className="font-bold text-lemonChiffon uppercase">{finding.severity}</span>
             </div>
-            <div className="p-3 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border">
-              <span className="text-koraSecondary block mb-0.5">6. Confidence</span>
-              <span className="font-bold text-koraSlate">{confidenceDisplay}</span>
+            <div className="p-3 rounded-xl bg-black/50 border border-borderDark">
+              <span className="text-textMuted block mb-0.5">6. Confidence</span>
+              <span className="font-bold text-botticelli">{confidenceDisplay}</span>
             </div>
-            <div className="p-3 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border">
-              <span className="text-koraSecondary block mb-0.5">7. Verification</span>
-              <span className="font-bold text-koraOffWhite truncate block">{verificationStatus}</span>
+            <div className="p-3 rounded-xl bg-black/50 border border-borderDark">
+              <span className="text-textMuted block mb-0.5">7. Verification</span>
+              <span className="font-bold text-lemonChiffon truncate block">{verificationStatus}</span>
             </div>
-            <div className="p-3 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border">
-              <span className="text-koraSecondary block mb-0.5">8. Detection Tool</span>
-              <span className="font-bold text-koraOffWhite truncate block">{finding.sourceTool || 'Static Engine'}</span>
+            <div className="p-3 rounded-xl bg-black/50 border border-borderDark">
+              <span className="text-textMuted block mb-0.5">8. Detection Tool</span>
+              <span className="font-bold text-textPrimary truncate block">{finding.sourceTool || 'Static Engine'}</span>
             </div>
           </div>
         </div>
 
         {/* Contribution Readiness & Urgency Separation Section */}
-        <div className="p-6 sm:p-8 rounded-2xl bg-koraCharcoal-surface/90 border border-koraCharcoal-border shadow-liquid-glass space-y-6 backdrop-blur-2xl">
+        <div className="p-6 sm:p-8 rounded-2xl bg-[#222222]/80 border border-[#FAF3E1]/10 space-y-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-koraRed" />
-              <h2 className="text-base font-heading font-semibold text-koraOffWhite">
+              <TrendingUp className="w-5 h-5 text-lemonChiffon" />
+              <h2 className="text-base font-heading font-semibold text-[#F5F3ED]">
                 Contribution Readiness &amp; Risk Separation
               </h2>
             </div>
-            <span className="text-xs font-mono text-koraSecondary">
+            <span className="text-xs font-mono text-[#AAA9A1]">
               Invariant: Urgency ≠ Readiness
             </span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
             {/* Risk / Urgency Card */}
-            <div className="p-4 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border space-y-2">
+            <div className="p-4 rounded-xl bg-black/60 border border-borderDark space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-koraSecondary uppercase font-semibold text-[10px]">
+                <span className="text-textMuted uppercase font-semibold text-[10px]">
                   Risk / Urgency Priority
                 </span>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-koraBurgundy/30 text-koraOffWhite border border-koraBurgundy">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-rosewood/30 text-cotton border border-rosewood/50">
                   {finding.urgencyLabel || 'medium'}
                 </span>
               </div>
               <div className="flex items-baseline gap-2">
-                <span className="text-2xl font-bold font-mono text-koraRed">
+                <span className="text-2xl font-bold font-mono text-electricTangerine">
                   {finding.urgencyScore ?? 50}
                 </span>
-                <span className="text-koraSecondary text-[10px] font-mono">/ 100</span>
+                <span className="text-textMuted text-[10px] font-mono">/ 100</span>
               </div>
-              <p className="text-[11px] text-koraSecondary leading-relaxed">
+              <p className="text-[11px] text-textMuted leading-relaxed">
                 Urgency measures how critically this finding impacts security posture. High urgency findings require maintainer attention and must not be marked beginner-friendly.
               </p>
             </div>
 
             {/* Contribution Readiness Card */}
             {readiness ? (
-              <div className="p-4 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border space-y-2">
+              <div className="p-4 rounded-xl bg-black/60 border border-lemonChiffon/30 space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-koraSecondary uppercase font-semibold text-[10px]">
+                  <span className="text-textMuted uppercase font-semibold text-[10px]">
                     Contribution Readiness Score
                   </span>
                   <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider border ${getReadinessBadge(readiness.label)}`}>
@@ -409,22 +413,22 @@ export default function FindingDetailPage({
                   </span>
                 </div>
                 <div className="flex items-baseline gap-2">
-                  <span className="text-2xl font-bold font-mono text-koraOffWhite">
+                  <span className="text-2xl font-bold font-mono text-lemonChiffon">
                     {readiness.total}
                   </span>
-                  <span className="text-koraSecondary text-[10px] font-mono">/ 100</span>
+                  <span className="text-textMuted text-[10px] font-mono">/ 100</span>
                   {readiness.estimatedMinutes && (
-                    <span className="text-koraSecondary text-[10px] font-mono ml-auto">
+                    <span className="text-textMuted text-[10px] font-mono ml-auto">
                       ~{readiness.estimatedMinutes} mins
                     </span>
                   )}
                 </div>
-                <p className="text-[11px] text-koraSecondary leading-relaxed">
+                <p className="text-[11px] text-lemonChiffon/80 leading-relaxed">
                   Deterministic assessment of scope bounded-ness, testability, and clarity for open-source contributors.
                 </p>
               </div>
             ) : (
-              <div className="p-4 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border flex items-center justify-center text-koraSecondary text-xs">
+              <div className="p-4 rounded-xl bg-black/60 border border-borderDark flex items-center justify-center text-textMuted text-xs">
                 Readiness evaluation available via scan summary
               </div>
             )}
@@ -432,50 +436,50 @@ export default function FindingDetailPage({
 
           {/* 5 Weighted Factor Breakdown */}
           {readiness && (
-            <div className="p-4 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border space-y-3">
-              <span className="text-[11px] font-semibold text-koraSecondary uppercase tracking-wider block">
+            <div className="p-4 rounded-xl bg-black/60 border border-white/5 space-y-3">
+              <span className="text-[11px] font-semibold text-textMuted uppercase tracking-wider block">
                 5-Factor Deterministic Criteria Breakdown
               </span>
               <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 text-[11px]">
-                <div className="p-2.5 rounded-lg bg-koraCharcoal-surface border border-koraCharcoal-border space-y-1">
-                  <div className="text-koraSecondary text-[10px]">Evidence Clarity</div>
-                  <div className="font-mono font-bold text-koraOffWhite">
-                    {readiness.evidenceClarity} <span className="text-koraSecondary font-normal">/ 25</span>
+                <div className="p-2.5 rounded-lg bg-[#222222] border border-white/5 space-y-1">
+                  <div className="text-textMuted text-[10px]">Evidence Clarity</div>
+                  <div className="font-mono font-bold text-lemonChiffon">
+                    {readiness.evidenceClarity} <span className="text-textMuted font-normal">/ 25</span>
                   </div>
                 </div>
-                <div className="p-2.5 rounded-lg bg-koraCharcoal-surface border border-koraCharcoal-border space-y-1">
-                  <div className="text-koraSecondary text-[10px]">Scope Simplicity</div>
-                  <div className="font-mono font-bold text-koraOffWhite">
-                    {readiness.scopeSimplicity} <span className="text-koraSecondary font-normal">/ 20</span>
+                <div className="p-2.5 rounded-lg bg-[#222222] border border-white/5 space-y-1">
+                  <div className="text-textMuted text-[10px]">Scope Simplicity</div>
+                  <div className="font-mono font-bold text-lemonChiffon">
+                    {readiness.scopeSimplicity} <span className="text-textMuted font-normal">/ 20</span>
                   </div>
                 </div>
-                <div className="p-2.5 rounded-lg bg-koraCharcoal-surface border border-koraCharcoal-border space-y-1">
-                  <div className="text-koraSecondary text-[10px]">Testability</div>
-                  <div className="font-mono font-bold text-koraOffWhite">
-                    {readiness.testability} <span className="text-koraSecondary font-normal">/ 20</span>
+                <div className="p-2.5 rounded-lg bg-[#222222] border border-white/5 space-y-1">
+                  <div className="text-textMuted text-[10px]">Testability</div>
+                  <div className="font-mono font-bold text-lemonChiffon">
+                    {readiness.testability} <span className="text-textMuted font-normal">/ 20</span>
                   </div>
                 </div>
-                <div className="p-2.5 rounded-lg bg-koraCharcoal-surface border border-koraCharcoal-border space-y-1">
-                  <div className="text-koraSecondary text-[10px]">Skill Accessibility</div>
-                  <div className="font-mono font-bold text-koraOffWhite">
-                    {readiness.skillAccessibility} <span className="text-koraSecondary font-normal">/ 20</span>
+                <div className="p-2.5 rounded-lg bg-[#222222] border border-white/5 space-y-1">
+                  <div className="text-textMuted text-[10px]">Skill Accessibility</div>
+                  <div className="font-mono font-bold text-lemonChiffon">
+                    {readiness.skillAccessibility} <span className="text-textMuted font-normal">/ 20</span>
                   </div>
                 </div>
-                <div className="p-2.5 rounded-lg bg-koraCharcoal-surface border border-koraCharcoal-border space-y-1">
-                  <div className="text-koraSecondary text-[10px]">Context Completeness</div>
-                  <div className="font-mono font-bold text-koraOffWhite">
-                    {readiness.contextCompleteness} <span className="text-koraSecondary font-normal">/ 15</span>
+                <div className="p-2.5 rounded-lg bg-[#222222] border border-white/5 space-y-1">
+                  <div className="text-textMuted text-[10px]">Context Completeness</div>
+                  <div className="font-mono font-bold text-lemonChiffon">
+                    {readiness.contextCompleteness} <span className="text-textMuted font-normal">/ 15</span>
                   </div>
                 </div>
               </div>
 
               {/* Reasons */}
               {readiness.reasons.length > 0 && (
-                <div className="pt-2 border-t border-koraCharcoal-border/60 space-y-1">
-                  <span className="text-[10px] font-mono uppercase text-koraOffWhite font-semibold">Positive Reasons:</span>
+                <div className="pt-2 border-t border-white/5 space-y-1">
+                  <span className="text-[10px] font-mono uppercase text-lemonChiffon font-semibold">Positive Reasons:</span>
                   <ul className="space-y-1">
                     {readiness.reasons.map((r, i) => (
-                      <li key={i} className="text-[11px] text-koraSecondary flex items-start gap-1.5">
+                      <li key={i} className="text-[11px] text-[#AAA9A1] flex items-start gap-1.5">
                         <span className="text-emerald-400 mt-0.5">•</span>
                         <span>{r}</span>
                       </li>
@@ -486,12 +490,12 @@ export default function FindingDetailPage({
 
               {/* Blockers */}
               {readiness.blockers && readiness.blockers.length > 0 && (
-                <div className="pt-2 border-t border-koraCharcoal-border/60 space-y-1">
-                  <span className="text-[10px] font-mono uppercase text-koraRed font-semibold">Blockers:</span>
+                <div className="pt-2 border-t border-white/5 space-y-1">
+                  <span className="text-[10px] font-mono uppercase text-rosewood font-semibold">Blockers:</span>
                   <ul className="space-y-1">
                     {readiness.blockers.map((b, i) => (
-                      <li key={i} className="text-[11px] text-koraOffWhite flex items-start gap-1.5">
-                        <span className="text-koraRed mt-0.5">✕</span>
+                      <li key={i} className="text-[11px] text-cotton flex items-start gap-1.5">
+                        <span className="text-rosewood mt-0.5">✕</span>
                         <span>{b}</span>
                       </li>
                     ))}
@@ -502,17 +506,17 @@ export default function FindingDetailPage({
           )}
         </div>
 
-        {/* Evidence Chain / Trust Trail */}
+        {/* Evidence Chain / Trust Trail (8 Traceable Steps) */}
         {finding.evidenceChain && finding.evidenceChain.steps && (
-          <div className="p-6 sm:p-8 rounded-2xl bg-koraCharcoal-surface/90 border border-koraCharcoal-border shadow-liquid-glass space-y-4 backdrop-blur-2xl">
+          <div className="p-6 sm:p-8 rounded-2xl bg-[#222222]/80 border border-[#FAF3E1]/10 space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Layers className="w-5 h-5 text-koraSlate" />
-                <h2 className="text-base font-heading font-semibold text-koraOffWhite">
+                <Layers className="w-5 h-5 text-botticelli" />
+                <h2 className="text-base font-heading font-semibold text-[#F5F3ED]">
                   Evidence Chain / Trust Trail (8 Traceable Steps)
                 </h2>
               </div>
-              <span className="text-xs font-mono text-koraSecondary">
+              <span className="text-xs font-mono text-[#AAA9A1]">
                 Hash: {finding.evidenceChain.evidenceHash?.slice(0, 10)}...
               </span>
             </div>
@@ -521,21 +525,21 @@ export default function FindingDetailPage({
               {finding.evidenceChain.steps.map((st) => (
                 <div
                   key={st.step}
-                  className="p-3 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border flex items-start gap-3"
+                  className="p-3 rounded-xl bg-black/60 border border-white/5 flex items-start gap-3"
                 >
-                  <div className="w-6 h-6 rounded-full bg-koraBurgundy text-koraOffWhite font-mono text-xs flex items-center justify-center font-bold shrink-0 mt-0.5">
+                  <div className="w-6 h-6 rounded-full bg-coffeeBean text-lemonChiffon font-mono text-xs flex items-center justify-center font-bold shrink-0 mt-0.5">
                     {st.step}
                   </div>
                   <div className="space-y-1 min-w-0">
                     <div className="flex items-center justify-between gap-1">
-                      <span className="font-semibold text-koraOffWhite text-xs truncate">
+                      <span className="font-semibold text-[#F5F3ED] text-xs truncate">
                         {st.label}
                       </span>
-                      <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-koraCharcoal-surface text-koraOffWhite border border-koraCharcoal-border uppercase shrink-0">
+                      <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-[#222222] text-lemonChiffon border border-lemonChiffon/20 uppercase shrink-0">
                         {st.verifiedBy}
                       </span>
                     </div>
-                    <p className="text-[11px] text-koraSecondary leading-relaxed">
+                    <p className="text-[11px] text-[#AAA9A1] leading-relaxed">
                       {st.detail}
                     </p>
                   </div>
@@ -546,62 +550,62 @@ export default function FindingDetailPage({
         )}
 
         {/* 4. Evidence Panel (Redacted) */}
-        <div className="p-6 sm:p-8 rounded-2xl bg-koraCharcoal-surface/90 border border-koraCharcoal-border shadow-liquid-glass space-y-4 backdrop-blur-2xl">
+        <div className="p-6 sm:p-8 rounded-2xl bg-[#222222]/80 border border-[#FAF3E1]/10 space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Lock className="w-4 h-4 text-koraRed" />
-              <h2 className="text-base font-heading font-semibold text-koraOffWhite uppercase tracking-wider">
+              <Lock className="w-4 h-4 text-[#FF6D1F]" />
+              <h2 className="text-base font-heading font-semibold text-[#F5F3ED] uppercase tracking-wider">
                 4. Verified Evidence (Redacted)
               </h2>
             </div>
             <button
               onClick={handleCopyEvidence}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-koraCharcoal-dark border border-koraCharcoal-border text-xs text-koraSecondary hover:text-koraOffWhite transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#000000]/60 border border-white/10 text-xs text-[#AAA9A1] hover:text-[#FFF8CA] transition-colors"
             >
               {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
               {copied ? 'Copied' : 'Copy Evidence'}
             </button>
           </div>
 
-          <pre className="p-4 rounded-xl bg-[#0B0908] border border-koraCharcoal-border text-xs font-mono text-koraOffWhite whitespace-pre-wrap overflow-x-auto leading-relaxed">
+          <pre className="p-4 rounded-xl bg-[#000000] border border-white/10 text-xs font-mono text-[#FAF3E1] whitespace-pre-wrap overflow-x-auto leading-relaxed">
             {finding.redactedEvidence || finding.evidence || 'No raw evidence snippet required for this structural finding.'}
           </pre>
-          <p className="text-[11px] text-koraSecondary">
+          <p className="text-[11px] text-textMuted">
             Zero raw secrets are stored or logged. Sensitive credentials are conservatively masked with asterisks.
           </p>
         </div>
 
         {/* 3 & 11. Why it Matters & Recommended Action */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="p-6 rounded-2xl bg-koraCharcoal-surface/90 border border-koraCharcoal-border shadow-liquid-glass space-y-3">
-            <h3 className="text-xs font-heading font-semibold text-koraRed uppercase tracking-wider">
+          <div className="p-6 rounded-2xl bg-[#222222]/80 border border-[#FAF3E1]/10 space-y-3">
+            <h3 className="text-xs font-heading font-semibold text-[#FF6D1F] uppercase tracking-wider">
               3. Why it Matters (Impact)
             </h3>
-            <p className="text-sm text-koraOffWhite leading-relaxed">{finding.impact}</p>
+            <p className="text-sm text-[#F5F3ED]/90 leading-relaxed">{finding.impact}</p>
           </div>
 
-          <div className="p-6 rounded-2xl bg-koraCharcoal-surface/90 border border-koraCharcoal-border shadow-liquid-glass space-y-3">
-            <h3 className="text-xs font-heading font-semibold text-koraOffWhite uppercase tracking-wider">
+          <div className="p-6 rounded-2xl bg-[#222222]/80 border border-[#FAF3E1]/10 space-y-3">
+            <h3 className="text-xs font-heading font-semibold text-[#FFF8CA] uppercase tracking-wider">
               11. Recommended Action
             </h3>
-            <p className="text-sm text-koraSecondary leading-relaxed">{finding.fixHint}</p>
+            <p className="text-sm text-[#F5F3ED]/90 leading-relaxed">{finding.fixHint}</p>
           </div>
         </div>
 
-        {/* 9 & 10. What is Confirmed vs. What is NOT Confirmed */}
-        <div className="p-6 sm:p-8 rounded-2xl bg-koraCharcoal-surface/90 border border-koraCharcoal-border shadow-liquid-glass space-y-4 backdrop-blur-2xl">
-          <h2 className="text-sm font-heading font-bold text-koraOffWhite uppercase tracking-wider flex items-center gap-2">
-            <Info className="w-4 h-4 text-koraSlate" />
+        {/* 9 & 10. What is Confirmed vs. What is NOT Confirmed (Limitations) */}
+        <div className="p-6 sm:p-8 rounded-2xl bg-[#222222]/80 border border-[#FAF3E1]/10 space-y-4">
+          <h2 className="text-sm font-heading font-bold text-textPrimary uppercase tracking-wider flex items-center gap-2">
+            <Info className="w-4 h-4 text-botticelli" />
             <span>9 &amp; 10. Scanner Scope &amp; Limitations</span>
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
             {/* Confirmed */}
-            <div className="p-4 rounded-xl bg-koraCharcoal-dark border border-emerald-500/20 space-y-2">
+            <div className="p-4 rounded-xl bg-black/60 border border-emerald-500/20 space-y-2">
               <span className="font-bold text-emerald-400 flex items-center gap-1.5">
                 <CheckCircle2 className="w-4 h-4" /> 9. What is Confirmed
               </span>
-              <ul className="space-y-1.5 text-koraSecondary pl-2 list-disc">
+              <ul className="space-y-1.5 text-textMuted pl-2 list-disc">
                 <li>Deterministic text pattern or manifest configuration exists in public source files.</li>
                 <li>Severity assigned based on static AST/manifest rules without AI speculation.</li>
                 <li>Evidence has been cryptographically hashed and verified against repository tree.</li>
@@ -609,11 +613,11 @@ export default function FindingDetailPage({
             </div>
 
             {/* Not Confirmed */}
-            <div className="p-4 rounded-xl bg-koraCharcoal-dark border border-koraBurgundy/40 space-y-2">
-              <span className="font-bold text-koraRed flex items-center gap-1.5">
+            <div className="p-4 rounded-xl bg-black/60 border border-rosewood/40 space-y-2">
+              <span className="font-bold text-rosewood flex items-center gap-1.5">
                 <HelpCircle className="w-4 h-4" /> 10. What is NOT Confirmed (Limitations)
               </span>
-              <ul className="space-y-1.5 text-koraSecondary pl-2 list-disc">
+              <ul className="space-y-1.5 text-textMuted pl-2 list-disc">
                 <li>Runtime exploitability is NOT verified (ContribLens never executes repository code).</li>
                 <li>Secret liveness or active cloud validity is NOT checked against third-party providers.</li>
                 <li>Private branch changes or uncommitted repository states are NOT evaluated.</li>
@@ -622,31 +626,31 @@ export default function FindingDetailPage({
           </div>
         </div>
 
-        {/* Explanation Depth Switcher */}
-        <div className="p-6 sm:p-8 rounded-2xl bg-koraCharcoal-surface/90 border border-koraCharcoal-border shadow-liquid-glass space-y-4 backdrop-blur-2xl">
+        {/* Explanation Depth Switcher (Beginner / Developer / Maintainer) */}
+        <div className="p-6 sm:p-8 rounded-2xl bg-[#222222]/80 border border-[#FAF3E1]/10 space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-koraRed" />
+              <Sparkles className="w-5 h-5 text-lemonChiffon" />
               <div>
-                <h2 className="text-base font-heading font-semibold text-koraOffWhite">
+                <h2 className="text-base font-heading font-semibold text-[#F5F3ED]">
                   Explanation Depth &amp; Grounded Perspectives
                 </h2>
-                <span className="text-xs text-koraSecondary">
+                <span className="text-xs text-[#AAA9A1]">
                   Same verified evidence explained for 3 contributor skill levels
                 </span>
               </div>
             </div>
 
             {/* Depth Switcher Pills */}
-            <div className="flex items-center gap-1 bg-koraCharcoal-dark p-1 rounded-full border border-koraCharcoal-border">
+            <div className="flex items-center gap-1 bg-black p-1 rounded-full border border-borderDark">
               {(['beginner', 'developer', 'maintainer'] as const).map((mode) => (
                 <button
                   key={mode}
                   onClick={() => setExplanationMode(mode)}
                   className={`px-3 py-1 text-xs font-mono capitalize rounded-full transition-all ${
                     explanationMode === mode
-                      ? 'bg-koraRed text-white font-semibold shadow-glow-red'
-                      : 'text-koraSecondary hover:text-koraOffWhite'
+                      ? 'bg-lemonChiffon text-black font-semibold'
+                      : 'text-textMuted hover:text-textPrimary'
                   }`}
                 >
                   {mode}
@@ -655,111 +659,147 @@ export default function FindingDetailPage({
             </div>
           </div>
 
-          <div className="p-5 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border space-y-2 text-xs">
+          <div className="p-5 rounded-xl bg-black/60 border border-white/5 space-y-2 text-xs">
             <div className="flex items-center justify-between">
-              <span className="font-semibold text-koraOffWhite capitalize">
+              <span className="font-semibold text-lemonChiffon capitalize">
                 {explanationMode} Explanation Depth
               </span>
-              <span className="text-koraSecondary font-mono text-[10px]">
+              <span className="text-textMuted font-mono text-[10px]">
                 Deterministic &amp; Evidence-Grounded
               </span>
             </div>
-            <p className="text-sm text-koraOffWhite leading-relaxed">
+            <p className="text-sm text-[#F5F3ED] leading-relaxed">
               {explanationModeText}
             </p>
           </div>
         </div>
 
-        {/* AI Grounded Explanation with Gemini */}
-        <div className="p-6 sm:p-8 rounded-2xl bg-koraCharcoal-surface/90 border border-koraCharcoal-border shadow-liquid-glass space-y-4 backdrop-blur-2xl">
+        {/* AI Grounded Explanation with Gamma 4 */}
+        <div className="p-6 sm:p-8 rounded-2xl bg-[#222222]/80 border border-[#FAF3E1]/10 space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-koraRed" />
+              <Sparkles className="w-5 h-5 text-[#FF6D1F]" />
               <div>
-                <h2 className="text-base font-heading font-semibold text-koraOffWhite">
-                  Gemini Deep Explanation Query
+                <h2 className="text-base font-heading font-semibold text-[#F5F3ED]">
+                  Gamma 4 Deep Explanation Query
                 </h2>
-                <span className="text-xs text-koraSecondary">Evidence-grounded assistance (never mutates severity)</span>
+                <span className="text-xs text-textMuted">Evidence-grounded assistance (never mutates severity)</span>
               </div>
             </div>
             {!explanation && (
               <button
                 onClick={handleExplain}
                 disabled={explaining}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-koraRed text-white font-medium text-xs hover:bg-koraRed-hover disabled:opacity-50 transition-colors shadow-glow-red shrink-0"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#FFF8CA] text-[#000000] font-medium text-xs hover:opacity-90 disabled:opacity-50 transition-opacity shrink-0"
               >
                 {explaining ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
-                {explaining ? 'Grounding...' : 'Explain with Gemini'}
+                {explaining ? 'Grounding...' : 'Explain with Gamma 4'}
               </button>
             )}
           </div>
 
           {explanation ? (
             <div className="space-y-4 pt-2">
-              <div className="p-5 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border space-y-4">
-                <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-koraSecondary">
+              <div className="p-5 rounded-xl bg-[#000000]/60 border border-[#FFF8CA]/20 space-y-4">
+                <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#AAA9A1]">
                   <span className={`text-[10px] font-mono px-2.5 py-0.5 rounded-full border ${
                     explanation.generatedBy === 'gemini'
-                      ? 'bg-koraCharcoal-surface text-koraOffWhite border-koraCharcoal-border'
-                      : 'bg-koraBurgundy/40 text-koraOffWhite border-koraBurgundy'
+                      ? 'bg-black text-[#FFF8CA] border-[#FFF8CA]/30'
+                      : 'bg-[#2D120D] text-[#FFF8CA] border-[#FF6D1F]/40'
                   }`}>
                     {explanation.generatedBy === 'gemini'
-                      ? 'Grounded via Gemini 2.5 Flash'
+                      ? 'Grounded via Gamma 4 Adapter'
                       : 'Fallback Used: Deterministic Planner'}
                   </span>
-                  <span>Estimated effort: <strong className="text-koraOffWhite">{explanation.estimatedEffort}</strong></span>
+                  <span>Estimated effort: <strong className="text-[#F5F3ED]">{explanation.estimatedEffort}</strong></span>
                 </div>
 
-                <p className="text-sm text-koraOffWhite leading-relaxed">{explanation.explanation}</p>
+                <p className="text-sm text-[#F5F3ED] leading-relaxed">{explanation.explanation}</p>
 
-                <div className="pt-3 border-t border-koraCharcoal-border space-y-1">
-                  <span className="text-xs text-koraRed font-semibold uppercase">Risk Context:</span>
-                  <p className="text-xs text-koraSecondary">{explanation.riskContext}</p>
+                <div className="pt-3 border-t border-white/5 space-y-1">
+                  <span className="text-xs text-[#FF6D1F] font-semibold uppercase">Risk Context:</span>
+                  <p className="text-xs text-[#AAA9A1]">{explanation.riskContext}</p>
                 </div>
 
                 {/* 12. Required Skills */}
-                <div className="pt-2 border-t border-koraCharcoal-border">
-                  <span className="text-xs text-koraSecondary block mb-1 font-semibold">12. Required Skills:</span>
+                <div className="pt-2 border-t border-white/5">
+                  <span className="text-xs text-textMuted block mb-1 font-semibold">12. Required Skills:</span>
                   <div className="flex flex-wrap gap-1.5">
                     {explanation.skillsNeeded.map((skill, i) => (
                       <span
                         key={i}
-                        className="text-xs px-2.5 py-0.5 rounded-full bg-koraCharcoal-surface text-koraSlate border border-koraCharcoal-border"
+                        className="text-xs px-2.5 py-0.5 rounded-full bg-[#222222] text-[#CDE3E8] border border-[#CDE3E8]/20"
                       >
                         {skill}
                       </span>
                     ))}
                   </div>
                 </div>
+
+                {/* Verified Repository Technology Context */}
+                {explanation.repositoryContext && (
+                  <div className="pt-3 border-t border-white/5 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-[#FFF8CA] font-semibold uppercase tracking-wider">
+                        Repository Technology Context:
+                      </span>
+                      {explanation.repositoryContext.packageManager && (
+                        <span className="text-[10px] font-mono text-sustainableLinen bg-sustainableLinen/10 px-2 py-0.5 rounded border border-sustainableLinen/20">
+                          Manager: {explanation.repositoryContext.packageManager}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex flex-wrap gap-2 text-xs">
+                      {explanation.repositoryContext.primaryLanguage && (
+                        <div className="px-2.5 py-1 rounded-lg bg-black border border-white/10 flex items-center gap-1.5 font-mono text-[11px]">
+                          <span className="text-textMuted">Language:</span>
+                          <strong className="text-lemonChiffon">{explanation.repositoryContext.primaryLanguage}</strong>
+                        </div>
+                      )}
+                      {explanation.repositoryContext.frameworks.length > 0 && (
+                        <div className="px-2.5 py-1 rounded-lg bg-black border border-white/10 flex items-center gap-1.5 font-mono text-[11px]">
+                          <span className="text-textMuted">Framework:</span>
+                          <strong className="text-botticelli">{explanation.repositoryContext.frameworks.join(', ')}</strong>
+                        </div>
+                      )}
+                      {explanation.repositoryContext.tooling.length > 0 && (
+                        <div className="px-2.5 py-1 rounded-lg bg-black border border-white/10 flex items-center gap-1.5 font-mono text-[11px]">
+                          <span className="text-textMuted">Tooling:</span>
+                          <strong className="text-cotton">{explanation.repositoryContext.tooling.slice(0, 3).join(', ')}</strong>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           ) : (
-            <p className="text-xs text-koraSecondary">
-              Generate a beginner-friendly, evidence-grounded explanation and contributor readiness breakdown using Gemini.
+            <p className="text-xs text-[#AAA9A1]">
+              Generate a beginner-friendly, evidence-grounded explanation and contributor readiness breakdown using Gamma 4.
             </p>
           )}
         </div>
 
         {/* 13, 14, 15, 16, 17, 18. Contributor Roadmap & Next Actions */}
-        <div className="p-6 sm:p-8 rounded-2xl bg-koraCharcoal-surface/90 border border-koraCharcoal-border shadow-liquid-glass space-y-6 backdrop-blur-2xl">
-          <h2 className="text-base font-heading font-semibold text-koraOffWhite flex items-center gap-2">
-            <Compass className="w-5 h-5 text-koraRed" />
+        <div className="p-6 sm:p-8 rounded-2xl bg-[#222222]/80 border border-[#FAF3E1]/10 space-y-6">
+          <h2 className="text-base font-heading font-semibold text-textPrimary flex items-center gap-2">
+            <Compass className="w-5 h-5 text-electricTangerine" />
             <span>Contributor Roadmap &amp; Actions</span>
           </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-            <div className="p-4 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border">
-              <span className="font-semibold text-koraOffWhite block mb-1">
+            <div className="p-4 rounded-xl bg-black/60 border border-borderDark">
+              <span className="font-semibold text-lemonChiffon block mb-1">
                 13. {finding.file ? 'Target Files to Inspect' : 'Target Repository Area'}
               </span>
-              <code className="text-koraSlate font-mono block break-all">
+              <code className="text-botticelli font-mono block break-all">
                 {finding.file || (finding.ruleId === 'REPO-NO-TEST-SIGNAL' ? 'Repository Root (Test Suite Configuration)' : 'Repository Root (Configuration)')}
               </code>
             </div>
 
-            <div className="p-4 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border">
-              <span className="font-semibold text-koraOffWhite block mb-1">14. Suggested Verification Tests</span>
-              <span className="text-koraSecondary leading-relaxed block">
+            <div className="p-4 rounded-xl bg-black/60 border border-borderDark">
+              <span className="font-semibold text-lemonChiffon block mb-1">14. Suggested Verification Tests</span>
+              <span className="text-textMuted leading-relaxed block">
                 {finding.ruleId === 'REPO-NO-TEST-SIGNAL'
                   ? 'Configure automated test script and verify local test execution passes cleanly.'
                   : 'Run local unit tests or linter matching file extension.'}
@@ -768,23 +808,23 @@ export default function FindingDetailPage({
           </div>
 
           {/* Action CTAs */}
-          <div className="pt-4 border-t border-koraCharcoal-border flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="text-xs text-koraSecondary flex items-center gap-2">
-              <BookOpen className="w-4 h-4 text-koraSlate" />
+          <div className="pt-4 border-t border-borderDark flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="text-xs text-textMuted flex items-center gap-2">
+              <BookOpen className="w-4 h-4 text-botticelli" />
               <span>18. References: Static scanner rules &amp; GitHub Security Best Practices</span>
             </div>
 
             <div className="flex items-center gap-3">
               {finding.disclosureMode === 'security-disclosure' || finding.category === 'secret' ? (
-                <div className="px-5 py-2.5 rounded-full bg-koraBurgundy/40 text-koraOffWhite text-xs font-semibold flex items-center gap-2 border border-koraBurgundy">
-                  <Lock className="w-4 h-4 text-koraRed" />
+                <div className="px-5 py-2.5 rounded-full bg-rosewood/30 text-cotton text-xs font-semibold flex items-center gap-2 border border-rosewood">
+                  <Lock className="w-4 h-4 text-lemonChiffon" />
                   <span>Public Draft Blocked (Private Disclosure Only)</span>
                 </div>
               ) : (
                 <button
                   onClick={handleCreateRoute}
                   disabled={creatingRoute}
-                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-koraRed hover:bg-koraRed-hover text-white font-semibold text-xs shadow-glow-red transition-all disabled:opacity-50"
+                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#FF6D1F] hover:bg-[#FF6D1F]/90 text-[#000000] font-semibold text-xs shadow-lg shadow-[#FF6D1F]/20 transition-all disabled:opacity-50"
                 >
                   {creatingRoute ? <Loader2 className="w-4 h-4 animate-spin" /> : <Compass className="w-4 h-4" />}
                   <span>{creatingRoute ? 'Building Route...' : 'Create Contribution Route'}</span>
