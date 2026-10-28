@@ -1,2 +1,7 @@
 'use client';
-export { default } from '../../findings/page';
+
+import FindingsView from '@/components/views/FindingsView';
+
+export default function AppFindingsPage() {
+  return <FindingsView />;
+}

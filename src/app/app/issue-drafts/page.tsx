@@ -1,2 +1,7 @@
 'use client';
-export { default } from '../../drafts/page';
+
+import DraftsView from '@/components/views/DraftsView';
+
+export default function AppIssueDraftsPage() {
+  return <DraftsView />;
+}

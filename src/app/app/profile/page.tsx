@@ -1,2 +1,7 @@
 'use client';
-export { default } from '../../profile/page';
+
+import ProfileView from '@/components/views/ProfileView';
+
+export default function AppProfilePage() {
+  return <ProfileView />;
+}

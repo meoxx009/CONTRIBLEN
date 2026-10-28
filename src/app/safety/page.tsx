@@ -1,3 +1,7 @@
 'use client';
 
-export { default } from '../security/page';
+import SecurityView from '@/components/views/SecurityView';
+
+export default function SafetyPage() {
+  return <SecurityView />;
+}

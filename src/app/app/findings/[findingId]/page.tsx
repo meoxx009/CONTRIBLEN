@@ -1,2 +1,7 @@
 'use client';
-export { default } from '../../../findings/[findingId]/page';
+
+import FindingDetailsView from '@/components/views/FindingDetailsView';
+
+export default function AppFindingDetailsPage(props: { params: Promise<{ findingId: string }> }) {
+  return <FindingDetailsView {...props} />;
+}

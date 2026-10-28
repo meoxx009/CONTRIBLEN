@@ -1,2 +1,7 @@
 'use client';
-export { default } from '../../dashboard/page';
+
+import DashboardView from '@/components/views/DashboardView';
+
+export default function AppDashboardPage() {
+  return <DashboardView />;
+}

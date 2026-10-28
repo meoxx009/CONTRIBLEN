@@ -1,2 +1,7 @@
 'use client';
-export { default } from '../../contributions/page';
+
+import ContributionsView from '@/components/views/ContributionsView';
+
+export default function AppContributionsPage() {
+  return <ContributionsView />;
+}

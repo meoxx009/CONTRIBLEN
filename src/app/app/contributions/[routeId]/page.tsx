@@ -1,2 +1,7 @@
 'use client';
-export { default } from '../../../contributions/[routeId]/page';
+
+import RouteDetailsView from '@/components/views/RouteDetailsView';
+
+export default function AppRouteDetailsPage() {
+  return <RouteDetailsView />;
+}

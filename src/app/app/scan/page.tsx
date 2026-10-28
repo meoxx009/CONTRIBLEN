@@ -1,2 +1,7 @@
 'use client';
-export { default } from '../../scan/page';
+
+import ScanView from '@/components/views/ScanView';
+
+export default function AppScanPage() {
+  return <ScanView />;
+}
