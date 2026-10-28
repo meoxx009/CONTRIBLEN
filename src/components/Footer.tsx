@@ -29,22 +29,22 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="text-lemonChiffon text-xs font-bold uppercase tracking-wider mb-3">Navigation</h4>
-            <ul className="space-y-2 text-xs text-platinumSilver/80">
-              <li><Link href="/#process" className="hover:text-lemonChiffon transition-colors">How It Works</Link></li>
-              <li><Link href="/#features" className="hover:text-lemonChiffon transition-colors">Core Features</Link></li>
-              <li><Link href="/security" className="hover:text-lemonChiffon transition-colors">Security &amp; Safety</Link></li>
-              <li><Link href="/privacy" className="hover:text-lemonChiffon transition-colors">Privacy Notice</Link></li>
+            <h4 className="text-lemonChiffon text-xs font-bold uppercase tracking-wider mb-3 font-mono">{'// Navigation'}</h4>
+            <ul className="space-y-2 text-xs text-platinumSilver/80 font-mono">
+              <li><Link href="/#process" className="min-h-[36px] inline-flex items-center hover:text-lemonChiffon transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lemonChiffon rounded px-1 -ml-1">How It Works</Link></li>
+              <li><Link href="/#features" className="min-h-[36px] inline-flex items-center hover:text-lemonChiffon transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lemonChiffon rounded px-1 -ml-1">Core Features</Link></li>
+              <li><Link href="/security" className="min-h-[36px] inline-flex items-center hover:text-lemonChiffon transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lemonChiffon rounded px-1 -ml-1">Security &amp; Safety</Link></li>
+              <li><Link href="/privacy" className="min-h-[36px] inline-flex items-center hover:text-lemonChiffon transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lemonChiffon rounded px-1 -ml-1">Privacy Notice</Link></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="text-lemonChiffon text-xs font-bold uppercase tracking-wider mb-3">Community &amp; Compliance</h4>
-            <ul className="space-y-2 text-xs text-platinumSilver/80">
-              <li><Link href="/security" className="hover:text-lemonChiffon transition-colors">Security &amp; Disclosure Policy</Link></li>
-              <li><Link href="/privacy" className="hover:text-lemonChiffon transition-colors">Privacy Notice &amp; Zero Retention</Link></li>
-              <li><span className="text-platinumSilver/60">Zero Code Execution Invariant</span></li>
-              <li><span className="text-platinumSilver/60">Strict Secret Masking</span></li>
+            <h4 className="text-lemonChiffon text-xs font-bold uppercase tracking-wider mb-3 font-mono">{'// Compliance'}</h4>
+            <ul className="space-y-2 text-xs text-platinumSilver/80 font-mono">
+              <li><Link href="/security" className="min-h-[36px] inline-flex items-center hover:text-lemonChiffon transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lemonChiffon rounded px-1 -ml-1">Security &amp; Disclosure</Link></li>
+              <li><Link href="/privacy" className="min-h-[36px] inline-flex items-center hover:text-lemonChiffon transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lemonChiffon rounded px-1 -ml-1">Zero Retention Policy</Link></li>
+              <li><span className="text-platinumSilver/60 min-h-[36px] inline-flex items-center">Zero Code Execution</span></li>
+              <li><span className="text-platinumSilver/60 min-h-[36px] inline-flex items-center">Strict Secret Masking</span></li>
             </ul>
           </div>
 

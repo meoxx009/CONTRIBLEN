@@ -221,15 +221,19 @@ export default function LandingPage() {
           {/* Left Column: Clear answers to What, Who, What Next, Why Trust (Col span 7) */}
           <div className="lg:col-span-7 space-y-5 text-center lg:text-left">
             
-            {/* Restrained Eyebrow & Palette Swatch */}
-            <div className="inline-flex items-center gap-3 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-platinumSilver/20 text-xs font-mono text-platinumSilver/90 shadow-sm backdrop-blur-md">
-              <span className="w-2 h-2 rounded-full bg-electricTangerine" />
+            {/* Developer-Centric Eyebrow & Palette Swatch */}
+            <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-platinumSilver/20 text-xs font-mono text-platinumSilver/90 shadow-sm backdrop-blur-md">
+              <span className="inline-flex items-center gap-1.5 text-[11px] text-electricTangerine font-semibold">
+                <span className="w-1.5 h-1.5 rounded-full bg-electricTangerine animate-pulse" />
+                <span>sys::ready</span>
+              </span>
+              <span className="text-platinumSilver/30">{'//'}</span>
               <span className="font-semibold text-lemonChiffon">ContriBLens OSS</span>
-              <span className="text-platinumSilver/30">•</span>
-              <span className="text-platinumSilver/70">Scan. Understand. Contribute.</span>
+              <span className="hidden sm:inline text-platinumSilver/30">•</span>
+              <span className="hidden sm:inline text-platinumSilver/70">Scan. Understand. Contribute.</span>
               
               {/* Subtle Reference Palette Swatch Rail */}
-              <div className="hidden sm:flex items-center gap-1 pl-2 border-l border-platinumSilver/20">
+              <div className="hidden md:flex items-center gap-1 pl-2 border-l border-platinumSilver/20">
                 <span className="w-2 h-2 rounded-full bg-mochaBrown" title="Mocha Brown" />
                 <span className="w-2 h-2 rounded-full bg-platinumSilver" title="Platinum Silver" />
                 <span className="w-2 h-2 rounded-full bg-paleLavender" title="Pale Lavender" />
@@ -250,11 +254,11 @@ export default function LandingPage() {
               An evidence-first security intelligence platform for open-source contributors and maintainers. We scan public GitHub repositories, verify findings deterministically, and generate beginner-friendly pull request plans.
             </p>
 
-            {/* What Should I Do Now: High-Impact CTAs with min-h-[44px] tap target */}
+            {/* What Should I Do Now: High-Impact CTAs with min-h-[46px] tap target & focus rings */}
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5 pt-1">
               <Link
                 href="/scan"
-                className="w-full sm:w-auto min-h-[46px] px-7 py-3 rounded-full bg-electricTangerine hover:bg-electricTangerine-hover text-white font-bold text-sm transition-all shadow-glow-tangerine flex items-center justify-center gap-2 group active:scale-95"
+                className="w-full sm:w-auto min-h-[46px] px-7 py-3 rounded-full bg-electricTangerine hover:bg-electricTangerine-hover text-white font-bold text-sm transition-all shadow-glow-tangerine flex items-center justify-center gap-2 group active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-electricTangerine focus-visible:ring-offset-2 focus-visible:ring-offset-black"
               >
                 <span>Scan a Repository</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
@@ -262,7 +266,7 @@ export default function LandingPage() {
 
               <a
                 href="#process"
-                className="w-full sm:w-auto min-h-[46px] px-7 py-3 rounded-full bg-white/[0.05] hover:bg-white/[0.1] text-platinumSilver border border-platinumSilver/25 font-semibold text-sm transition-all backdrop-blur-md flex items-center justify-center gap-2 active:scale-95"
+                className="w-full sm:w-auto min-h-[46px] px-7 py-3 rounded-full bg-white/[0.05] hover:bg-white/[0.1] text-platinumSilver border border-platinumSilver/25 font-semibold text-sm transition-all backdrop-blur-md flex items-center justify-center gap-2 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lemonChiffon focus-visible:ring-offset-2 focus-visible:ring-offset-black"
               >
                 <Compass className="w-4 h-4 text-lemonChiffon" />
                 <span>See How It Works</span>
@@ -270,21 +274,25 @@ export default function LandingPage() {
             </div>
 
             {/* Why Should I Trust It: Calm Trust Bar (No visual clutter) */}
-            <div className="pt-2 flex flex-wrap items-center justify-center lg:justify-start gap-x-4 gap-y-1.5 text-xs text-platinumSilver/70 font-mono">
+            <div className="pt-2 flex flex-wrap items-center justify-center lg:justify-start gap-x-4 gap-y-2 text-xs text-platinumSilver/75 font-mono">
               <span className="flex items-center gap-1.5">
-                <Check className="w-3.5 h-3.5 text-lemonChiffon" /> Zero code execution
+                <Check className="w-3.5 h-3.5 text-lemonChiffon shrink-0" />
+                <span>Zero code execution</span>
               </span>
-              <span className="hidden sm:inline text-platinumSilver/30">•</span>
+              <span className="hidden sm:inline text-platinumSilver/30">{'//'}</span>
               <span className="flex items-center gap-1.5">
-                <Check className="w-3.5 h-3.5 text-electricTangerine" /> OSV-verified CVEs
+                <Check className="w-3.5 h-3.5 text-electricTangerine shrink-0" />
+                <span>OSV-verified CVEs</span>
               </span>
-              <span className="hidden sm:inline text-platinumSilver/30">•</span>
+              <span className="hidden sm:inline text-platinumSilver/30">{'//'}</span>
               <span className="flex items-center gap-1.5">
-                <Check className="w-3.5 h-3.5 text-paleLavender" /> Grounded Gamma 4 (no inventions)
+                <Check className="w-3.5 h-3.5 text-paleLavender shrink-0" />
+                <span>Grounded Gamma 4</span>
               </span>
-              <span className="hidden sm:inline text-platinumSilver/30">•</span>
+              <span className="hidden sm:inline text-platinumSilver/30">{'//'}</span>
               <span className="flex items-center gap-1.5">
-                <Check className="w-3.5 h-3.5 text-emerald-400" /> Human-approved PRs
+                <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                <span>Human-approved PRs</span>
               </span>
             </div>
 
@@ -294,8 +302,25 @@ export default function LandingPage() {
           <div className="lg:col-span-5" id="hero-preview">
             <div className="liquid-glass-hero p-5 sm:p-6 rounded-3xl space-y-4 relative border border-platinumSilver/20 shadow-liquid-glass">
               
-              {/* Header: Sample Repository & Readiness Gauge */}
-              <div className="flex items-center justify-between pb-3.5 border-b border-platinumSilver/15">
+              {/* Terminal Title Bar & Session Metadata */}
+              <div className="flex items-center justify-between pb-3 border-b border-platinumSilver/15 text-xs font-mono">
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1.5" aria-hidden="true">
+                    <span className="w-2.5 h-2.5 rounded-full bg-rosewood/80 border border-white/10" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-electricTangerine/70 border border-white/10" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/70 border border-white/10" />
+                  </div>
+                  <span className="text-[11px] text-platinumSilver/60 pl-1">
+                    session::preview // <span className="text-electricTangerine">git:(main)</span>
+                  </span>
+                </div>
+                <span className="text-[10px] px-2 py-0.5 rounded bg-white/5 border border-white/10 text-lemonChiffon">
+                  AST_READ_ONLY
+                </span>
+              </div>
+
+              {/* Sample Repository & Readiness Gauge */}
+              <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
                   <div className="w-7 h-7 rounded-lg liquid-chrome-orb flex items-center justify-center shadow-sm">
                     <Shield className="w-3.5 h-3.5 text-black" />
@@ -310,65 +335,77 @@ export default function LandingPage() {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-coffeeBean text-lemonChiffon border border-lemonChiffon/30 shadow-sm">
+                  <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-coffeeBean text-lemonChiffon border border-lemonChiffon/30 shadow-sm font-semibold">
                     Readiness: 88/100
                   </span>
                 </div>
               </div>
 
-              {/* 4 Interactive Segmented Tabs */}
-              <div className="grid grid-cols-4 gap-1 p-1 rounded-xl bg-black/60 border border-platinumSilver/15 text-[11px] font-mono" role="tablist">
+              {/* 4 Interactive Segmented Tabs with Accessible Focus Rings */}
+              <div className="grid grid-cols-4 gap-1 p-1 rounded-xl bg-black/60 border border-platinumSilver/15 text-[11px] font-mono" role="tablist" aria-label="Evidence preview modes">
                 <button
                   type="button"
                   role="tab"
+                  id="tab-btn-finding"
                   aria-selected={activePreviewTab === 'finding'}
+                  aria-controls="tab-panel-finding"
                   onClick={() => handleTabClick('finding')}
-                  className={`py-1.5 px-1 rounded-lg text-center transition-all ${
+                  className={`min-h-[40px] sm:min-h-[44px] py-2 px-1 rounded-lg text-center transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lemonChiffon ${
                     activePreviewTab === 'finding'
-                      ? 'bg-white/15 text-lemonChiffon font-bold border border-platinumSilver/30 shadow-sm'
-                      : 'text-platinumSilver/60 hover:text-platinumSilver'
+                      ? 'bg-white/15 text-lemonChiffon font-bold border border-lemonChiffon/40 shadow-sm'
+                      : 'text-platinumSilver/65 hover:text-platinumSilver hover:bg-white/5'
                   }`}
                 >
-                  Finding
+                  <span className="block text-[10px] text-platinumSilver/40 font-mono">[01]</span>
+                  <span>Finding</span>
                 </button>
                 <button
                   type="button"
                   role="tab"
+                  id="tab-btn-explanation"
                   aria-selected={activePreviewTab === 'explanation'}
+                  aria-controls="tab-panel-explanation"
                   onClick={() => handleTabClick('explanation')}
-                  className={`py-1.5 px-1 rounded-lg text-center transition-all ${
+                  className={`min-h-[40px] sm:min-h-[44px] py-2 px-1 rounded-lg text-center transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lemonChiffon ${
                     activePreviewTab === 'explanation'
-                      ? 'bg-white/15 text-lemonChiffon font-bold border border-platinumSilver/30 shadow-sm'
-                      : 'text-platinumSilver/60 hover:text-platinumSilver'
+                      ? 'bg-white/15 text-lemonChiffon font-bold border border-lemonChiffon/40 shadow-sm'
+                      : 'text-platinumSilver/65 hover:text-platinumSilver hover:bg-white/5'
                   }`}
                 >
-                  Explain
+                  <span className="block text-[10px] text-platinumSilver/40 font-mono">[02]</span>
+                  <span>Explain</span>
                 </button>
                 <button
                   type="button"
                   role="tab"
+                  id="tab-btn-route"
                   aria-selected={activePreviewTab === 'route'}
+                  aria-controls="tab-panel-route"
                   onClick={() => handleTabClick('route')}
-                  className={`py-1.5 px-1 rounded-lg text-center transition-all ${
+                  className={`min-h-[40px] sm:min-h-[44px] py-2 px-1 rounded-lg text-center transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lemonChiffon ${
                     activePreviewTab === 'route'
-                      ? 'bg-white/15 text-lemonChiffon font-bold border border-platinumSilver/30 shadow-sm'
-                      : 'text-platinumSilver/60 hover:text-platinumSilver'
+                      ? 'bg-white/15 text-lemonChiffon font-bold border border-lemonChiffon/40 shadow-sm'
+                      : 'text-platinumSilver/65 hover:text-platinumSilver hover:bg-white/5'
                   }`}
                 >
-                  Route
+                  <span className="block text-[10px] text-platinumSilver/40 font-mono">[03]</span>
+                  <span>Route</span>
                 </button>
                 <button
                   type="button"
                   role="tab"
+                  id="tab-btn-draft"
                   aria-selected={activePreviewTab === 'draft'}
+                  aria-controls="tab-panel-draft"
                   onClick={() => handleTabClick('draft')}
-                  className={`py-1.5 px-1 rounded-lg text-center transition-all ${
+                  className={`min-h-[40px] sm:min-h-[44px] py-2 px-1 rounded-lg text-center transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lemonChiffon ${
                     activePreviewTab === 'draft'
-                      ? 'bg-white/15 text-lemonChiffon font-bold border border-platinumSilver/30 shadow-sm'
-                      : 'text-platinumSilver/60 hover:text-platinumSilver'
+                      ? 'bg-white/15 text-lemonChiffon font-bold border border-lemonChiffon/40 shadow-sm'
+                      : 'text-platinumSilver/65 hover:text-platinumSilver hover:bg-white/5'
                   }`}
                 >
-                  Draft
+                  <span className="block text-[10px] text-platinumSilver/40 font-mono">[04]</span>
+                  <span>Draft</span>
                 </button>
               </div>
 
@@ -377,20 +414,21 @@ export default function LandingPage() {
                 
                 {/* TAB 1: FINDING */}
                 {activePreviewTab === 'finding' && (
-                  <div className="space-y-2.5 animate-in fade-in duration-200">
+                  <div id="tab-panel-finding" role="tabpanel" aria-labelledby="tab-btn-finding" className="space-y-2.5 animate-in fade-in duration-200">
                     <div className="p-3.5 rounded-xl bg-black/80 border border-platinumSilver/20 space-y-2">
                       <div className="flex items-center justify-between text-[11px] font-mono">
                         <span className="px-2 py-0.5 rounded bg-rosewood text-white font-bold text-[10px]">
                           HIGH SEVERITY
                         </span>
-                        <span className="text-lemonChiffon">Confidence: 98%</span>
+                        <span className="text-lemonChiffon font-semibold">Confidence: 98%</span>
                       </div>
                       <div className="text-xs font-semibold text-textPrimary leading-snug">
                         Overly Permissive Workflow: write-all declared
                       </div>
-                      <div className="font-mono text-[10px] text-platinumSilver/70 bg-black/90 p-2 rounded border border-white/5 space-y-0.5">
-                        <p className="text-platinumSilver/60">File: .github/workflows/ci.yml:18</p>
-                        <p className="text-electricTangerine">Evidence: permissions: write-all</p>
+                      <div className="font-mono text-[10px] text-platinumSilver/70 bg-black/90 p-2.5 rounded border border-white/5 space-y-1">
+                        <div className="text-platinumSilver/50 text-[9px]">{'// evidence.verify()'}</div>
+                        <p className="text-platinumSilver/75">File: .github/workflows/ci.yml:18</p>
+                        <p className="text-electricTangerine font-semibold">Evidence: permissions: write-all</p>
                         <p className="text-lemonChiffon">SHA-256: e3b0c44298fc1c14...</p>
                       </div>
                     </div>
@@ -399,15 +437,18 @@ export default function LandingPage() {
 
                 {/* TAB 2: EXPLANATION */}
                 {activePreviewTab === 'explanation' && (
-                  <div className="space-y-2.5 animate-in fade-in duration-200">
+                  <div id="tab-panel-explanation" role="tabpanel" aria-labelledby="tab-btn-explanation" className="space-y-2.5 animate-in fade-in duration-200">
                     <div className="p-3.5 rounded-xl bg-black/80 border border-platinumSilver/20 space-y-2">
                       <div className="flex items-center justify-between text-[11px] font-mono">
                         <span className="text-paleLavender font-semibold">GROUNDED EXPLANATION</span>
                         <span className="text-lemonChiffon text-[10px]">Anchored: L18</span>
                       </div>
-                      <p className="text-xs text-platinumSilver/85 leading-relaxed bg-black/90 p-2.5 rounded border border-white/5">
-                        &quot;This workflow grants unrestricted write permissions to every repository asset. If an untrusted action or PR payload executes here, it could tamper with code releases.&quot;
-                      </p>
+                      <div className="text-xs text-platinumSilver/85 leading-relaxed bg-black/90 p-2.5 rounded border border-white/5 space-y-1">
+                        <div className="text-platinumSilver/50 text-[9px] font-mono">{'// gamma4.explain()'}</div>
+                        <p>
+                          &quot;This workflow grants unrestricted write permissions to every repository asset. If an untrusted action or PR payload executes here, it could tamper with code releases.&quot;
+                        </p>
+                      </div>
                       <div className="flex items-center justify-between text-[11px] font-mono text-platinumSilver/60 pt-0.5">
                         <span>Required Skill: GitHub Actions, YAML</span>
                         <span className="text-lemonChiffon">Est. 25m</span>
@@ -418,13 +459,14 @@ export default function LandingPage() {
 
                 {/* TAB 3: ROUTE */}
                 {activePreviewTab === 'route' && (
-                  <div className="space-y-2.5 animate-in fade-in duration-200">
+                  <div id="tab-panel-route" role="tabpanel" aria-labelledby="tab-btn-route" className="space-y-2.5 animate-in fade-in duration-200">
                     <div className="p-3.5 rounded-xl bg-black/80 border border-platinumSilver/20 space-y-2">
                       <div className="flex items-center justify-between text-[11px] font-mono">
                         <span className="text-lemonChiffon font-semibold">CONTRIBUTOR ROUTE</span>
-                        <span className="text-emerald-400 text-[10px]">Beginner Friendly</span>
+                        <span className="text-emerald-400 text-[10px] font-semibold">Beginner Friendly</span>
                       </div>
-                      <div className="space-y-1 text-[11px] bg-black/90 p-2 rounded border border-white/5 font-mono">
+                      <div className="space-y-1 text-[11px] bg-black/90 p-2.5 rounded border border-white/5 font-mono">
+                        <div className="text-platinumSilver/50 text-[9px]">{'// route.plan()'}</div>
                         <p className="text-lemonChiffon font-semibold">Action: Scope workflow permissions</p>
                         <p className="text-platinumSilver/70 text-[10px]">Criteria: replace write-all with contents: read</p>
                         <p className="text-platinumSilver/60 text-[10px]">Verification: dry-run CI workflow checks</p>
@@ -435,16 +477,17 @@ export default function LandingPage() {
 
                 {/* TAB 4: DRAFT */}
                 {activePreviewTab === 'draft' && (
-                  <div className="space-y-2.5 animate-in fade-in duration-200">
+                  <div id="tab-panel-draft" role="tabpanel" aria-labelledby="tab-btn-draft" className="space-y-2.5 animate-in fade-in duration-200">
                     <div className="p-3.5 rounded-xl bg-black/80 border border-platinumSilver/20 space-y-2">
                       <div className="flex items-center justify-between text-[11px] font-mono">
                         <span className="text-platinumSilver font-semibold">MAINTAINER ISSUE DRAFT</span>
                         <span className="text-lemonChiffon text-[10px]">8 Sections Verified</span>
                       </div>
-                      <div className="space-y-0.5 text-[10px] bg-black/90 p-2 rounded border border-white/5 font-mono text-platinumSilver/80">
+                      <div className="space-y-1 text-[10px] bg-black/90 p-2.5 rounded border border-white/5 font-mono text-platinumSilver/80">
+                        <div className="text-platinumSilver/50 text-[9px]">{'// draft.markdown'}</div>
                         <p className="text-lemonChiffon font-bold">### Summary of Proposed Fix</p>
                         <p>Restrict CI workflow permissions to read-only content access.</p>
-                        <p className="text-platinumSilver/60 mt-1">### Verification Steps</p>
+                        <p className="text-platinumSilver/60 mt-1 font-semibold">### Verification Steps</p>
                         <p>1. Run workflow dry-run with explicit scopes.</p>
                       </div>
                     </div>
@@ -452,15 +495,15 @@ export default function LandingPage() {
                 )}
 
                 {/* Footer Status & Sample Notice */}
-                <div className="pt-2 flex items-center justify-between text-[11px] text-textMuted border-t border-platinumSilver/15">
+                <div className="pt-2.5 flex items-center justify-between text-[11px] text-textMuted border-t border-platinumSilver/15">
                   <span className="text-[10px] font-mono text-platinumSilver/60">Sample Data Preview • Local</span>
                   <button
                     type="button"
                     onClick={() => setIsAutoCycle(!isAutoCycle)}
-                    className="flex items-center gap-1 text-lemonChiffon hover:underline text-[10px] font-mono"
+                    className="min-h-[36px] px-2 py-1 flex items-center gap-1.5 text-lemonChiffon hover:text-white rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lemonChiffon text-[11px] font-mono transition-colors"
                   >
-                    <RotateCcw className="w-3 h-3" />
-                    <span>{isAutoCycle ? 'Auto-cycle' : 'Paused'}</span>
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    <span>{isAutoCycle ? 'Auto-cycle [ON]' : 'Auto-cycle [OFF]'}</span>
                   </button>
                 </div>
 
@@ -476,20 +519,27 @@ export default function LandingPage() {
       {/* ========================================================
           SECTION C — COMPACT TRUST STRIP
           ======================================================== */}
-      <section className="py-7 border-y border-platinumSilver/15 bg-blackHole/40 backdrop-blur-md relative z-10">
+      <section className="py-8 border-y border-platinumSilver/15 bg-blackHole/40 backdrop-blur-md relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {trustPrinciples.map((tp, idx) => {
               const Icon = tp.icon;
+              const tags = ['[ STATIC-AST ]', '[ OSV-CVE ]', '[ GROUNDED-AI ]', '[ HUMAN-GATED ]'];
               return (
-                <div key={idx} className="flex items-start gap-3">
-                  {/* Small line icon container (28px) */}
-                  <div className="w-7 h-7 rounded-lg bg-white/[0.04] border border-platinumSilver/20 flex items-center justify-center shrink-0">
-                    <Icon className="w-3.5 h-3.5 text-platinumSilver" />
+                <div
+                  key={idx}
+                  className="p-4 rounded-xl bg-white/[0.02] border border-platinumSilver/10 hover:border-platinumSilver/25 transition-colors flex items-start gap-3"
+                >
+                  {/* Line icon container (32px) */}
+                  <div className="w-8 h-8 rounded-lg bg-white/[0.04] border border-platinumSilver/20 flex items-center justify-center shrink-0 text-platinumSilver">
+                    <Icon className="w-4 h-4" />
                   </div>
-                  <div>
-                    <h3 className="text-xs font-bold text-textPrimary tracking-tight">{tp.title}</h3>
-                    <p className="text-[11px] text-platinumSilver/70 leading-relaxed mt-0.5">{tp.desc}</p>
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between gap-1">
+                      <h3 className="text-xs font-bold text-textPrimary tracking-tight">{tp.title}</h3>
+                      <span className="text-[9px] font-mono text-lemonChiffon/70 shrink-0">{tags[idx]}</span>
+                    </div>
+                    <p className="text-[11px] text-platinumSilver/75 leading-relaxed">{tp.desc}</p>
                   </div>
                 </div>
               );
@@ -516,7 +566,7 @@ export default function LandingPage() {
             </p>
           </div>
 
-          {/* 4-Step Rail: Clean, Scannable & Minimal */}
+          {/* 4-Step Rail: Clean, Scannable & Accessible */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 relative">
             {processSteps.map((step, idx) => {
               const Icon = step.icon;
@@ -524,21 +574,35 @@ export default function LandingPage() {
               return (
                 <div
                   key={idx}
+                  role="button"
+                  tabIndex={0}
+                  aria-pressed={isSelected}
                   onClick={() => handleStepClick(idx)}
-                  className={`p-5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between ${
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      handleStepClick(idx);
+                    }
+                  }}
+                  className={`p-5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lemonChiffon ${
                     isSelected
                       ? 'liquid-glass-card border-lemonChiffon/60 shadow-liquid-glow scale-[1.01]'
-                      : 'bg-black/40 border-platinumSilver/15 hover:border-platinumSilver/30'
+                      : 'bg-black/40 border-platinumSilver/15 hover:border-platinumSilver/30 hover:bg-black/60'
                   }`}
                 >
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className={`text-2xl font-mono font-bold transition-colors ${
-                        isSelected ? 'text-lemonChiffon' : 'text-platinumSilver/30'
-                      }`}>
-                        {step.num}
-                      </span>
-                      {/* Small line icon container (30px) */}
+                      <div className="flex items-center gap-2">
+                        <span className={`text-2xl font-mono font-bold transition-colors ${
+                          isSelected ? 'text-lemonChiffon' : 'text-platinumSilver/35'
+                        }`}>
+                          {step.num}
+                        </span>
+                        <span className="text-[10px] font-mono text-platinumSilver/45 uppercase tracking-wider">
+                          step::{step.num}
+                        </span>
+                      </div>
+                      {/* Small line icon container (32px) */}
                       <div className="w-8 h-8 rounded-lg bg-white/[0.04] border border-platinumSilver/20 flex items-center justify-center text-electricTangerine">
                         <Icon className="w-4 h-4" />
                       </div>
@@ -566,7 +630,7 @@ export default function LandingPage() {
       </section>
 
       {/* ========================================================
-          SECTION F — CORE FEATURES: Minimal Editorial Grid (Problem 1 & 2 Fixed)
+          SECTION F — CORE FEATURES: Minimal Editorial Grid
           ======================================================== */}
       <section id="features" className="scroll-mt-24 py-20 border-b border-platinumSilver/15 relative">
         
@@ -587,18 +651,18 @@ export default function LandingPage() {
             </p>
           </div>
 
-          {/* Minimal 3-Column Editorial Grid: 28-34px icons, clean typography, progressive disclosure */}
+          {/* Minimal 3-Column Editorial Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feat, idx) => {
               const Icon = feat.icon;
               return (
                 <div
                   key={idx}
-                  className="p-6 rounded-2xl bg-black/50 border border-platinumSilver/15 hover:border-platinumSilver/30 hover:bg-black/70 transition-all flex flex-col justify-between space-y-4"
+                  className="p-6 rounded-2xl bg-black/50 border border-platinumSilver/15 hover:border-lemonChiffon/30 hover:bg-black/70 transition-all flex flex-col justify-between space-y-4"
                 >
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      {/* Small line icon container (30px) */}
+                      {/* Small line icon container (32px) */}
                       <div className="w-8 h-8 rounded-lg bg-white/[0.04] border border-platinumSilver/20 flex items-center justify-center text-electricTangerine">
                         <Icon className="w-4 h-4" />
                       </div>
@@ -639,9 +703,14 @@ export default function LandingPage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 text-left">
-            <div className="p-5 rounded-2xl bg-black/60 border border-platinumSilver/20 space-y-2">
-              <div className="w-7 h-7 rounded-lg bg-coffeeBean/70 border border-platinumSilver/20 flex items-center justify-center text-lemonChiffon mb-2">
-                <Lock className="w-3.5 h-3.5" />
+            <div className="p-5 rounded-2xl bg-black/60 border border-platinumSilver/20 space-y-2 hover:border-lemonChiffon/30 transition-colors">
+              <div className="flex items-center justify-between mb-2">
+                <div className="w-7 h-7 rounded-lg bg-coffeeBean/70 border border-platinumSilver/20 flex items-center justify-center text-lemonChiffon">
+                  <Lock className="w-3.5 h-3.5" />
+                </div>
+                <span className="text-[9px] font-mono text-lemonChiffon/70 bg-white/5 px-1.5 py-0.5 rounded border border-white/10">
+                  INVARIANT // 01
+                </span>
               </div>
               <h3 className="font-bold text-xs sm:text-sm text-textPrimary">1. Zero Code Execution</h3>
               <p className="text-xs text-platinumSilver/70 leading-relaxed font-normal">
@@ -649,9 +718,14 @@ export default function LandingPage() {
               </p>
             </div>
 
-            <div className="p-5 rounded-2xl bg-black/60 border border-platinumSilver/20 space-y-2">
-              <div className="w-7 h-7 rounded-lg bg-coffeeBean/70 border border-platinumSilver/20 flex items-center justify-center text-electricTangerine mb-2">
-                <KeyRound className="w-3.5 h-3.5" />
+            <div className="p-5 rounded-2xl bg-black/60 border border-platinumSilver/20 space-y-2 hover:border-electricTangerine/30 transition-colors">
+              <div className="flex items-center justify-between mb-2">
+                <div className="w-7 h-7 rounded-lg bg-coffeeBean/70 border border-platinumSilver/20 flex items-center justify-center text-electricTangerine">
+                  <KeyRound className="w-3.5 h-3.5" />
+                </div>
+                <span className="text-[9px] font-mono text-electricTangerine/80 bg-white/5 px-1.5 py-0.5 rounded border border-white/10">
+                  INVARIANT // 02
+                </span>
               </div>
               <h3 className="font-bold text-xs sm:text-sm text-textPrimary">2. Strict Secret Masking</h3>
               <p className="text-xs text-platinumSilver/70 leading-relaxed font-normal">
@@ -659,9 +733,14 @@ export default function LandingPage() {
               </p>
             </div>
 
-            <div className="p-5 rounded-2xl bg-black/60 border border-platinumSilver/20 space-y-2">
-              <div className="w-7 h-7 rounded-lg bg-coffeeBean/70 border border-platinumSilver/20 flex items-center justify-center text-paleLavender mb-2">
-                <GitPullRequest className="w-3.5 h-3.5" />
+            <div className="p-5 rounded-2xl bg-black/60 border border-platinumSilver/20 space-y-2 hover:border-paleLavender/30 transition-colors">
+              <div className="flex items-center justify-between mb-2">
+                <div className="w-7 h-7 rounded-lg bg-coffeeBean/70 border border-platinumSilver/20 flex items-center justify-center text-paleLavender">
+                  <GitPullRequest className="w-3.5 h-3.5" />
+                </div>
+                <span className="text-[9px] font-mono text-paleLavender/80 bg-white/5 px-1.5 py-0.5 rounded border border-white/10">
+                  INVARIANT // 03
+                </span>
               </div>
               <h3 className="font-bold text-xs sm:text-sm text-textPrimary">3. Manual PRs Only</h3>
               <p className="text-xs text-platinumSilver/70 leading-relaxed font-normal">
@@ -673,18 +752,18 @@ export default function LandingPage() {
           <div className="pt-2 flex flex-wrap items-center justify-center gap-4 text-xs font-mono">
             <Link
               href="/security"
-              className="text-lemonChiffon hover:underline flex items-center gap-1 font-semibold"
+              className="min-h-[44px] px-3 py-2 text-lemonChiffon hover:underline flex items-center gap-1.5 font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lemonChiffon rounded-lg"
             >
               <span>Security &amp; Disclosure Policy</span>
-              <ArrowRight className="w-3 h-3" />
+              <ArrowRight className="w-3.5 h-3.5" />
             </Link>
-            <span className="text-platinumSilver/30">•</span>
+            <span className="text-platinumSilver/30">{'//'}</span>
             <Link
               href="/privacy"
-              className="text-paleLavender hover:underline flex items-center gap-1 font-semibold"
+              className="min-h-[44px] px-3 py-2 text-paleLavender hover:underline flex items-center gap-1.5 font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lemonChiffon rounded-lg"
             >
               <span>Privacy Notice</span>
-              <ArrowRight className="w-3 h-3" />
+              <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
 
@@ -719,7 +798,7 @@ export default function LandingPage() {
                     aria-controls={`faq-answer-${idx}`}
                     aria-expanded={openFaq === idx}
                     onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
-                    className="w-full min-h-[44px] p-4 sm:p-5 text-left flex items-center justify-between text-xs sm:text-sm font-semibold text-textPrimary hover:text-lemonChiffon transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lemonChiffon rounded-2xl"
+                    className="w-full min-h-[48px] p-4 sm:p-5 text-left flex items-center justify-between text-xs sm:text-sm font-semibold text-textPrimary hover:text-lemonChiffon transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lemonChiffon rounded-2xl"
                   >
                     <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3 pr-3">
                       <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/5 text-paleLavender border border-paleLavender/30 shrink-0 w-fit">
@@ -739,7 +818,7 @@ export default function LandingPage() {
                     id={`faq-answer-${idx}`}
                     role="region"
                     aria-labelledby={`faq-btn-${idx}`}
-                    className="px-4 pb-4 sm:px-5 sm:pb-5 text-xs text-platinumSilver/80 leading-relaxed border-t border-platinumSilver/15 pt-3 font-normal"
+                    className="px-4 pb-4 sm:px-5 sm:pb-5 text-xs text-platinumSilver/85 leading-relaxed border-t border-platinumSilver/15 pt-3 font-normal"
                   >
                     {faq.a}
                   </div>
@@ -776,7 +855,7 @@ export default function LandingPage() {
           {/* Quick Scan Input Widget */}
           <form
             onSubmit={handleQuickScan}
-            className="max-w-lg mx-auto flex flex-col sm:flex-row items-center gap-2 p-1.5 rounded-2xl sm:rounded-full bg-black/80 border border-platinumSilver/30 shadow-liquid-glass backdrop-blur-xl"
+            className="max-w-lg mx-auto flex flex-col sm:flex-row items-center gap-2 p-1.5 rounded-2xl sm:rounded-full bg-black/80 border border-platinumSilver/30 shadow-liquid-glass backdrop-blur-xl focus-within:border-electricTangerine/60 transition-colors"
           >
             <div className="flex items-center gap-2 px-3 w-full sm:w-auto flex-1">
               <Search className="w-4 h-4 text-platinumSilver/60 shrink-0" />
@@ -785,18 +864,19 @@ export default function LandingPage() {
                 value={demoRepoInput}
                 onChange={(e) => setDemoRepoInput(e.target.value)}
                 placeholder="https://github.com/owner/repository"
-                className="w-full bg-transparent text-xs sm:text-sm text-textPrimary placeholder-textMuted/60 focus:outline-none font-mono"
+                aria-label="Repository URL to scan"
+                className="w-full min-h-[44px] bg-transparent text-xs sm:text-sm text-textPrimary placeholder-textMuted/60 focus:outline-none font-mono"
               />
             </div>
             <button
               type="submit"
-              className="w-full sm:w-auto min-h-[44px] px-6 py-2.5 rounded-full bg-electricTangerine hover:bg-electricTangerine-hover text-white font-bold text-xs sm:text-sm transition-all shadow-glow-tangerine shrink-0 active:scale-95"
+              className="w-full sm:w-auto min-h-[46px] px-6 py-2.5 rounded-full bg-electricTangerine hover:bg-electricTangerine-hover text-white font-bold text-xs sm:text-sm transition-all shadow-glow-tangerine shrink-0 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-electricTangerine"
             >
               Scan Repository
             </button>
           </form>
 
-          {/* Sample Shortcuts */}
+          {/* Sample Shortcuts with min-h-[36px] */}
           <div className="flex flex-wrap items-center justify-center gap-2 text-xs">
             <span className="text-textMuted font-mono">Sample:</span>
             {sampleRepositories.map((repo) => (
@@ -804,24 +884,24 @@ export default function LandingPage() {
                 key={repo}
                 type="button"
                 onClick={() => setDemoRepoInput(`https://github.com/${repo}`)}
-                className="px-3 py-1 rounded-full bg-white/5 hover:bg-white/10 text-platinumSilver/90 border border-platinumSilver/20 font-mono text-[11px] transition-all"
+                className="min-h-[36px] px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 text-platinumSilver/90 border border-platinumSilver/20 font-mono text-[11px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lemonChiffon"
               >
                 {repo}
               </button>
             ))}
           </div>
 
-          {/* Account CTAs */}
+          {/* Account CTAs with min-h-[46px] */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-2">
             <Link
               href="/signup"
-              className="w-full sm:w-auto min-h-[44px] px-7 py-3 rounded-full bg-lemonChiffon hover:bg-sustainableLinen text-black font-bold text-xs sm:text-sm transition-all shadow-md active:scale-95"
+              className="w-full sm:w-auto min-h-[46px] px-7 py-3 rounded-full bg-lemonChiffon hover:bg-sustainableLinen text-black font-bold text-xs sm:text-sm transition-all shadow-md active:scale-95 flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lemonChiffon"
             >
               Sign up with Email &amp; Phone
             </Link>
             <Link
               href="/login"
-              className="w-full sm:w-auto min-h-[44px] px-7 py-3 rounded-full bg-black/60 hover:bg-white/5 text-platinumSilver border border-platinumSilver/25 font-semibold text-xs sm:text-sm transition-all backdrop-blur-md active:scale-95"
+              className="w-full sm:w-auto min-h-[46px] px-7 py-3 rounded-full bg-black/60 hover:bg-white/5 text-platinumSilver border border-platinumSilver/25 font-semibold text-xs sm:text-sm transition-all backdrop-blur-md active:scale-95 flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lemonChiffon"
             >
               Log in to Existing Account
             </Link>

@@ -162,7 +162,7 @@ export default function Navbar() {
               <div className="hidden lg:flex items-center gap-2 ml-3 px-3.5 py-1.5 rounded-full bg-black/60 border border-platinumSilver/20 text-xs text-textPrimary backdrop-blur-md shadow-inner">
                 <GitBranch className="w-3.5 h-3.5 text-electricTangerine shrink-0" />
                 <span className="font-mono text-lemonChiffon font-medium truncate max-w-[170px]">
-                  {activeScan.repoName}
+                  git::{activeScan.repoName}
                 </span>
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
               </div>
@@ -183,7 +183,7 @@ export default function Navbar() {
                     <Link
                       key={item.href}
                       href={item.href}
-                      className={`relative px-3.5 py-1.5 text-xs lg:text-sm font-medium rounded-full transition-all ${
+                      className={`relative px-3.5 py-1.5 min-h-[38px] inline-flex items-center text-xs lg:text-sm font-medium rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lemonChiffon ${
                         isActive
                           ? 'bg-white/10 text-lemonChiffon border border-lemonChiffon/40 shadow-sm'
                           : 'text-platinumSilver/80 hover:text-textPrimary hover:bg-white/5 border border-transparent'
@@ -202,7 +202,7 @@ export default function Navbar() {
                       <Link
                         key={item.href}
                         href={item.href}
-                        className={`px-3.5 py-2 text-sm font-medium rounded-full transition-all ${
+                        className={`px-3.5 py-2 min-h-[38px] inline-flex items-center text-sm font-medium rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lemonChiffon ${
                           isAnchorActive
                             ? 'bg-white/10 text-lemonChiffon border border-lemonChiffon/30 shadow-sm'
                             : 'text-platinumSilver/85 hover:text-lemonChiffon hover:bg-white/5'
@@ -215,14 +215,14 @@ export default function Navbar() {
                   <div className="h-4 w-px bg-platinumSilver/20 mx-2" />
                   <Link
                     href="/login"
-                    className="px-4 py-2 text-sm font-medium text-platinumSilver/90 hover:text-textPrimary hover:bg-white/5 rounded-full transition-all"
+                    className="px-4 py-2 min-h-[38px] inline-flex items-center text-sm font-medium text-platinumSilver/90 hover:text-textPrimary hover:bg-white/5 rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lemonChiffon"
                   >
                     Login
                   </Link>
                   {/* Lemon Chiffon Pill Button for Signup with Tangerine Glow */}
                   <Link
                     href="/signup"
-                    className="px-5 py-2 text-sm font-semibold bg-lemonChiffon hover:bg-sustainableLinen text-black rounded-full transition-all shadow-md hover:shadow-lemonChiffon/30 ml-1 active:scale-95"
+                    className="px-5 py-2 min-h-[38px] inline-flex items-center text-sm font-semibold bg-lemonChiffon hover:bg-sustainableLinen text-black rounded-full transition-all shadow-md hover:shadow-lemonChiffon/30 ml-1 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lemonChiffon"
                   >
                     Sign up
                   </Link>
@@ -239,7 +239,7 @@ export default function Navbar() {
               <div className="relative pl-2 shrink-0" ref={dropdownRef}>
                 <button
                   onClick={() => setDropdownOpen(!dropdownOpen)}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/60 border border-platinumSilver/25 hover:border-lemonChiffon/40 transition-all text-textPrimary text-xs focus:outline-none focus:ring-1 focus:ring-lemonChiffon shadow-sm backdrop-blur-md"
+                  className="flex items-center gap-2 px-3 py-1.5 min-h-[38px] rounded-full bg-black/60 border border-platinumSilver/25 hover:border-lemonChiffon/40 transition-all text-textPrimary text-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-lemonChiffon shadow-sm backdrop-blur-md"
                   aria-label="User Profile Menu"
                   aria-expanded={dropdownOpen}
                 >
@@ -301,12 +301,12 @@ export default function Navbar() {
               </div>
             )}
 
-            {/* Mobile Menu Hamburger Button */}
+            {/* Mobile Menu Hamburger Button with min 44px tap target */}
             <div className="md:hidden" ref={mobileMenuRef}>
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-2.5 rounded-xl bg-white/5 border border-platinumSilver/20 text-platinumSilver hover:text-lemonChiffon hover:border-lemonChiffon/40 focus:outline-none focus:ring-2 focus:ring-lemonChiffon transition-all"
+                className="w-11 h-11 flex items-center justify-center rounded-xl bg-white/5 border border-platinumSilver/20 text-platinumSilver hover:text-lemonChiffon hover:border-lemonChiffon/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-lemonChiffon transition-all"
                 aria-label="Toggle navigation menu"
                 aria-expanded={mobileMenuOpen}
                 aria-controls="mobile-nav-drawer"
@@ -339,7 +339,7 @@ export default function Navbar() {
                     key={item.href}
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`block px-4 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+                    className={`min-h-[44px] flex items-center px-4 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                       isActive
                         ? 'bg-white/10 text-lemonChiffon border border-lemonChiffon/30'
                         : 'text-platinumSilver/80 hover:bg-white/5 hover:text-textPrimary'
@@ -359,7 +359,7 @@ export default function Navbar() {
                     key={item.href}
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="block px-4 py-2.5 rounded-xl text-sm font-medium text-platinumSilver/85 hover:bg-white/5 hover:text-lemonChiffon transition-colors"
+                    className="min-h-[44px] flex items-center px-4 py-2.5 rounded-xl text-sm font-medium text-platinumSilver/85 hover:bg-white/5 hover:text-lemonChiffon transition-colors"
                   >
                     {item.label}
                   </Link>
@@ -370,21 +370,21 @@ export default function Navbar() {
                 <Link
                   href="/login"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full py-2.5 text-center text-sm font-medium text-platinumSilver hover:text-textPrimary bg-white/5 rounded-xl border border-platinumSilver/20"
+                  className="w-full min-h-[44px] flex items-center justify-center py-2.5 text-center text-sm font-medium text-platinumSilver hover:text-textPrimary bg-white/5 rounded-xl border border-platinumSilver/20"
                 >
                   Log In
                 </Link>
                 <Link
                   href="/signup"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full py-3 text-center text-sm font-bold bg-lemonChiffon hover:bg-sustainableLinen text-black rounded-xl shadow-md"
+                  className="w-full min-h-[44px] flex items-center justify-center py-3 text-center text-sm font-bold bg-lemonChiffon hover:bg-sustainableLinen text-black rounded-xl shadow-md"
                 >
                   Sign Up
                 </Link>
                 <Link
                   href="/scan"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full py-3 text-center text-sm font-bold bg-electricTangerine hover:bg-electricTangerine-hover text-white rounded-xl shadow-glow-tangerine flex items-center justify-center gap-2"
+                  className="w-full min-h-[44px] py-3 text-center text-sm font-bold bg-electricTangerine hover:bg-electricTangerine-hover text-white rounded-xl shadow-glow-tangerine flex items-center justify-center gap-2"
                 >
                   <Search className="w-4 h-4" />
                   <span>Scan a Repository</span>
