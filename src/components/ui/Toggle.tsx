@@ -26,12 +26,12 @@ export function Toggle({
           {label && (
             <label
               htmlFor={id}
-              className="text-sm font-medium text-textPrimary cursor-pointer select-none"
+              className="text-sm font-medium text-koraOffWhite cursor-pointer select-none"
             >
               {label}
             </label>
           )}
-          {description && <p className="text-xs text-textMuted">{description}</p>}
+          {description && <p className="text-xs text-koraSecondary">{description}</p>}
         </div>
       )}
       <button
@@ -41,8 +41,8 @@ export function Toggle({
         aria-checked={checked}
         disabled={disabled}
         onClick={() => onChange(!checked)}
-        className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lemonChiffon focus-visible:ring-offset-2 focus-visible:ring-offset-black disabled:opacity-50 disabled:cursor-not-allowed ${
-          checked ? 'bg-electricTangerine' : 'bg-blackHole border-borderDark'
+        className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-koraRed focus-visible:ring-offset-2 focus-visible:ring-offset-koraBg disabled:opacity-50 disabled:cursor-not-allowed ${
+          checked ? 'bg-koraRed' : 'bg-koraCharcoal-card border-koraCharcoal-border'
         }`}
       >
         <span

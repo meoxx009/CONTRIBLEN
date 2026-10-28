@@ -136,8 +136,8 @@ export default function Navbar() {
     <header
       className={`sticky top-0 z-40 w-full pt-[env(safe-area-inset-top,0px)] transition-all duration-300 ${
         scrolled
-          ? 'bg-black/80 backdrop-blur-2xl border-b border-platinumSilver/20 shadow-liquid-nav'
-          : 'bg-black/55 backdrop-blur-xl border-b border-platinumSilver/12 shadow-sm'
+          ? 'bg-koraBg/90 backdrop-blur-2xl border-b border-koraCharcoal-border shadow-liquid-nav'
+          : 'bg-koraBg/75 backdrop-blur-xl border-b border-koraCharcoal-border/80 shadow-sm'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -146,13 +146,13 @@ export default function Navbar() {
           {/* Logo & Brand */}
           <div className="flex items-center gap-3 shrink-0">
             <Link href={user ? '/app/dashboard' : '/'} className="flex items-center gap-2.5 group" aria-label="ContriBLens OSS Home">
-              <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-platinumSilver/20 via-coffeeBean/40 to-electricTangerine/20 border border-platinumSilver/30 flex items-center justify-center group-hover:scale-105 transition-all shadow-liquid-glass">
-                <ContriBLensMark size={20} className="w-5 h-5 drop-shadow-[0_0_8px_rgba(255,109,31,0.5)]" />
+              <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-koraSlate/25 via-koraCharcoal-surface to-koraBurgundy/30 border border-koraCharcoal-border flex items-center justify-center group-hover:scale-105 transition-all shadow-liquid-glass">
+                <ContriBLensMark size={20} className="w-5 h-5 drop-shadow-[0_0_8px_rgba(192,43,24,0.5)]" />
                 <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-transparent via-white/10 to-transparent pointer-events-none" />
               </div>
               <div className="flex flex-col">
-                <span className="font-heading font-bold text-base tracking-tight text-textPrimary flex items-center gap-1.5 group-hover:text-platinumSilver transition-colors">
-                  <span>Contri<span className="text-textPrimary">B</span><span className="text-electricTangerine">Lens</span></span> <span className="text-[10px] font-semibold bg-coffeeBean text-lemonChiffon border border-lemonChiffon/30 px-2 py-0.5 rounded-full shadow-sm font-mono">OSS</span>
+                <span className="font-heading font-bold text-base tracking-tight text-textPrimary flex items-center gap-1.5 group-hover:text-koraOffWhite transition-colors">
+                  <span>Contri<span className="text-textPrimary">B</span><span className="text-koraRed">Lens</span></span> <span className="text-[10px] font-semibold bg-[#1C1715] text-koraOffWhite border border-[#5B5857]/40 px-2 py-0.5 rounded-full shadow-sm font-mono">OSS</span>
                 </span>
                 <span className="text-[11px] text-textMuted -mt-0.5 hidden sm:inline tracking-wide font-normal">Scan. Understand. Contribute.</span>
               </div>
@@ -160,9 +160,9 @@ export default function Navbar() {
 
             {/* Active repository pill if in authenticated mode */}
             {user && activeScan && (
-              <div className="hidden lg:flex items-center gap-2 ml-3 px-3.5 py-1.5 rounded-full bg-black/60 border border-platinumSilver/20 text-xs text-textPrimary backdrop-blur-md shadow-inner">
-                <GitBranch className="w-3.5 h-3.5 text-electricTangerine shrink-0" />
-                <span className="font-mono text-lemonChiffon font-medium truncate max-w-[170px]">
+              <div className="hidden lg:flex items-center gap-2 ml-3 px-3.5 py-1.5 rounded-full bg-[#120F0E]/80 border border-koraCharcoal-border text-xs text-textPrimary backdrop-blur-md shadow-inner">
+                <GitBranch className="w-3.5 h-3.5 text-koraRed shrink-0" />
+                <span className="font-mono text-koraOffWhite font-medium truncate max-w-[170px]">
                   git::{activeScan.repoName}
                 </span>
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -174,7 +174,7 @@ export default function Navbar() {
           <nav className="hidden md:flex items-center py-2 px-1">
             <div className="flex items-center gap-1 lg:gap-2 whitespace-nowrap">
               {user ? (
-                // Authenticated Navigation with liquid-glass pill and active Lemon Chiffon state
+                // Authenticated Navigation with Kora dark editorial pill
                 authenticatedLinks.map((item) => {
                   const isActive =
                     pathname === item.href ||
@@ -184,10 +184,10 @@ export default function Navbar() {
                     <Link
                       key={item.href}
                       href={item.href}
-                      className={`relative px-3.5 py-1.5 min-h-[38px] inline-flex items-center text-xs lg:text-sm font-medium rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lemonChiffon ${
+                      className={`relative px-3.5 py-1.5 min-h-[38px] inline-flex items-center text-xs lg:text-sm font-medium rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-koraOffWhite ${
                         isActive
-                          ? 'bg-white/10 text-lemonChiffon border border-lemonChiffon/40 shadow-sm'
-                          : 'text-platinumSilver/80 hover:text-textPrimary hover:bg-white/5 border border-transparent'
+                          ? 'bg-white/10 text-koraOffWhite border border-koraOffWhite/35 shadow-sm'
+                          : 'text-koraSecondary hover:text-koraOffWhite hover:bg-white/5 border border-transparent'
                       }`}
                     >
                       {item.label}
@@ -203,27 +203,27 @@ export default function Navbar() {
                       <Link
                         key={item.href}
                         href={item.href}
-                        className={`px-3.5 py-2 min-h-[38px] inline-flex items-center text-sm font-medium rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lemonChiffon ${
+                        className={`px-3.5 py-2 min-h-[38px] inline-flex items-center text-sm font-medium rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-koraOffWhite ${
                           isAnchorActive
-                            ? 'bg-white/10 text-lemonChiffon border border-lemonChiffon/30 shadow-sm'
-                            : 'text-platinumSilver/85 hover:text-lemonChiffon hover:bg-white/5'
+                            ? 'bg-white/10 text-koraOffWhite border border-koraOffWhite/30 shadow-sm'
+                            : 'text-koraSecondary hover:text-koraOffWhite hover:bg-white/5'
                         }`}
                       >
                         {item.label}
                       </Link>
                     );
                   })}
-                  <div className="h-4 w-px bg-platinumSilver/20 mx-2" />
+                  <div className="h-4 w-px bg-koraCharcoal/30 mx-2" />
                   <Link
                     href="/login"
-                    className="px-4 py-2 min-h-[38px] inline-flex items-center text-sm font-medium text-platinumSilver/90 hover:text-textPrimary hover:bg-white/5 rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lemonChiffon"
+                    className="px-4 py-2 min-h-[38px] inline-flex items-center text-sm font-medium text-koraSecondary hover:text-koraOffWhite hover:bg-white/5 rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-koraOffWhite"
                   >
                     Login
                   </Link>
-                  {/* Lemon Chiffon Pill Button for Signup with Tangerine Glow */}
+                  {/* Primary Red Accent Button for Signup with Kora glow */}
                   <Link
                     href="/signup"
-                    className="px-5 py-2 min-h-[38px] inline-flex items-center text-sm font-semibold bg-lemonChiffon hover:bg-sustainableLinen text-black rounded-full transition-all shadow-md hover:shadow-lemonChiffon/30 ml-1 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lemonChiffon"
+                    className="px-5 py-2 min-h-[38px] inline-flex items-center text-sm font-semibold bg-koraRed hover:bg-koraRed-hover text-white rounded-full transition-all shadow-glow-red ml-1 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-koraRed"
                   >
                     Sign up
                   </Link>

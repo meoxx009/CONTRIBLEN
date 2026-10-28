@@ -64,23 +64,23 @@ function LoginContent() {
   };
 
   return (
-    <div className="relative flex-1 flex items-center justify-center py-16 px-4 sm:px-6 lg:px-8 bg-black overflow-hidden">
-      {/* Orange Ambient Top Glow */}
-      <div className="absolute top-[-100px] left-1/2 -translate-x-1/2 w-[600px] h-[340px] bg-electricTangerine/20 rounded-full blur-[90px] pointer-events-none" />
+    <div className="relative flex-1 flex items-center justify-center py-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      {/* Smoky Ambient Top Glow */}
+      <div className="absolute top-[-100px] left-1/2 -translate-x-1/2 w-[600px] h-[340px] bg-koraBurgundy/25 rounded-full blur-[90px] pointer-events-none" />
 
-      <div className="glass-panel p-8 rounded-2xl shadow-glass-card max-w-md w-full space-y-8 relative z-10 border border-borderDark">
+      <div className="p-8 rounded-2xl shadow-liquid-glass max-w-md w-full space-y-8 relative z-10 bg-koraCharcoal-surface/90 border border-koraCharcoal-border backdrop-blur-2xl">
         <div className="text-center">
-          <div className="inline-flex w-12 h-12 rounded-xl bg-electricTangerine/15 border border-electricTangerine/30 items-center justify-center text-electricTangerine mb-4 shadow-glow-tangerine">
+          <div className="inline-flex w-12 h-12 rounded-xl bg-gradient-to-br from-koraSlate/25 via-koraCharcoal-surface to-koraBurgundy/30 border border-koraCharcoal-border items-center justify-center text-koraOffWhite mb-4 shadow-liquid-glass">
             <ContriBLensMark size={24} className="w-6 h-6" />
           </div>
-          <h2 className="text-2xl font-heading font-bold text-textPrimary tracking-tight">Log in to ContribLens</h2>
-          <p className="mt-2 text-xs text-textMuted">
+          <h2 className="text-2xl font-heading font-bold text-koraOffWhite tracking-tight">Log in to ContribLens</h2>
+          <p className="mt-2 text-xs text-koraSecondary">
             Access your scanned repositories, contribution routes, and issue drafts.
           </p>
         </div>
 
         {error && (
-          <div className="p-3.5 rounded-lg bg-rosewood/40 border border-rosewood text-cotton text-xs flex items-start gap-2">
+          <div className="p-3.5 rounded-lg bg-koraBurgundy/30 border border-koraBurgundy text-koraOffWhite text-xs flex items-start gap-2">
             <span>•</span>
             <span>{error}</span>
           </div>
@@ -88,7 +88,7 @@ function LoginContent() {
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-5">
           <div>
-            <label className="block text-xs font-medium text-textPrimary mb-1.5">
+            <label className="block text-xs font-medium text-koraOffWhite mb-1.5">
               Email Address or Phone Number
             </label>
             <div className="relative">
@@ -97,23 +97,23 @@ function LoginContent() {
                 value={identifier}
                 onChange={(e) => setIdentifier(e.target.value)}
                 placeholder="developer@example.com or +1 555-0199"
-                className="w-full px-3.5 py-2.5 bg-black border border-borderDark rounded-lg text-sm text-textPrimary placeholder-textMuted/40 focus:outline-none focus:border-lemonChiffon focus:ring-1 focus:ring-lemonChiffon transition-colors"
+                className="w-full px-3.5 py-2.5 bg-koraCharcoal-dark border border-koraCharcoal-border rounded-lg text-sm text-koraOffWhite placeholder-koraSecondary/50 focus:outline-none focus:border-koraRed focus:ring-1 focus:ring-koraRed transition-colors"
                 disabled={loading}
               />
             </div>
-            <p className="mt-1 text-[11px] text-textMuted">
+            <p className="mt-1 text-[11px] text-koraSecondary">
               Enter the email or phone number you registered with.
             </p>
           </div>
 
           <div>
             <div className="flex items-center justify-between mb-1.5">
-              <label className="block text-xs font-medium text-textPrimary">
+              <label className="block text-xs font-medium text-koraOffWhite">
                 Password
               </label>
               <Link
                 href="/forgot-password"
-                className="text-[11px] text-lemonChiffon/90 hover:underline"
+                className="text-[11px] text-koraSecondary hover:text-koraOffWhite hover:underline"
               >
                 Forgot your password?
               </Link>
@@ -124,13 +124,13 @@ function LoginContent() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••••••"
-                className="w-full px-3.5 py-2.5 bg-black border border-borderDark rounded-lg text-sm text-textPrimary placeholder-textMuted/40 focus:outline-none focus:border-lemonChiffon focus:ring-1 focus:ring-lemonChiffon transition-colors pr-10"
+                className="w-full px-3.5 py-2.5 bg-koraCharcoal-dark border border-koraCharcoal-border rounded-lg text-sm text-koraOffWhite placeholder-koraSecondary/50 focus:outline-none focus:border-koraRed focus:ring-1 focus:ring-koraRed transition-colors pr-10"
                 disabled={loading}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center text-textMuted hover:text-textPrimary"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-koraSecondary hover:text-koraOffWhite"
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
@@ -140,7 +140,7 @@ function LoginContent() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2.5 px-4 rounded-xl bg-lemonChiffon hover:bg-sustainableLinen text-black font-semibold text-sm transition-all shadow-md hover:shadow-lemonChiffon/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-2.5 px-4 rounded-xl bg-koraRed hover:bg-koraRed-hover text-white font-semibold text-sm transition-all shadow-glow-red flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? (
               <>
@@ -156,12 +156,12 @@ function LoginContent() {
           </button>
         </form>
 
-        <div className="text-center pt-2 border-t border-borderDark">
-          <p className="text-xs text-textMuted">
+        <div className="text-center pt-2 border-t border-koraCharcoal-border">
+          <p className="text-xs text-koraSecondary">
             Don&apos;t have an account?{' '}
             <Link
               href={nextParam ? `/signup?next=${encodeURIComponent(nextParam)}` : '/signup'}
-              className="text-lemonChiffon hover:underline font-medium"
+              className="text-koraOffWhite hover:underline font-medium"
             >
               Create an account
             </Link>
@@ -174,7 +174,7 @@ function LoginContent() {
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-black" />}>
+    <Suspense fallback={<div className="min-h-screen bg-koraBg" />}>
       <LoginContent />
     </Suspense>
   );

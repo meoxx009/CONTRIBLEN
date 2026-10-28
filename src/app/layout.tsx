@@ -25,11 +25,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark font-sans-mode text-base-mode">
-      <body className="bg-black text-textPrimary flex flex-col min-h-screen selection:bg-electricTangerine/30 selection:text-lemonChiffon">
+      <body className="bg-koraBg text-textPrimary flex flex-col min-h-screen selection:bg-koraRed/30 selection:text-koraOffWhite relative overflow-x-hidden">
+        {/* Subtle Smoky Atmospheric Ambient Backdrop */}
+        <div className="fixed inset-0 pointer-events-none z-0 smoky-ambient-backdrop" aria-hidden="true" />
         <AppProvider>
-          <Navbar />
-          <main className="flex-1 w-full flex flex-col">{children}</main>
-          <Footer />
+          <div className="relative z-10 flex flex-col min-h-screen">
+            <Navbar />
+            <main className="flex-1 w-full flex flex-col">{children}</main>
+            <Footer />
+          </div>
         </AppProvider>
       </body>
     </html>

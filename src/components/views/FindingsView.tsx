@@ -22,12 +22,9 @@ import {
   Check,
   ExternalLink,
   RefreshCw,
-  Clock,
   Layers,
-  HelpCircle,
-  FileText,
-  GitCompare,
   TrendingUp,
+  GitCompare,
 } from 'lucide-react';
 import type { Finding, Severity, GroundedExplanation, ExplanationMode } from '@/types';
 
@@ -85,16 +82,16 @@ function getSeverityBadge(sev: Severity | string) {
   const s = sev?.toUpperCase();
   switch (s) {
     case 'CRITICAL':
-      return 'bg-rosewood text-cotton border border-rosewood';
+      return 'bg-koraBurgundy text-koraOffWhite border border-koraRed';
     case 'HIGH':
-      return 'bg-coffeeBean text-electricTangerine border border-electricTangerine/60';
+      return 'bg-koraBurgundy/60 text-koraRed border border-koraRed/40';
     case 'MEDIUM':
-      return 'bg-coffeeBean text-lemonChiffon border border-lemonChiffon/40';
+      return 'bg-koraSlate/50 text-koraOffWhite border border-koraSlate';
     case 'LOW':
-      return 'bg-blackHole text-botticelli border border-borderDark';
+      return 'bg-koraCharcoal-card text-koraSecondary border border-koraCharcoal-border';
     case 'INFO':
     default:
-      return 'bg-[#222222] text-[#AAA9A1] border border-white/10';
+      return 'bg-koraCharcoal-dark text-koraSecondary border border-koraCharcoal-border';
   }
 }
 
@@ -103,12 +100,12 @@ function getReadinessBadge(label?: string) {
     case 'good-first-contribution':
       return 'bg-emerald-950/70 text-emerald-300 border-emerald-500/50';
     case 'beginner-friendly':
-      return 'bg-coffeeBean text-lemonChiffon border-lemonChiffon/40';
+      return 'bg-koraBurgundy/40 text-koraOffWhite border-koraBurgundy';
     case 'intermediate':
-      return 'bg-[#2D120D] text-electricTangerine border-electricTangerine/40';
+      return 'bg-koraSlate/40 text-koraSecondary border-koraSlate/60';
     case 'maintainer-assistance':
     default:
-      return 'bg-rosewood/30 text-cotton border-rosewood/40';
+      return 'bg-koraCharcoal-card text-koraSecondary border-koraCharcoal-border';
   }
 }
 
@@ -117,14 +114,14 @@ function getDiffStatusBadge(status?: string) {
     case 'new':
       return 'bg-emerald-950/60 text-emerald-300 border-emerald-500/40';
     case 'resolved':
-      return 'bg-blue-950/60 text-blue-300 border-blue-500/40';
+      return 'bg-koraSlate/60 text-koraOffWhite border-koraSlate';
     case 'changed':
-      return 'bg-coffeeBean text-electricTangerine border-electricTangerine/40';
+      return 'bg-koraBurgundy/50 text-koraRed border-koraRed/40';
     case 'needs-review':
-      return 'bg-rosewood/30 text-lemonChiffon border-rosewood/40';
+      return 'bg-koraBurgundy/40 text-koraOffWhite border-koraBurgundy';
     case 'unchanged':
     default:
-      return 'bg-black text-textMuted border-borderDark';
+      return 'bg-koraCharcoal-dark text-koraSecondary border-koraCharcoal-border';
   }
 }
 
@@ -185,7 +182,6 @@ export default function FindingsView() {
 
       setFindings(sorted);
       if (sorted.length > 0) {
-        // Keep selected finding if still in list, else select top sorted finding
         setSelectedFinding((prev) => {
           if (!prev) return sorted[0];
           const exists = sorted.find((f) => f.id === prev.id);
@@ -338,53 +334,53 @@ export default function FindingsView() {
   }, [selectedFinding, explanationMode]);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-6 bg-black text-textPrimary">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-6 text-textPrimary">
       
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-borderDark">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-koraCharcoal-border">
         <div>
-          <h1 className="text-2xl font-heading font-bold text-textPrimary flex items-center gap-2">
+          <h1 className="text-2xl font-heading font-bold text-koraOffWhite flex items-center gap-2">
             <span>Verified Findings</span>
             {activeScan && (
-              <span className="text-xs font-mono font-medium text-lemonChiffon bg-coffeeBean px-3 py-1 rounded-full border border-lemonChiffon/20">
+              <span className="text-xs font-mono font-medium text-koraOffWhite bg-koraBurgundy/40 px-3 py-1 rounded-full border border-koraBurgundy">
                 {activeScan.repoName}
               </span>
             )}
           </h1>
-          <p className="text-xs text-textMuted mt-1">
+          <p className="text-xs text-koraSecondary mt-1">
             Deterministic security, manifest, and health findings with exact evidence, Contribution Readiness scoring, and grounded contributor trails.
           </p>
         </div>
 
         <button
           onClick={() => router.push('/app/scan')}
-          className="px-4 py-2 rounded-full bg-blackHole hover:bg-blackHole/80 text-textPrimary border border-borderDark text-xs font-medium transition-colors self-start md:self-auto"
+          className="px-4 py-2 rounded-full bg-koraCharcoal-surface hover:bg-koraCharcoal-card text-koraOffWhite border border-koraCharcoal-border text-xs font-medium transition-colors self-start md:self-auto"
         >
           Scan Another Repo
         </button>
       </div>
 
       {/* Filter Toolbar */}
-      <div className="glass-panel p-4 sm:p-5 rounded-2xl border border-borderDark space-y-3.5">
+      <div className="p-4 sm:p-5 rounded-2xl border border-koraCharcoal-border bg-koraCharcoal-surface/90 shadow-liquid-glass space-y-3.5">
         {/* Row 1: Search & Severity Filters */}
         <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
           
           {/* Search */}
           <div className="w-full md:w-80 relative shrink-0">
-            <Search className="w-4 h-4 text-textMuted absolute left-3 top-2.5" />
+            <Search className="w-4 h-4 text-koraSecondary absolute left-3 top-2.5" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search findings, files, or rules..."
               aria-label="Search findings by title, file, or rule ID"
-              className="w-full pl-9 pr-3 py-1.5 bg-black border border-borderDark rounded-lg text-xs text-textPrimary placeholder-textMuted/40 focus:outline-none focus:border-lemonChiffon"
+              className="w-full pl-9 pr-3 py-1.5 bg-koraCharcoal-dark border border-koraCharcoal-border rounded-lg text-xs text-koraOffWhite placeholder-koraSecondary/40 focus:outline-none focus:border-koraRed"
             />
           </div>
 
           {/* Severity Filter */}
           <div className="flex flex-wrap items-center gap-1.5" role="toolbar" aria-label="Severity filter">
-            <span className="text-xs text-textMuted font-medium flex items-center gap-1 shrink-0">
+            <span className="text-xs text-koraSecondary font-medium flex items-center gap-1 shrink-0">
               <Filter className="w-3.5 h-3.5" /> Severity:
             </span>
             {SEVERITY_OPTIONS.map((s) => (
@@ -394,8 +390,8 @@ export default function FindingsView() {
                 onClick={() => setSeverityFilter(s)}
                 className={`px-3 py-1 text-xs rounded-full font-medium transition-colors shrink-0 ${
                   severityFilter === s
-                    ? 'bg-lemonChiffon text-black font-semibold shadow-sm'
-                    : 'text-textMuted hover:text-textPrimary bg-black border border-borderDark'
+                    ? 'bg-koraRed text-white font-semibold shadow-glow-red'
+                    : 'text-koraSecondary hover:text-koraOffWhite bg-koraCharcoal-dark border border-koraCharcoal-border'
                 }`}
               >
                 {s}
@@ -405,8 +401,8 @@ export default function FindingsView() {
         </div>
 
         {/* Row 2: Category Filter */}
-        <div className="pt-2.5 border-t border-borderDark/40 flex flex-wrap items-center gap-1.5" role="toolbar" aria-label="Category filter">
-          <span className="text-xs text-textMuted font-medium shrink-0 mr-1">Category:</span>
+        <div className="pt-2.5 border-t border-koraCharcoal-border/60 flex flex-wrap items-center gap-1.5" role="toolbar" aria-label="Category filter">
+          <span className="text-xs text-koraSecondary font-medium shrink-0 mr-1">Category:</span>
           {CATEGORY_OPTIONS.map((c) => (
             <button
               key={c.id}
@@ -414,8 +410,8 @@ export default function FindingsView() {
               onClick={() => setCategoryFilter(c.id)}
               className={`px-3 py-1 text-xs rounded-full font-medium transition-colors shrink-0 ${
                 categoryFilter === c.id
-                  ? 'bg-coffeeBean text-lemonChiffon border border-lemonChiffon/30 font-semibold'
-                  : 'text-textMuted hover:text-textPrimary bg-black border border-borderDark'
+                  ? 'bg-koraBurgundy/60 text-koraOffWhite border border-koraBurgundy font-semibold'
+                  : 'text-koraSecondary hover:text-koraOffWhite bg-koraCharcoal-dark border border-koraCharcoal-border'
               }`}
             >
               {c.label}
@@ -424,11 +420,11 @@ export default function FindingsView() {
         </div>
 
         {/* Row 3 Filters: Contribution Readiness & Diff Status */}
-        <div className="pt-2.5 border-t border-borderDark/40 flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div className="pt-2.5 border-t border-koraCharcoal-border/60 flex flex-wrap items-center justify-between gap-3 text-xs">
           {/* Readiness Filter */}
           <div className="flex flex-wrap items-center gap-1.5">
-            <span className="text-textMuted font-medium flex items-center gap-1 shrink-0">
-              <TrendingUp className="w-3.5 h-3.5 text-lemonChiffon" /> Readiness:
+            <span className="text-koraSecondary font-medium flex items-center gap-1 shrink-0">
+              <TrendingUp className="w-3.5 h-3.5 text-koraRed" /> Readiness:
             </span>
             {READINESS_OPTIONS.map((r) => (
               <button
@@ -437,8 +433,8 @@ export default function FindingsView() {
                 onClick={() => setReadinessFilter(r.id)}
                 className={`px-2.5 py-0.5 rounded-full text-[11px] font-mono transition-colors shrink-0 ${
                   readinessFilter === r.id
-                    ? 'bg-lemonChiffon text-black font-semibold shadow-sm'
-                    : 'text-textMuted hover:text-textPrimary bg-black border border-borderDark'
+                    ? 'bg-koraRed text-white font-semibold shadow-glow-red'
+                    : 'text-koraSecondary hover:text-koraOffWhite bg-koraCharcoal-dark border border-koraCharcoal-border'
                 }`}
               >
                 {r.label}
@@ -448,8 +444,8 @@ export default function FindingsView() {
 
           {/* Diff Status Filter */}
           <div className="flex flex-wrap items-center gap-1.5">
-            <span className="text-textMuted font-medium flex items-center gap-1 shrink-0">
-              <GitCompare className="w-3.5 h-3.5 text-botticelli" /> Diff Status:
+            <span className="text-koraSecondary font-medium flex items-center gap-1 shrink-0">
+              <GitCompare className="w-3.5 h-3.5 text-koraSlate" /> Diff Status:
             </span>
             {DIFF_OPTIONS.map((d) => (
               <button
@@ -458,8 +454,8 @@ export default function FindingsView() {
                 onClick={() => setDiffFilter(d.id)}
                 className={`px-2.5 py-0.5 rounded-full text-[11px] font-mono transition-colors shrink-0 ${
                   diffFilter === d.id
-                    ? 'bg-coffeeBean text-lemonChiffon border border-lemonChiffon/30 font-semibold'
-                    : 'text-textMuted hover:text-textPrimary bg-black border border-borderDark'
+                    ? 'bg-koraBurgundy/60 text-koraOffWhite border border-koraBurgundy font-semibold'
+                    : 'text-koraSecondary hover:text-koraOffWhite bg-koraCharcoal-dark border border-koraCharcoal-border'
                 }`}
               >
                 {d.label}
@@ -469,25 +465,25 @@ export default function FindingsView() {
         </div>
 
         {/* Count Summary */}
-        <div className="pt-3 border-t border-borderDark/60 flex flex-wrap items-center justify-between text-xs text-textMuted gap-2">
+        <div className="pt-3 border-t border-koraCharcoal-border flex flex-wrap items-center justify-between text-xs text-koraSecondary gap-2">
           <div className="flex flex-wrap items-center gap-2">
             <span>
-              Showing <strong className="text-textPrimary">{filteredFindings.length}</strong> of{' '}
-              <strong className="text-textPrimary">{counts.total}</strong> findings
+              Showing <strong className="text-koraOffWhite">{filteredFindings.length}</strong> of{' '}
+              <strong className="text-koraOffWhite">{counts.total}</strong> findings
             </span>
-            <span className="text-borderDark">•</span>
+            <span className="text-koraCharcoal-borderLight">•</span>
             <span className="text-emerald-400 font-medium">{counts.goodFirst} Good First</span>
-            <span className="text-rosewood font-medium">{counts.maintainerAssistance} Maintainer Assistance</span>
-            <span className="text-borderDark">•</span>
-            <span className="text-rosewood font-medium">{counts.bySev.CRITICAL} Critical</span>
-            <span className="text-electricTangerine font-medium">{counts.bySev.HIGH} High</span>
-            <span className="text-lemonChiffon font-medium">{counts.bySev.MEDIUM} Medium</span>
-            <span className="text-botticelli font-medium">{counts.bySev.LOW} Low</span>
+            <span className="text-koraSecondary font-medium">{counts.maintainerAssistance} Maintainer Assistance</span>
+            <span className="text-koraCharcoal-borderLight">•</span>
+            <span className="text-koraOffWhite font-medium">{counts.bySev.CRITICAL} Critical</span>
+            <span className="text-koraRed font-medium">{counts.bySev.HIGH} High</span>
+            <span className="text-koraSlate font-medium">{counts.bySev.MEDIUM} Medium</span>
+            <span className="text-koraSecondary font-medium">{counts.bySev.LOW} Low</span>
           </div>
 
           <div className="flex items-center gap-3">
             {counts.resolved > 0 && (
-              <span className="text-blue-400 font-mono text-[11px]">
+              <span className="text-koraOffWhite font-mono text-[11px]">
                 {counts.resolved} Resolved
               </span>
             )}
@@ -501,14 +497,14 @@ export default function FindingsView() {
 
       {/* Error State Banner */}
       {fetchError && (
-        <div className="p-4 rounded-xl bg-rosewood/20 border border-rosewood text-cotton flex items-center justify-between gap-4">
+        <div className="p-4 rounded-xl bg-koraBurgundy/30 border border-koraBurgundy text-koraOffWhite flex items-center justify-between gap-4">
           <div className="flex items-center gap-2 text-xs">
-            <AlertTriangle className="w-4 h-4 text-rosewood shrink-0" />
+            <AlertTriangle className="w-4 h-4 text-koraRed shrink-0" />
             <span>{fetchError}</span>
           </div>
           <button
             onClick={fetchFindings}
-            className="px-3 py-1 rounded-md bg-rosewood hover:bg-rosewood/80 text-white text-xs font-semibold flex items-center gap-1 transition-colors"
+            className="px-3 py-1 rounded-md bg-koraRed hover:bg-koraRed-hover text-white text-xs font-semibold flex items-center gap-1 transition-colors"
           >
             <RefreshCw className="w-3.5 h-3.5" />
             <span>Retry</span>
@@ -518,9 +514,9 @@ export default function FindingsView() {
 
       {/* Loading State */}
       {loading ? (
-        <div className="text-center py-20 glass-panel rounded-2xl border border-borderDark">
-          <Loader2 className="w-8 h-8 text-lemonChiffon animate-spin mx-auto mb-3" />
-          <p className="text-xs text-textMuted font-mono">Loading verified findings...</p>
+        <div className="text-center py-20 p-8 rounded-2xl border border-koraCharcoal-border bg-koraCharcoal-surface/90">
+          <Loader2 className="w-8 h-8 text-koraRed animate-spin mx-auto mb-3" />
+          <p className="text-xs text-koraSecondary font-mono">Loading verified findings...</p>
         </div>
       ) : filteredFindings.length > 0 ? (
         /* Master-Detail Split Layout */
@@ -528,7 +524,7 @@ export default function FindingsView() {
           
           {/* Left: Accessible Finding List (Col span 5) */}
           <div className="lg:col-span-5 space-y-3" role="region" aria-label="Findings List">
-            <div className="flex items-center justify-between text-xs font-semibold text-textMuted uppercase tracking-wider mb-1">
+            <div className="flex items-center justify-between text-xs font-semibold text-koraSecondary uppercase tracking-wider mb-1">
               <span>Sorted by Severity &amp; Confidence</span>
               <span>{filteredFindings.length} items</span>
             </div>
@@ -550,14 +546,14 @@ export default function FindingsView() {
                       className={`w-full text-left p-4 rounded-xl border transition-all cursor-pointer ${
                         isSelected
                           ? isCritical
-                            ? 'bg-rosewood/30 border-rosewood shadow-md'
+                            ? 'bg-koraBurgundy/40 border-koraRed shadow-glow-red/20'
                             : isHigh
-                            ? 'bg-coffeeBean border-electricTangerine/70 shadow-md'
-                            : 'bg-coffeeBean border-lemonChiffon/60 shadow-md'
-                          : 'glass-panel hover:border-borderDark/80'
+                            ? 'bg-koraBurgundy/25 border-koraRed/60 shadow-glow-red/10'
+                            : 'bg-koraCharcoal-surface border-koraRed/50 shadow-liquid-glass'
+                          : 'bg-koraCharcoal-surface/60 border-koraCharcoal-border hover:border-koraCharcoal-borderLight hover:bg-koraCharcoal-surface'
                       }`}
                     >
-                      {/* Top Badges Row: Severity, Urgency, Readiness, Diff Status */}
+                      {/* Top Badges Row */}
                       <div className="flex flex-wrap items-center justify-between text-[11px] mb-2 gap-1.5">
                         <div className="flex flex-wrap items-center gap-1.5">
                           <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${getSeverityBadge(finding.severity)}`}>
@@ -565,7 +561,7 @@ export default function FindingsView() {
                           </span>
 
                           {finding.urgencyScore !== undefined && (
-                            <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold bg-black border border-borderDark text-textMuted">
+                            <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold bg-koraCharcoal-dark border border-koraCharcoal-border text-koraSecondary">
                               Urg: {finding.urgencyScore}
                             </span>
                           )}
@@ -589,7 +585,7 @@ export default function FindingsView() {
                           )}
                         </div>
 
-                        <span className="text-[10px] font-mono text-textMuted">
+                        <span className="text-[10px] font-mono text-koraSecondary">
                           {typeof finding.confidence === 'number'
                             ? `${Math.round(finding.confidence * 100)}%`
                             : finding.confidence || 'HIGH'}{' '}
@@ -597,20 +593,20 @@ export default function FindingsView() {
                         </span>
                       </div>
 
-                      <h4 className="text-xs font-heading font-semibold text-textPrimary line-clamp-2">
+                      <h4 className="text-xs font-heading font-semibold text-koraOffWhite line-clamp-2">
                         {finding.title}
                       </h4>
 
                       {/* Top Readiness reason preview */}
                       {topReason && (
-                        <p className="mt-1.5 text-[11px] text-textMuted line-clamp-1 italic">
+                        <p className="mt-1.5 text-[11px] text-koraSecondary line-clamp-1 italic">
                           💡 {topReason}
                         </p>
                       )}
 
-                      <div className="mt-2.5 text-[11px] text-botticelli font-mono flex items-center justify-between">
+                      <div className="mt-2.5 text-[11px] text-koraSlate font-mono flex items-center justify-between">
                         <span className="truncate max-w-[200px]">{finding.file || 'Repository Root'}</span>
-                        <ChevronRight className="w-3.5 h-3.5 text-textMuted" />
+                        <ChevronRight className="w-3.5 h-3.5 text-koraSecondary" />
                       </div>
                     </button>
                   </li>
@@ -623,26 +619,26 @@ export default function FindingsView() {
           <div className="lg:col-span-7">
             {selectedFinding ? (
               <div
-                className={`glass-panel p-6 sm:p-8 rounded-2xl border transition-all space-y-6 ${
+                className={`p-6 sm:p-8 rounded-2xl border transition-all space-y-6 shadow-liquid-glass backdrop-blur-2xl ${
                   selectedFinding.severity?.toUpperCase() === 'CRITICAL'
-                    ? 'border-rosewood/70 bg-rosewood/10'
+                    ? 'border-koraRed/60 bg-koraBurgundy/20'
                     : selectedFinding.severity?.toUpperCase() === 'HIGH'
-                    ? 'border-electricTangerine/40 bg-coffeeBean/40'
-                    : 'border-borderDark'
+                    ? 'border-koraRed/40 bg-koraBurgundy/15'
+                    : 'border-koraCharcoal-border bg-koraCharcoal-surface/90'
                 }`}
               >
                 
                 {/* Header: Title, Category, Severity, Rule ID, Diff Status, Review Toggle */}
-                <div className="space-y-3 pb-4 border-b border-borderDark">
+                <div className="space-y-3 pb-4 border-b border-koraCharcoal-border">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div className="flex flex-wrap items-center gap-2">
                       <span className={`px-2.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${getSeverityBadge(selectedFinding.severity)}`}>
                         {selectedFinding.severity}
                       </span>
-                      <span className="text-xs px-2.5 py-0.5 rounded-full bg-black border border-borderDark text-textMuted uppercase">
+                      <span className="text-xs px-2.5 py-0.5 rounded-full bg-koraCharcoal-dark border border-koraCharcoal-border text-koraSecondary uppercase">
                         {selectedFinding.category}
                       </span>
-                      <span className="text-[11px] font-mono text-lemonChiffon">
+                      <span className="text-[11px] font-mono text-koraOffWhite">
                         Rule: {selectedFinding.ruleId}
                       </span>
                       {selectedFinding.diffStatus && (
@@ -661,7 +657,7 @@ export default function FindingsView() {
                         className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold border transition-all ${
                           selectedFinding.reviewed
                             ? 'bg-emerald-950/60 text-emerald-300 border-emerald-600/50 hover:bg-emerald-900/60'
-                            : 'bg-[#222222] text-[#AAA9A1] border-white/10 hover:text-[#FFF8CA] hover:border-[#FFF8CA]/30'
+                            : 'bg-koraCharcoal-card text-koraSecondary border-koraCharcoal-border hover:text-koraOffWhite'
                         }`}
                       >
                         {updatingReviewId === selectedFinding.id ? (
@@ -669,7 +665,7 @@ export default function FindingsView() {
                         ) : selectedFinding.reviewed ? (
                           <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
                         ) : (
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#AAA9A1]" />
+                          <span className="w-1.5 h-1.5 rounded-full bg-koraSecondary" />
                         )}
                         <span>{selectedFinding.reviewed ? 'Reviewed ✓' : 'Mark as Reviewed'}</span>
                       </button>
@@ -677,7 +673,7 @@ export default function FindingsView() {
                       {/* Deep Link to Detail Page */}
                       <Link
                         href={`/app/findings/${selectedFinding.id}`}
-                        className="p-1.5 rounded-md text-textMuted hover:text-lemonChiffon hover:bg-black/40 border border-borderDark transition-colors"
+                        className="p-1.5 rounded-md text-koraSecondary hover:text-koraOffWhite hover:bg-koraCharcoal-dark border border-koraCharcoal-border transition-colors"
                         title="Open finding deep link in dedicated page"
                         aria-label="Open finding deep link in dedicated page"
                       >
@@ -686,19 +682,19 @@ export default function FindingsView() {
                     </div>
                   </div>
 
-                  <h3 className="text-lg font-heading font-bold text-textPrimary leading-snug">
+                  <h3 className="text-lg font-heading font-bold text-koraOffWhite leading-snug">
                     {selectedFinding.title}
                   </h3>
 
                   {/* Exact File and Line clearly shown */}
-                  <div className="p-3 rounded-xl bg-black border border-borderDark flex items-center justify-between gap-2 text-xs font-mono text-botticelli">
+                  <div className="p-3 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border flex items-center justify-between gap-2 text-xs font-mono text-koraSlate">
                     <div className="flex items-center gap-2 truncate">
-                      <FileCode className="w-4 h-4 text-lemonChiffon shrink-0" />
+                      <FileCode className="w-4 h-4 text-koraRed shrink-0" />
                       <span>Exact Location: </span>
-                      <strong className="text-textPrimary truncate">
+                      <strong className="text-koraOffWhite truncate">
                         {selectedFinding.file || 'Repository Root'}
                         {(selectedFinding.lineStart || selectedFinding.line) && (
-                          <span className="text-lemonChiffon ml-1">
+                          <span className="text-koraOffWhite ml-1">
                             (Line {selectedFinding.lineStart || selectedFinding.line}
                             {selectedFinding.lineEnd && selectedFinding.lineEnd !== (selectedFinding.lineStart || selectedFinding.line)
                               ? `-${selectedFinding.lineEnd}`
@@ -708,7 +704,7 @@ export default function FindingsView() {
                         )}
                       </strong>
                     </div>
-                    <span className="text-[10px] text-textMuted uppercase font-mono px-2 py-0.5 rounded bg-blackHole border border-borderDark shrink-0">
+                    <span className="text-[10px] text-koraSecondary uppercase font-mono px-2 py-0.5 rounded bg-koraCharcoal-card border border-koraCharcoal-border shrink-0">
                       {selectedFinding.sourceTool || 'Deterministic Engine'}
                     </span>
                   </div>
@@ -717,42 +713,42 @@ export default function FindingsView() {
                 {/* Contribution Readiness & Risk Separation Section */}
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-textPrimary uppercase tracking-wider flex items-center gap-1.5">
-                      <TrendingUp className="w-4 h-4 text-lemonChiffon" />
+                    <span className="text-xs font-bold text-koraOffWhite uppercase tracking-wider flex items-center gap-1.5">
+                      <TrendingUp className="w-4 h-4 text-koraRed" />
                       <span>Contribution Readiness &amp; Risk Separation</span>
                     </span>
-                    <span className="text-[10px] font-mono text-textMuted">
+                    <span className="text-[10px] font-mono text-koraSecondary">
                       Deterministic Invariant: Urgency ≠ Readiness
                     </span>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
                     {/* Urgency & Risk Card */}
-                    <div className="p-4 rounded-xl bg-black border border-borderDark space-y-2">
+                    <div className="p-4 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border space-y-2">
                       <div className="flex items-center justify-between">
-                        <span className="text-textMuted uppercase tracking-wider font-semibold text-[10px]">
+                        <span className="text-koraSecondary uppercase tracking-wider font-semibold text-[10px]">
                           Risk / Urgency Score
                         </span>
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-rosewood/20 text-cotton border border-rosewood/40">
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-koraBurgundy/30 text-koraOffWhite border border-koraBurgundy">
                           {selectedFinding.urgencyLabel || 'medium'}
                         </span>
                       </div>
                       <div className="flex items-baseline gap-2">
-                        <span className="text-2xl font-bold font-mono text-electricTangerine">
+                        <span className="text-2xl font-bold font-mono text-koraRed">
                           {selectedFinding.urgencyScore ?? 50}
                         </span>
-                        <span className="text-textMuted text-[10px] font-mono">/ 100</span>
+                        <span className="text-koraSecondary text-[10px] font-mono">/ 100</span>
                       </div>
-                      <p className="text-[11px] text-textMuted leading-relaxed">
+                      <p className="text-[11px] text-koraSecondary leading-relaxed">
                         Urgency measures repository threat priority. Critical vulnerabilities must be fixed immediately by maintainers, NOT delegated to beginner contributors.
                       </p>
                     </div>
 
                     {/* Contribution Readiness Card */}
                     {selectedFinding.readiness ? (
-                      <div className="p-4 rounded-xl bg-black border border-lemonChiffon/30 space-y-2">
+                      <div className="p-4 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border space-y-2">
                         <div className="flex items-center justify-between">
-                          <span className="text-textMuted uppercase tracking-wider font-semibold text-[10px]">
+                          <span className="text-koraSecondary uppercase tracking-wider font-semibold text-[10px]">
                             Contribution Readiness
                           </span>
                           <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider border ${getReadinessBadge(selectedFinding.readiness.label)}`}>
@@ -760,22 +756,22 @@ export default function FindingsView() {
                           </span>
                         </div>
                         <div className="flex items-baseline gap-2">
-                          <span className="text-2xl font-bold font-mono text-lemonChiffon">
+                          <span className="text-2xl font-bold font-mono text-koraOffWhite">
                             {selectedFinding.readiness.total}
                           </span>
-                          <span className="text-textMuted text-[10px] font-mono">/ 100</span>
+                          <span className="text-koraSecondary text-[10px] font-mono">/ 100</span>
                           {selectedFinding.readiness.estimatedMinutes && (
-                            <span className="text-textMuted text-[10px] font-mono ml-auto">
+                            <span className="text-koraSecondary text-[10px] font-mono ml-auto">
                               ~{selectedFinding.readiness.estimatedMinutes} mins
                             </span>
                           )}
                         </div>
-                        <p className="text-[11px] text-lemonChiffon/80 leading-relaxed">
+                        <p className="text-[11px] text-koraSecondary leading-relaxed">
                           Readiness evaluates whether a new contributor can safely fix and test this finding with clear bounds.
                         </p>
                       </div>
                     ) : (
-                      <div className="p-4 rounded-xl bg-black border border-borderDark flex items-center justify-center text-textMuted text-xs">
+                      <div className="p-4 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border flex items-center justify-center text-koraSecondary text-xs">
                         Readiness calculated during scan
                       </div>
                     )}
@@ -783,50 +779,50 @@ export default function FindingsView() {
 
                   {/* 5-Factor Weighted Criteria Breakdown */}
                   {selectedFinding.readiness && (
-                    <div className="p-4 rounded-xl bg-black border border-borderDark space-y-3">
-                      <span className="text-[11px] font-semibold text-textMuted uppercase tracking-wider block">
+                    <div className="p-4 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border space-y-3">
+                      <span className="text-[11px] font-semibold text-koraSecondary uppercase tracking-wider block">
                         5-Factor Deterministic Weighting
                       </span>
                       <div className="grid grid-cols-1 sm:grid-cols-5 gap-2 text-[11px]">
-                        <div className="p-2 rounded-lg bg-blackHole border border-borderDark space-y-1">
-                          <div className="text-textMuted text-[10px]">Clarity</div>
-                          <div className="font-mono font-bold text-lemonChiffon">
-                            {selectedFinding.readiness.evidenceClarity} <span className="text-textMuted font-normal">/ 25</span>
+                        <div className="p-2 rounded-lg bg-koraCharcoal-surface border border-koraCharcoal-border space-y-1">
+                          <div className="text-koraSecondary text-[10px]">Clarity</div>
+                          <div className="font-mono font-bold text-koraOffWhite">
+                            {selectedFinding.readiness.evidenceClarity} <span className="text-koraSecondary font-normal">/ 25</span>
                           </div>
                         </div>
-                        <div className="p-2 rounded-lg bg-blackHole border border-borderDark space-y-1">
-                          <div className="text-textMuted text-[10px]">Scope</div>
-                          <div className="font-mono font-bold text-lemonChiffon">
-                            {selectedFinding.readiness.scopeSimplicity} <span className="text-textMuted font-normal">/ 20</span>
+                        <div className="p-2 rounded-lg bg-koraCharcoal-surface border border-koraCharcoal-border space-y-1">
+                          <div className="text-koraSecondary text-[10px]">Scope</div>
+                          <div className="font-mono font-bold text-koraOffWhite">
+                            {selectedFinding.readiness.scopeSimplicity} <span className="text-koraSecondary font-normal">/ 20</span>
                           </div>
                         </div>
-                        <div className="p-2 rounded-lg bg-blackHole border border-borderDark space-y-1">
-                          <div className="text-textMuted text-[10px]">Testability</div>
-                          <div className="font-mono font-bold text-lemonChiffon">
-                            {selectedFinding.readiness.testability} <span className="text-textMuted font-normal">/ 20</span>
+                        <div className="p-2 rounded-lg bg-koraCharcoal-surface border border-koraCharcoal-border space-y-1">
+                          <div className="text-koraSecondary text-[10px]">Testability</div>
+                          <div className="font-mono font-bold text-koraOffWhite">
+                            {selectedFinding.readiness.testability} <span className="text-koraSecondary font-normal">/ 20</span>
                           </div>
                         </div>
-                        <div className="p-2 rounded-lg bg-blackHole border border-borderDark space-y-1">
-                          <div className="text-textMuted text-[10px]">Skill Accessibility</div>
-                          <div className="font-mono font-bold text-lemonChiffon">
-                            {selectedFinding.readiness.skillAccessibility} <span className="text-textMuted font-normal">/ 20</span>
+                        <div className="p-2 rounded-lg bg-koraCharcoal-surface border border-koraCharcoal-border space-y-1">
+                          <div className="text-koraSecondary text-[10px]">Skill Accessibility</div>
+                          <div className="font-mono font-bold text-koraOffWhite">
+                            {selectedFinding.readiness.skillAccessibility} <span className="text-koraSecondary font-normal">/ 20</span>
                           </div>
                         </div>
-                        <div className="p-2 rounded-lg bg-blackHole border border-borderDark space-y-1">
-                          <div className="text-textMuted text-[10px]">Context</div>
-                          <div className="font-mono font-bold text-lemonChiffon">
-                            {selectedFinding.readiness.contextCompleteness} <span className="text-textMuted font-normal">/ 15</span>
+                        <div className="p-2 rounded-lg bg-koraCharcoal-surface border border-koraCharcoal-border space-y-1">
+                          <div className="text-koraSecondary text-[10px]">Context</div>
+                          <div className="font-mono font-bold text-koraOffWhite">
+                            {selectedFinding.readiness.contextCompleteness} <span className="text-koraSecondary font-normal">/ 15</span>
                           </div>
                         </div>
                       </div>
 
                       {/* Reasons list */}
                       {selectedFinding.readiness.reasons.length > 0 && (
-                        <div className="pt-2 border-t border-borderDark/40 space-y-1">
-                          <span className="text-[10px] font-mono uppercase text-lemonChiffon font-semibold">Positive Indicators:</span>
+                        <div className="pt-2 border-t border-koraCharcoal-border/60 space-y-1">
+                          <span className="text-[10px] font-mono uppercase text-koraOffWhite font-semibold">Positive Indicators:</span>
                           <ul className="space-y-1">
                             {selectedFinding.readiness.reasons.map((r, i) => (
-                              <li key={i} className="text-[11px] text-textMuted flex items-start gap-1.5">
+                              <li key={i} className="text-[11px] text-koraSecondary flex items-start gap-1.5">
                                 <span className="text-emerald-400 mt-0.5">•</span>
                                 <span>{r}</span>
                               </li>
@@ -837,12 +833,12 @@ export default function FindingsView() {
 
                       {/* Blockers list */}
                       {selectedFinding.readiness.blockers && selectedFinding.readiness.blockers.length > 0 && (
-                        <div className="pt-2 border-t border-borderDark/40 space-y-1">
-                          <span className="text-[10px] font-mono uppercase text-rosewood font-semibold">Disclosure Blockers:</span>
+                        <div className="pt-2 border-t border-koraCharcoal-border/60 space-y-1">
+                          <span className="text-[10px] font-mono uppercase text-koraRed font-semibold">Disclosure Blockers:</span>
                           <ul className="space-y-1">
                             {selectedFinding.readiness.blockers.map((b, i) => (
-                              <li key={i} className="text-[11px] text-cotton flex items-start gap-1.5">
-                                <span className="text-rosewood mt-0.5">✕</span>
+                              <li key={i} className="text-[11px] text-koraOffWhite flex items-start gap-1.5">
+                                <span className="text-koraRed mt-0.5">✕</span>
                                 <span>{b}</span>
                               </li>
                             ))}
@@ -853,39 +849,39 @@ export default function FindingsView() {
                   )}
                 </div>
 
-                {/* Evidence Chain / Trust Trail (8 Traceable Steps) */}
+                {/* Evidence Chain / Trust Trail */}
                 {selectedFinding.evidenceChain && selectedFinding.evidenceChain.steps && (
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-textPrimary uppercase tracking-wider flex items-center gap-1.5">
-                        <Layers className="w-4 h-4 text-botticelli" />
+                      <span className="text-xs font-bold text-koraOffWhite uppercase tracking-wider flex items-center gap-1.5">
+                        <Layers className="w-4 h-4 text-koraSlate" />
                         <span>Evidence Chain / Trust Trail (8 Steps)</span>
                       </span>
-                      <span className="text-[10px] font-mono text-textMuted">
+                      <span className="text-[10px] font-mono text-koraSecondary">
                         Hash: {selectedFinding.evidenceChain.evidenceHash?.slice(0, 10)}...
                       </span>
                     </div>
 
-                    <div className="p-4 rounded-xl bg-black border border-borderDark space-y-2">
+                    <div className="p-4 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border space-y-2">
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                         {selectedFinding.evidenceChain.steps.map((st) => (
                           <div
                             key={st.step}
-                            className="p-2.5 rounded-lg bg-blackHole border border-borderDark/60 flex items-start gap-2.5"
+                            className="p-2.5 rounded-lg bg-koraCharcoal-surface border border-koraCharcoal-border flex items-start gap-2.5"
                           >
-                            <div className="w-5 h-5 rounded-full bg-coffeeBean text-lemonChiffon font-mono text-[10px] flex items-center justify-center font-bold shrink-0 mt-0.5">
+                            <div className="w-5 h-5 rounded-full bg-koraBurgundy text-koraOffWhite font-mono text-[10px] flex items-center justify-center font-bold shrink-0 mt-0.5">
                               {st.step}
                             </div>
                             <div className="space-y-0.5 min-w-0">
                               <div className="flex items-center justify-between gap-1">
-                                <span className="font-semibold text-textPrimary text-[11px] truncate">
+                                <span className="font-semibold text-koraOffWhite text-[11px] truncate">
                                   {st.label}
                                 </span>
-                                <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-black text-lemonChiffon border border-lemonChiffon/20 shrink-0 uppercase">
+                                <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-koraCharcoal-dark text-koraOffWhite border border-koraCharcoal-border shrink-0 uppercase">
                                   {st.verifiedBy}
                                 </span>
                               </div>
-                              <p className="text-[10px] text-textMuted line-clamp-2">
+                              <p className="text-[10px] text-koraSecondary line-clamp-2">
                                 {st.detail}
                               </p>
                             </div>
@@ -898,22 +894,22 @@ export default function FindingsView() {
 
                 {/* Impact Statement */}
                 <div className="space-y-1.5">
-                  <span className="text-xs font-semibold text-textMuted uppercase tracking-wider">
+                  <span className="text-xs font-semibold text-koraSecondary uppercase tracking-wider">
                     Security &amp; Operational Impact
                   </span>
-                  <p className="text-xs text-textPrimary leading-relaxed">
+                  <p className="text-xs text-koraOffWhite leading-relaxed">
                     {selectedFinding.impact}
                   </p>
                 </div>
 
-                {/* Redacted Evidence with Botticelli / Linen accents */}
+                {/* Redacted Evidence */}
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="font-semibold text-textMuted uppercase tracking-wider">
+                    <span className="font-semibold text-koraSecondary uppercase tracking-wider">
                       Redacted Finding Evidence
                     </span>
                     <div className="flex items-center gap-3">
-                      <span className="text-lemonChiffon text-[11px] flex items-center gap-1">
+                      <span className="text-koraRed text-[11px] flex items-center gap-1">
                         <Lock className="w-3 h-3" /> Redacted &amp; Masked
                       </span>
                       <button
@@ -923,7 +919,7 @@ export default function FindingsView() {
                             selectedFinding.redactedEvidence || selectedFinding.evidence
                           )
                         }
-                        className="text-[11px] text-botticelli hover:text-lemonChiffon flex items-center gap-1 font-mono transition-colors"
+                        className="text-[11px] text-koraOffWhite hover:underline flex items-center gap-1 font-mono transition-colors"
                       >
                         {copiedEvidence ? (
                           <Check className="w-3 h-3 text-emerald-400" />
@@ -934,38 +930,38 @@ export default function FindingsView() {
                       </button>
                     </div>
                   </div>
-                  <pre className="p-4 rounded-xl bg-black border border-borderDark font-mono text-xs text-botticelli overflow-x-auto whitespace-pre-wrap leading-relaxed">
+                  <pre className="p-4 rounded-xl bg-[#0B0908] border border-koraCharcoal-border font-mono text-xs text-koraOffWhite overflow-x-auto whitespace-pre-wrap leading-relaxed">
                     {selectedFinding.redactedEvidence ||
                       selectedFinding.evidence ||
                       'No raw evidence snippet required for this structural finding.'}
                   </pre>
-                  <p className="text-[10px] text-textMuted">
+                  <p className="text-[10px] text-koraSecondary">
                     {selectedFinding.category === 'secret'
                       ? 'Credentials strictly redacted. Raw secret material is never logged or exposed.'
                       : 'Evidence extracted deterministically from scanned repository tree.'}
                   </p>
                 </div>
 
-                {/* Grounded Explanation Depth Switcher (Beginner / Developer / Maintainer) */}
-                <div className="space-y-3 pt-2 border-t border-borderDark">
+                {/* Grounded Explanation Depth Switcher */}
+                <div className="space-y-3 pt-2 border-t border-koraCharcoal-border">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <div className="flex items-center gap-2">
-                      <Sparkles className="w-4 h-4 text-lemonChiffon" />
-                      <span className="text-xs font-bold text-textPrimary uppercase tracking-wider">
+                      <Sparkles className="w-4 h-4 text-koraRed" />
+                      <span className="text-xs font-bold text-koraOffWhite uppercase tracking-wider">
                         Explanation Depth &amp; Guidance
                       </span>
                     </div>
 
                     {/* Mode Toggle Pills */}
-                    <div className="flex items-center gap-1 bg-black p-1 rounded-full border border-borderDark">
+                    <div className="flex items-center gap-1 bg-koraCharcoal-dark p-1 rounded-full border border-koraCharcoal-border">
                       {(['beginner', 'developer', 'maintainer'] as const).map((mode) => (
                         <button
                           key={mode}
                           onClick={() => setExplanationMode(mode)}
                           className={`px-3 py-1 text-[11px] font-mono capitalize rounded-full transition-all ${
                             explanationMode === mode
-                              ? 'bg-lemonChiffon text-black font-semibold'
-                              : 'text-textMuted hover:text-textPrimary'
+                              ? 'bg-koraRed text-white font-semibold shadow-glow-red'
+                              : 'text-koraSecondary hover:text-koraOffWhite'
                           }`}
                         >
                           {mode}
@@ -974,16 +970,16 @@ export default function FindingsView() {
                     </div>
                   </div>
 
-                  <div className="p-4 rounded-xl bg-black border border-borderDark space-y-2">
+                  <div className="p-4 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border space-y-2">
                     <div className="flex items-center justify-between text-[11px]">
-                      <span className="font-semibold text-lemonChiffon capitalize">
+                      <span className="font-semibold text-koraOffWhite capitalize">
                         {explanationMode} Perspective
                       </span>
-                      <span className="text-textMuted font-mono text-[10px]">
+                      <span className="text-koraSecondary font-mono text-[10px]">
                         Grounded in identical verified evidence
                       </span>
                     </div>
-                    <p className="text-xs text-textPrimary leading-relaxed">
+                    <p className="text-xs text-koraOffWhite leading-relaxed">
                       {explanationText}
                     </p>
                   </div>
@@ -991,18 +987,18 @@ export default function FindingsView() {
 
                 {/* Fix Guidance & Disclosure Policy */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                  <div className="md:col-span-2 p-3.5 rounded-xl bg-black border border-borderDark text-xs text-textPrimary space-y-1">
-                    <span className="font-semibold text-lemonChiffon block">Suggested Action</span>
-                    <p className="text-textMuted leading-relaxed">{selectedFinding.fixHint}</p>
+                  <div className="md:col-span-2 p-3.5 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border text-xs text-koraOffWhite space-y-1">
+                    <span className="font-semibold text-koraOffWhite block">Suggested Action</span>
+                    <p className="text-koraSecondary leading-relaxed">{selectedFinding.fixHint}</p>
                   </div>
 
-                  <div className="p-3.5 rounded-xl bg-black border border-borderDark text-xs space-y-1">
-                    <span className="font-semibold text-textMuted block">Disclosure Policy</span>
+                  <div className="p-3.5 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border text-xs space-y-1">
+                    <span className="font-semibold text-koraSecondary block">Disclosure Policy</span>
                     <span
                       className={`inline-block px-2 py-0.5 rounded text-[10px] font-semibold uppercase ${
                         selectedFinding.disclosureMode === 'security-disclosure' ||
                         selectedFinding.category === 'secret'
-                          ? 'bg-rosewood/40 text-cotton border border-rosewood'
+                          ? 'bg-koraBurgundy text-koraOffWhite border border-koraRed'
                           : 'bg-emerald-950/40 text-emerald-400 border border-emerald-500/30'
                       }`}
                     >
@@ -1014,37 +1010,37 @@ export default function FindingsView() {
                   </div>
                 </div>
 
-                {/* Action Buttons: Explain with Gamma 4 & Create Contribution Route */}
-                <div className="pt-2 flex flex-col sm:flex-row items-center gap-3 border-t border-borderDark">
+                {/* Action Buttons */}
+                <div className="pt-2 flex flex-col sm:flex-row items-center gap-3 border-t border-koraCharcoal-border">
                   <button
                     onClick={() => handleRequestExplanation(selectedFinding)}
                     disabled={explainingId === selectedFinding.id}
-                    className="w-full sm:w-auto px-5 py-2.5 rounded-full bg-coffeeBean hover:bg-coffeeBean/80 text-textPrimary border border-borderDark text-xs font-semibold flex items-center justify-center gap-2 transition-colors disabled:opacity-50"
+                    className="w-full sm:w-auto px-5 py-2.5 rounded-full bg-koraCharcoal-surface hover:bg-koraCharcoal-card text-koraOffWhite border border-koraCharcoal-border text-xs font-semibold flex items-center justify-center gap-2 transition-colors disabled:opacity-50"
                   >
                     {explainingId === selectedFinding.id ? (
                       <>
-                        <Loader2 className="w-3.5 h-3.5 animate-spin text-electricTangerine" />
-                        <span>Grounded Gamma 4 Query...</span>
+                        <Loader2 className="w-3.5 h-3.5 animate-spin text-koraRed" />
+                        <span>Grounded Gemini Query...</span>
                       </>
                     ) : (
                       <>
-                        <Sparkles className="w-3.5 h-3.5 text-lemonChiffon" />
-                        <span>Explain with Gamma 4</span>
+                        <Sparkles className="w-3.5 h-3.5 text-koraRed" />
+                        <span>Explain with Gemini</span>
                       </>
                     )}
                   </button>
 
                   {selectedFinding.disclosureMode === 'security-disclosure' ||
                   selectedFinding.category === 'secret' ? (
-                    <div className="w-full sm:w-auto px-5 py-2.5 rounded-full bg-rosewood/30 text-cotton border border-rosewood text-xs font-semibold flex items-center justify-center gap-2">
-                      <Lock className="w-3.5 h-3.5 text-lemonChiffon" />
+                    <div className="w-full sm:w-auto px-5 py-2.5 rounded-full bg-koraBurgundy/40 text-koraOffWhite border border-koraBurgundy text-xs font-semibold flex items-center justify-center gap-2">
+                      <Lock className="w-3.5 h-3.5 text-koraRed" />
                       <span>Public Draft Blocked (Private Disclosure Only)</span>
                     </div>
                   ) : (
                     <button
                       onClick={() => handleCreateRoute(selectedFinding)}
                       disabled={creatingRouteId === selectedFinding.id}
-                      className="w-full sm:w-auto px-6 py-2.5 rounded-full bg-lemonChiffon hover:bg-sustainableLinen text-black text-xs font-semibold flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lemonChiffon/20 disabled:opacity-50"
+                      className="w-full sm:w-auto px-6 py-2.5 rounded-full bg-koraRed hover:bg-koraRed-hover text-white text-xs font-semibold flex items-center justify-center gap-2 transition-all shadow-glow-red disabled:opacity-50"
                     >
                       {creatingRouteId === selectedFinding.id ? (
                         <>
@@ -1069,10 +1065,10 @@ export default function FindingsView() {
         </div>
       ) : (
         /* Empty State */
-        <div className="text-center py-20 glass-panel rounded-2xl border border-dashed border-borderDark px-4">
-          <Shield className="w-10 h-10 text-lemonChiffon/70 mx-auto mb-3" />
-          <h3 className="text-sm font-heading font-semibold text-textPrimary">No verified findings match your filters</h3>
-          <p className="text-xs text-textMuted mt-1.5 max-w-md mx-auto leading-relaxed">
+        <div className="text-center py-20 rounded-2xl border border-dashed border-koraCharcoal-border bg-koraCharcoal-surface/60 px-4">
+          <Shield className="w-10 h-10 text-koraRed/70 mx-auto mb-3" />
+          <h3 className="text-sm font-heading font-semibold text-koraOffWhite">No verified findings match your filters</h3>
+          <p className="text-xs text-koraSecondary mt-1.5 max-w-md mx-auto leading-relaxed">
             No deterministic findings match the current severity, category, or readiness filters.
           </p>
           <div className="mt-4 flex items-center justify-center gap-3">
@@ -1084,13 +1080,13 @@ export default function FindingsView() {
                 setDiffFilter('ALL');
                 setSearchQuery('');
               }}
-              className="px-4 py-2 rounded-full bg-coffeeBean text-lemonChiffon border border-lemonChiffon/30 text-xs font-semibold hover:opacity-90 transition-opacity"
+              className="px-4 py-2 rounded-full bg-koraCharcoal-dark text-koraOffWhite border border-koraCharcoal-border text-xs font-semibold hover:border-koraRed/40 transition-colors"
             >
               Reset Filters
             </button>
             <button
               onClick={() => router.push('/app/scan')}
-              className="px-5 py-2 rounded-full bg-lemonChiffon text-black text-xs font-semibold hover:opacity-90 transition-opacity"
+              className="px-5 py-2 rounded-full bg-koraRed hover:bg-koraRed-hover text-white text-xs font-semibold transition-colors shadow-glow-red"
             >
               Scan Another Repository
             </button>
@@ -1101,7 +1097,7 @@ export default function FindingsView() {
       {/* Grounded Explanation Modal */}
       {currentExplanation && selectedFinding && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-          <div className="max-w-2xl w-full glass-panel border border-borderDark rounded-2xl shadow-glass-card p-6 sm:p-8 space-y-5 animate-in zoom-in-95 duration-200">
+          <div className="max-w-2xl w-full border border-koraCharcoal-border bg-koraCharcoal-surface rounded-2xl shadow-liquid-glass p-6 sm:p-8 space-y-5 animate-in zoom-in-95 duration-200">
             
             <div className="flex items-start justify-between">
               <div>
@@ -1109,73 +1105,73 @@ export default function FindingsView() {
                   <span
                     className={`text-[10px] font-mono px-2.5 py-0.5 rounded-full border ${
                       currentExplanation.generatedBy === 'gemini'
-                        ? 'bg-black text-lemonChiffon border-lemonChiffon/30'
-                        : 'bg-coffeeBean text-lemonChiffon border-electricTangerine/40'
+                        ? 'bg-koraCharcoal-dark text-koraOffWhite border-koraCharcoal-border'
+                        : 'bg-koraBurgundy/40 text-koraOffWhite border-koraBurgundy'
                     }`}
                   >
                     {currentExplanation.generatedBy === 'gemini'
-                      ? 'Grounded via Gamma 4 Adapter'
+                      ? 'Grounded via Gemini 2.5 Flash'
                       : 'Fallback Used: Deterministic Planner (100% Grounded Evidence)'}
                   </span>
-                  <span className="text-xs text-botticelli capitalize">
+                  <span className="text-xs text-koraSlate capitalize">
                     {currentExplanation.difficulty} Track
                   </span>
                 </div>
-                <h3 className="text-lg font-heading font-bold text-textPrimary">{selectedFinding.title}</h3>
+                <h3 className="text-lg font-heading font-bold text-koraOffWhite">{selectedFinding.title}</h3>
               </div>
               <button
                 onClick={() => setCurrentExplanation(null)}
-                className="text-textMuted hover:text-textPrimary p-1"
+                className="text-koraSecondary hover:text-koraOffWhite p-1"
                 aria-label="Close explanation modal"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="space-y-4 text-xs text-textPrimary">
+            <div className="space-y-4 text-xs text-koraOffWhite">
               <div>
-                <h4 className="font-heading font-semibold text-textMuted uppercase tracking-wider mb-1">
+                <h4 className="font-heading font-semibold text-koraSecondary uppercase tracking-wider mb-1">
                   Educational Context
                 </h4>
-                <p className="leading-relaxed bg-black p-3.5 rounded-xl border border-borderDark">
+                <p className="leading-relaxed bg-koraCharcoal-dark p-3.5 rounded-xl border border-koraCharcoal-border">
                   {currentExplanation.explanation}
                 </p>
               </div>
 
               <div>
-                <h4 className="font-heading font-semibold text-textMuted uppercase tracking-wider mb-1">
+                <h4 className="font-heading font-semibold text-koraSecondary uppercase tracking-wider mb-1">
                   Repository Risk
                 </h4>
-                <p className="leading-relaxed bg-black p-3.5 rounded-xl border border-borderDark">
+                <p className="leading-relaxed bg-koraCharcoal-dark p-3.5 rounded-xl border border-koraCharcoal-border">
                   {currentExplanation.riskContext}
                 </p>
               </div>
 
               <div>
-                <h4 className="font-heading font-semibold text-textMuted uppercase tracking-wider mb-1">
+                <h4 className="font-heading font-semibold text-koraSecondary uppercase tracking-wider mb-1">
                   Step-by-Step Fix Guidance
                 </h4>
-                <p className="leading-relaxed bg-black p-3.5 rounded-xl border border-borderDark text-lemonChiffon">
+                <p className="leading-relaxed bg-koraCharcoal-dark p-3.5 rounded-xl border border-koraCharcoal-border text-koraOffWhite font-mono">
                   {currentExplanation.recommendedFix}
                 </p>
               </div>
 
               <div className="grid grid-cols-2 gap-3 pt-1">
-                <div className="p-3 rounded-xl bg-black border border-borderDark">
-                  <span className="text-textMuted text-[10px] block mb-0.5">Estimated Time</span>
-                  <span className="font-semibold text-textPrimary">{currentExplanation.estimatedEffort}</span>
+                <div className="p-3 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border">
+                  <span className="text-koraSecondary text-[10px] block mb-0.5">Estimated Time</span>
+                  <span className="font-semibold text-koraOffWhite">{currentExplanation.estimatedEffort}</span>
                 </div>
-                <div className="p-3 rounded-xl bg-black border border-borderDark">
-                  <span className="text-textMuted text-[10px] block mb-0.5">Required Skills</span>
-                  <span className="font-semibold text-textPrimary">{currentExplanation.skillsNeeded.join(', ')}</span>
+                <div className="p-3 rounded-xl bg-koraCharcoal-dark border border-koraCharcoal-border">
+                  <span className="text-koraSecondary text-[10px] block mb-0.5">Required Skills</span>
+                  <span className="font-semibold text-koraOffWhite">{currentExplanation.skillsNeeded.join(', ')}</span>
                 </div>
               </div>
             </div>
 
-            <div className="flex items-center justify-end gap-3 pt-4 border-t border-borderDark">
+            <div className="flex items-center justify-end gap-3 pt-4 border-t border-koraCharcoal-border">
               <button
                 onClick={() => setCurrentExplanation(null)}
-                className="px-4 py-2 rounded-full bg-blackHole text-textPrimary text-xs font-semibold hover:bg-black transition-colors"
+                className="px-4 py-2 rounded-full bg-koraCharcoal-dark text-koraOffWhite text-xs font-semibold hover:bg-koraCharcoal-card transition-colors border border-koraCharcoal-border"
               >
                 Close
               </button>
@@ -1186,7 +1182,7 @@ export default function FindingsView() {
                     setCurrentExplanation(null);
                     handleCreateRoute(target);
                   }}
-                  className="px-5 py-2 rounded-full bg-lemonChiffon hover:bg-sustainableLinen text-black text-xs font-semibold flex items-center gap-1.5 transition-all shadow-md"
+                  className="px-5 py-2 rounded-full bg-koraRed hover:bg-koraRed-hover text-white text-xs font-semibold flex items-center gap-1.5 transition-all shadow-glow-red"
                 >
                   <Compass className="w-3.5 h-3.5" />
                   <span>Create Route from this Explanation</span>

@@ -25,7 +25,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const baseStyles =
-      'inline-flex items-center justify-center font-medium rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-black disabled:opacity-50 disabled:pointer-events-none select-none';
+      'inline-flex items-center justify-center font-medium rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-koraBg disabled:opacity-50 disabled:pointer-events-none select-none';
 
     const sizeStyles = {
       sm: 'px-3 py-1.5 text-xs gap-1.5',
@@ -34,24 +34,24 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     };
 
     const variantStyles = {
-      // Primary: Warm Electric Tangerine glow
+      // Primary: Kora Red glow
       primary:
-        'bg-electricTangerine hover:bg-electricTangerine-hover text-white shadow-glow-tangerine focus-visible:ring-electricTangerine active:scale-[0.98]',
-      // Secondary: Dark glass card with subtle border
+        'bg-koraRed hover:bg-koraRed-hover text-white shadow-glow-red focus-visible:ring-koraRed active:scale-[0.98]',
+      // Secondary: Dark charcoal card with subtle border
       secondary:
-        'bg-blackHole border border-borderDark hover:border-lemonChiffon/30 text-textPrimary hover:bg-blackHole/80 focus-visible:ring-lemonChiffon active:scale-[0.98]',
+        'bg-koraCharcoal-card border border-koraCharcoal-border hover:border-koraRed/40 text-koraOffWhite hover:bg-koraCharcoal-dark focus-visible:ring-koraRed active:scale-[0.98]',
       // Ghost: Borderless hover highlight
       ghost:
-        'text-textMuted hover:text-textPrimary hover:bg-white/5 focus-visible:ring-lemonChiffon',
-      // Danger: Rosewood critical state
+        'text-koraSecondary hover:text-koraOffWhite hover:bg-white/5 focus-visible:ring-koraRed',
+      // Danger: Burgundy critical state
       danger:
-        'bg-rosewood hover:bg-rosewood/90 text-white border border-rosewood/50 shadow-md focus-visible:ring-rosewood active:scale-[0.98]',
-      // Lemon: Lemon Chiffon safe-action accent
+        'bg-koraBurgundy hover:bg-koraBurgundy/90 text-white border border-koraRed/50 shadow-md focus-visible:ring-koraRed active:scale-[0.98]',
+      // Lemon / Accent: Primary action
       lemon:
-        'bg-lemonChiffon hover:bg-lemonChiffon-hover text-black font-semibold shadow-md focus-visible:ring-lemonChiffon active:scale-[0.98]',
-      // Glass: Liquid glass button with Platinum Silver specular rim and Pale Lavender hover
+        'bg-koraRed hover:bg-koraRed-hover text-white font-semibold shadow-glow-red focus-visible:ring-koraRed active:scale-[0.98]',
+      // Glass: Liquid glass button with Kora styling
       glass:
-        'bg-white/[0.06] hover:bg-white/[0.12] text-platinumSilver border border-platinumSilver/30 hover:border-lemonChiffon/40 backdrop-blur-xl shadow-liquid-glass focus-visible:ring-lemonChiffon active:scale-[0.98]',
+        'bg-white/[0.06] hover:bg-white/[0.12] text-koraOffWhite border border-koraCharcoal-border hover:border-koraRed/40 backdrop-blur-xl shadow-liquid-glass focus-visible:ring-koraRed active:scale-[0.98]',
     };
 
     return (

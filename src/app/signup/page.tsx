@@ -101,26 +101,26 @@ function SignupContent() {
   };
 
   return (
-    <div className="relative flex-1 flex items-center justify-center py-16 px-4 sm:px-6 lg:px-8 bg-black overflow-hidden">
+    <div className="relative flex-1 flex items-center justify-center py-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
       
-      {/* Orange Ambient Top Glow */}
-      <div className="absolute top-[-100px] left-1/2 -translate-x-1/2 w-[600px] h-[340px] bg-electricTangerine/20 rounded-full blur-[90px] pointer-events-none" />
+      {/* Smoky Ambient Top Glow */}
+      <div className="absolute top-[-100px] left-1/2 -translate-x-1/2 w-[600px] h-[340px] bg-koraBurgundy/25 rounded-full blur-[90px] pointer-events-none" />
 
-      <div className="glass-panel p-8 rounded-2xl shadow-glass-card max-w-md w-full space-y-6 relative z-10 border border-borderDark">
+      <div className="p-8 rounded-2xl shadow-liquid-glass max-w-md w-full space-y-6 relative z-10 bg-koraCharcoal-surface/90 border border-koraCharcoal-border backdrop-blur-2xl">
         
         <div className="text-center">
-          <div className="inline-flex w-12 h-12 rounded-xl bg-electricTangerine/15 border border-electricTangerine/30 items-center justify-center text-electricTangerine mb-3 shadow-glow-tangerine">
+          <div className="inline-flex w-12 h-12 rounded-xl bg-gradient-to-br from-koraSlate/25 via-koraCharcoal-surface to-koraBurgundy/30 border border-koraCharcoal-border items-center justify-center text-koraOffWhite mb-3 shadow-liquid-glass">
             <ContriBLensMark size={24} className="w-6 h-6" />
           </div>
-          <h2 className="text-2xl font-heading font-bold text-textPrimary tracking-tight">Create your account</h2>
-          <p className="mt-1.5 text-xs text-textMuted">
+          <h2 className="text-2xl font-heading font-bold text-koraOffWhite tracking-tight">Create your account</h2>
+          <p className="mt-1.5 text-xs text-koraSecondary">
             Sign up with your email and phone to start navigating repositories safely.
           </p>
         </div>
 
         {error && (
-          <div className="p-3.5 rounded-lg bg-rosewood/40 border border-rosewood text-cotton text-xs flex items-start gap-2">
-            <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-lemonChiffon" />
+          <div className="p-3.5 rounded-lg bg-koraBurgundy/30 border border-koraBurgundy text-koraOffWhite text-xs flex items-start gap-2">
+            <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-koraOffWhite" />
             <span>{error}</span>
           </div>
         )}
@@ -128,7 +128,7 @@ function SignupContent() {
         <form onSubmit={handleSubmit} className="space-y-4">
           
           <div>
-            <label className="block text-xs font-medium text-textPrimary mb-1">
+            <label className="block text-xs font-medium text-koraOffWhite mb-1">
               Your Name (Optional)
             </label>
             <input
@@ -136,14 +136,14 @@ function SignupContent() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Alex Contributor"
-              className="w-full px-3.5 py-2.5 bg-black border border-borderDark rounded-lg text-sm text-textPrimary placeholder-textMuted/40 focus:outline-none focus:border-lemonChiffon focus:ring-1 focus:ring-lemonChiffon transition-colors"
+              className="w-full px-3.5 py-2.5 bg-koraCharcoal-dark border border-koraCharcoal-border rounded-lg text-sm text-koraOffWhite placeholder-koraSecondary/50 focus:outline-none focus:border-koraRed focus:ring-1 focus:ring-koraRed transition-colors"
               disabled={loading}
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-textPrimary mb-1">
-              Email Address <span className="text-electricTangerine">*</span>
+            <label className="block text-xs font-medium text-koraOffWhite mb-1">
+              Email Address <span className="text-koraRed">*</span>
             </label>
             <input
               type="email"
@@ -151,14 +151,14 @@ function SignupContent() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="developer@example.com"
-              className="w-full px-3.5 py-2.5 bg-black border border-borderDark rounded-lg text-sm text-textPrimary placeholder-textMuted/40 focus:outline-none focus:border-lemonChiffon focus:ring-1 focus:ring-lemonChiffon transition-colors"
+              className="w-full px-3.5 py-2.5 bg-koraCharcoal-dark border border-koraCharcoal-border rounded-lg text-sm text-koraOffWhite placeholder-koraSecondary/50 focus:outline-none focus:border-koraRed focus:ring-1 focus:ring-koraRed transition-colors"
               disabled={loading}
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-textPrimary mb-1">
-              Phone Number with Country Code <span className="text-electricTangerine">*</span>
+            <label className="block text-xs font-medium text-koraOffWhite mb-1">
+              Phone Number with Country Code <span className="text-koraRed">*</span>
             </label>
             <input
               type="tel"
@@ -166,15 +166,15 @@ function SignupContent() {
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="+1 555-0199 or +91 9876543210"
-              className="w-full px-3.5 py-2.5 bg-black border border-borderDark rounded-lg text-sm text-textPrimary placeholder-textMuted/40 focus:outline-none focus:border-lemonChiffon focus:ring-1 focus:ring-lemonChiffon transition-colors"
+              className="w-full px-3.5 py-2.5 bg-koraCharcoal-dark border border-koraCharcoal-border rounded-lg text-sm text-koraOffWhite placeholder-koraSecondary/50 focus:outline-none focus:border-koraRed focus:ring-1 focus:ring-koraRed transition-colors"
               disabled={loading}
             />
-            <span className="text-[10px] text-textMuted">Include your country calling code prefix.</span>
+            <span className="text-[10px] text-koraSecondary">Include your country calling code prefix.</span>
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-textPrimary mb-1">
-              Password <span className="text-electricTangerine">*</span>
+            <label className="block text-xs font-medium text-koraOffWhite mb-1">
+              Password <span className="text-koraRed">*</span>
             </label>
             <div className="relative">
               <input
@@ -183,13 +183,13 @@ function SignupContent() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••••••"
-                className="w-full px-3.5 py-2.5 pr-10 bg-black border border-borderDark rounded-lg text-sm text-textPrimary placeholder-textMuted/40 focus:outline-none focus:border-lemonChiffon focus:ring-1 focus:ring-lemonChiffon transition-colors"
+                className="w-full px-3.5 py-2.5 pr-10 bg-koraCharcoal-dark border border-koraCharcoal-border rounded-lg text-sm text-koraOffWhite placeholder-koraSecondary/50 focus:outline-none focus:border-koraRed focus:ring-1 focus:ring-koraRed transition-colors"
                 disabled={loading}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center text-textMuted hover:text-textPrimary"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-koraSecondary hover:text-koraOffWhite"
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
@@ -199,14 +199,16 @@ function SignupContent() {
             {password.length > 0 && (
               <div className="mt-2 space-y-1">
                 <div className="flex items-center justify-between text-[11px]">
-                  <span className="text-textMuted">Strength:</span>
+                  <span className="text-koraSecondary">Strength:</span>
                   <span
                     className={`font-semibold ${
                       strength.score <= 1
-                        ? 'text-rosewood'
+                        ? 'text-koraBurgundy'
                         : strength.score === 2
-                        ? 'text-electricTangerine'
-                        : 'text-lemonChiffon'
+                        ? 'text-koraSlate'
+                        : strength.score === 3
+                        ? 'text-koraRed'
+                        : 'text-emerald-400'
                     }`}
                   >
                     {strength.label}
@@ -219,11 +221,13 @@ function SignupContent() {
                       className={`h-full rounded-full transition-all ${
                         step < strength.score
                           ? strength.score <= 1
-                            ? 'bg-rosewood'
+                            ? 'bg-koraBurgundy'
                             : strength.score === 2
-                            ? 'bg-electricTangerine'
-                            : 'bg-lemonChiffon'
-                          : 'bg-blackHole'
+                            ? 'bg-koraSlate'
+                            : strength.score === 3
+                            ? 'bg-koraRed'
+                            : 'bg-emerald-400'
+                          : 'bg-koraCharcoal-dark'
                       }`}
                     />
                   ))}
@@ -233,8 +237,8 @@ function SignupContent() {
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-textPrimary mb-1">
-              Re-enter Password <span className="text-electricTangerine">*</span>
+            <label className="block text-xs font-medium text-koraOffWhite mb-1">
+              Re-enter Password <span className="text-koraRed">*</span>
             </label>
             <div className="relative">
               <input
@@ -243,13 +247,13 @@ function SignupContent() {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="••••••••••••"
-                className="w-full px-3.5 py-2.5 pr-10 bg-black border border-borderDark rounded-lg text-sm text-textPrimary placeholder-textMuted/40 focus:outline-none focus:border-lemonChiffon focus:ring-1 focus:ring-lemonChiffon transition-colors"
+                className="w-full px-3.5 py-2.5 pr-10 bg-koraCharcoal-dark border border-koraCharcoal-border rounded-lg text-sm text-koraOffWhite placeholder-koraSecondary/50 focus:outline-none focus:border-koraRed focus:ring-1 focus:ring-koraRed transition-colors"
                 disabled={loading}
               />
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center text-textMuted hover:text-textPrimary"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-koraSecondary hover:text-koraOffWhite"
               >
                 {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
@@ -262,11 +266,11 @@ function SignupContent() {
                 type="checkbox"
                 checked={termsAccepted}
                 onChange={(e) => setTermsAccepted(e.target.checked)}
-                className="mt-0.5 rounded bg-black border-borderDark text-electricTangerine focus:ring-lemonChiffon"
+                className="mt-0.5 rounded bg-koraCharcoal-dark border-koraCharcoal-border text-koraRed focus:ring-koraRed"
                 required
               />
-              <span className="text-xs text-textMuted leading-snug">
-                I agree to the <span className="text-textPrimary underline">Terms of Service</span> and acknowledge the <span className="text-textPrimary underline">Privacy Policy</span>. ContribLens scans public repositories in read-only mode.
+              <span className="text-xs text-koraSecondary leading-snug">
+                I agree to the <span className="text-koraOffWhite underline">Terms of Service</span> and acknowledge the <span className="text-koraOffWhite underline">Privacy Policy</span>. ContribLens scans public repositories in read-only mode.
               </span>
             </label>
           </div>
@@ -274,7 +278,7 @@ function SignupContent() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2.5 px-4 rounded-xl bg-lemonChiffon hover:bg-sustainableLinen text-black font-semibold text-sm transition-all shadow-md hover:shadow-lemonChiffon/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed mt-2"
+            className="w-full py-2.5 px-4 rounded-xl bg-koraRed hover:bg-koraRed-hover text-white font-semibold text-sm transition-all shadow-glow-red flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed mt-2"
           >
             {loading ? (
               <>
@@ -291,10 +295,10 @@ function SignupContent() {
 
         </form>
 
-        <div className="text-center pt-2 border-t border-borderDark">
-          <p className="text-xs text-textMuted">
+        <div className="text-center pt-2 border-t border-koraCharcoal-border">
+          <p className="text-xs text-koraSecondary">
             Already registered?{' '}
-            <Link href="/login" className="text-lemonChiffon hover:underline font-medium">
+            <Link href="/login" className="text-koraOffWhite hover:underline font-medium">
               Log in here
             </Link>
           </p>
@@ -307,7 +311,7 @@ function SignupContent() {
 
 export default function SignupPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-black" />}>
+    <Suspense fallback={<div className="min-h-screen bg-koraBg" />}>
       <SignupContent />
     </Suspense>
   );
