@@ -192,10 +192,10 @@ export default function DashboardPage() {
           {activeScan && (
             <div className="flex items-center gap-3">
               <div className="text-right">
-                <span className="text-[10px] text-textMuted uppercase font-mono block">Readiness Score</span>
+                <span className="text-[10px] text-textMuted uppercase font-mono block">Repository Readiness</span>
                 <span className="text-sm font-bold text-lemonChiffon font-mono">{activeScan.readinessScore}/100</span>
               </div>
-              <div className="w-10 h-10 rounded-full liquid-chrome-orb flex items-center justify-center font-bold text-xs text-black shadow-sm">
+              <div className="w-10 h-10 rounded-full liquid-chrome-orb flex items-center justify-center font-bold text-xs text-black shadow-sm" title="Repository environment & health readiness score">
                 {activeScan.readinessScore}
               </div>
             </div>
@@ -321,23 +321,23 @@ export default function DashboardPage() {
                   <div>
                     <h4 className="text-base sm:text-lg font-bold text-textPrimary leading-snug">{recommendedRoute.title}</h4>
                     <p className="text-xs text-platinumSilver/70 mt-1">
-                      Target File: <code className="text-lemonChiffon font-mono bg-white/5 px-2 py-0.5 rounded">{recommendedRoute.files[0]}</code>
+                      {recommendedRoute.files[0]?.includes('Repository Root') ? 'Target Area' : 'Target File'}: <code className="text-lemonChiffon font-mono bg-white/5 px-2 py-0.5 rounded break-all">{recommendedRoute.files[0]}</code>
                     </p>
                   </div>
                   <span className="text-xs font-semibold px-3 py-1 rounded-full bg-coffeeBean text-lemonChiffon border border-lemonChiffon/30 capitalize shrink-0">
-                    {recommendedRoute.difficulty}
+                    {recommendedRoute.difficulty} track
                   </span>
                 </div>
 
                 <div className="flex flex-wrap items-center gap-3 pt-2 text-xs text-platinumSilver/70 border-t border-platinumSilver/10">
                   <span>⏱ Effort: <strong className="text-platinumSilver">{recommendedRoute.estimatedEffort}</strong></span>
                   <span>•</span>
-                  <span>Skills: <strong className="text-lemonChiffon">{recommendedRoute.skills.join(', ')}</strong></span>
+                  <span>Skills: <strong className="text-lemonChiffon break-words">{recommendedRoute.skills.join(', ')}</strong></span>
                 </div>
 
                 <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <span className="text-xs text-platinumSilver/70">
-                    Readiness Score: <strong className="text-lemonChiffon font-mono">{recommendedRoute.readinessScore}/100</strong>
+                    Task Readiness: <strong className="text-lemonChiffon font-mono">{recommendedRoute.readinessScore}/100</strong> <span className="text-[10px] text-textMuted font-mono">(Task Suitability)</span>
                   </span>
                   <Link
                     href={`/app/contributions?routeId=${recommendedRoute.id}`}

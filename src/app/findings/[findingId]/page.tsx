@@ -330,7 +330,9 @@ export default function FindingDetailPage({
             </span>
             <div className="flex items-center gap-2 text-sm font-mono text-[#AAA9A1] bg-[#000000]/60 px-3 py-2 rounded-lg border border-white/5 overflow-x-auto">
               <FileCode className="w-4 h-4 text-[#FF6D1F] shrink-0" />
-              <span>{finding.file || 'Repository Root'}</span>
+              <span>
+                {finding.file || (finding.ruleId === 'REPO-NO-TEST-SIGNAL' ? 'Repository Root (Test Suite Configuration)' : 'Repository Root (Configuration)')}
+              </span>
               {(finding.lineStart || finding.line) && (
                 <span className="text-[#FFF8CA] font-semibold">
                   :Line {finding.lineStart || finding.line}
@@ -749,13 +751,21 @@ export default function FindingDetailPage({
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
             <div className="p-4 rounded-xl bg-black/60 border border-borderDark">
-              <span className="font-semibold text-lemonChiffon block mb-1">13. Target Files to Inspect</span>
-              <code className="text-botticelli font-mono block">{finding.file || 'Repository Root'}</code>
+              <span className="font-semibold text-lemonChiffon block mb-1">
+                13. {finding.file ? 'Target Files to Inspect' : 'Target Repository Area'}
+              </span>
+              <code className="text-botticelli font-mono block break-all">
+                {finding.file || (finding.ruleId === 'REPO-NO-TEST-SIGNAL' ? 'Repository Root (Test Suite Configuration)' : 'Repository Root (Configuration)')}
+              </code>
             </div>
 
             <div className="p-4 rounded-xl bg-black/60 border border-borderDark">
               <span className="font-semibold text-lemonChiffon block mb-1">14. Suggested Verification Tests</span>
-              <span className="text-textMuted">Run local unit tests or linter matching file extension.</span>
+              <span className="text-textMuted leading-relaxed block">
+                {finding.ruleId === 'REPO-NO-TEST-SIGNAL'
+                  ? 'Configure automated test script and verify local test execution passes cleanly.'
+                  : 'Run local unit tests or linter matching file extension.'}
+              </span>
             </div>
           </div>
 

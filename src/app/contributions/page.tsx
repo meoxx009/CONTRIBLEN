@@ -25,6 +25,7 @@ import {
   HelpCircle,
   Wrench,
   Download,
+  RotateCw,
 } from 'lucide-react';
 import type { ContributionRoute, TechStack, Finding } from '@/types';
 
@@ -261,9 +262,9 @@ function ContributionsContent() {
               {readinessScore}
             </div>
             <div>
-              <div className="text-xs font-bold text-textPrimary">Contribution Readiness</div>
+              <div className="text-xs font-bold text-textPrimary">Repository Readiness</div>
               <div className="text-[11px] text-textMuted">
-                {readinessScore >= 80 ? 'Excellent Onboarding' : readinessScore >= 60 ? 'Moderate Friction' : 'Needs Docs'}
+                {readinessScore >= 80 ? 'Excellent Onboarding' : readinessScore >= 60 ? 'Moderate Friction' : 'Needs Docs & Tooling'}
               </div>
             </div>
           </div>
@@ -281,7 +282,7 @@ function ContributionsContent() {
           </div>
           {techStack && (
             <span className="text-[11px] font-mono text-lemonChiffon">
-              Confidence Score: {techStack.confidenceScore}%
+              Confidence Score: {techStack.confidenceScore}% (Empirical Verification)
             </span>
           )}
         </div>
@@ -295,26 +296,32 @@ function ContributionsContent() {
                 <span>Languages</span>
                 <span className="text-lemonChiffon font-mono text-[11px]">{techStack.languages.length} detected</span>
               </h3>
-              <div className="space-y-3">
-                {techStack.languages.map((l) => (
-                  <div key={l.name} className="space-y-1">
-                    <div className="flex justify-between text-xs text-textPrimary">
-                      <span className="font-semibold">{l.name}</span>
-                      <span className="font-mono text-lemonChiffon text-[11px]">
-                        {Math.round((l.confidence ?? 0.9) * 100)}% Conf
-                      </span>
-                    </div>
-                    <div className="w-full bg-black h-1.5 rounded-full overflow-hidden">
-                      <div className="bg-lemonChiffon h-full rounded-full" style={{ width: `${l.percentage}%` }} />
-                    </div>
-                    {l.sources && l.sources.length > 0 && (
-                      <div className="text-[10px] text-textMuted font-mono truncate" title={l.sources.join(', ')}>
-                        src: {l.sources.slice(0, 2).join(', ')}
+              {techStack.languages.length > 0 ? (
+                <div className="space-y-3">
+                  {techStack.languages.map((l) => (
+                    <div key={l.name} className="space-y-1">
+                      <div className="flex justify-between text-xs text-textPrimary">
+                        <span className="font-semibold">{l.name}</span>
+                        <span className="font-mono text-lemonChiffon text-[11px]">
+                          {Math.round((l.confidence ?? 0.9) * 100)}% Conf
+                        </span>
                       </div>
-                    )}
-                  </div>
-                ))}
-              </div>
+                      <div className="w-full bg-black h-1.5 rounded-full overflow-hidden">
+                        <div className="bg-lemonChiffon h-full rounded-full" style={{ width: `${l.percentage}%` }} />
+                      </div>
+                      {l.sources && l.sources.length > 0 && (
+                        <div className="text-[10px] text-textMuted font-mono truncate" title={l.sources.join(', ')}>
+                          src: {l.sources.slice(0, 2).join(', ')}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-xs text-textMuted leading-relaxed">
+                  No supported programming languages detected in indexed scope.
+                </p>
+              )}
             </div>
 
             {/* Frameworks */}
@@ -379,7 +386,7 @@ function ContributionsContent() {
                   ))}
                 </div>
               ) : (
-                <p className="text-xs text-textMuted">Standard build tooling detected.</p>
+                <p className="text-xs text-textMuted leading-relaxed">No CI/CD or build tooling detected in repository.</p>
               )}
             </div>
 
@@ -440,8 +447,8 @@ function ContributionsContent() {
                     <Clock className="w-3.5 h-3.5 text-botticelli" />
                     Est. {topRoute.estimatedEffort || `${topRoute.estimatedMinutes || 30} mins`}
                   </span>
-                  <span className="text-xs font-mono text-lemonChiffon">
-                    Readiness: {topRoute.contributionReadiness?.total ?? topRoute.readiness?.total ?? topRoute.readinessScore ?? 85}/100
+                  <span className="text-xs font-mono text-lemonChiffon font-semibold">
+                    Task Readiness: {topRoute.contributionReadiness?.total ?? topRoute.readiness?.total ?? topRoute.readinessScore ?? 85}/100
                   </span>
                   {(topRoute.contributionReadiness?.label || topRoute.readinessLabel) && (
                     <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase bg-emerald-950/70 text-emerald-300 border border-emerald-500/40">
@@ -596,15 +603,15 @@ function ContributionsContent() {
             </h2>
           </div>
           <span className="text-[11px] font-mono text-textMuted">
-            Interactive Flow: Finding → File/Line → Technology/Skill → Task → Test → Issue
+            Interactive Flow: Finding → Location → Skills → Task → Test → Draft
           </span>
         </div>
 
-        <div className="glass-panel p-6 rounded-2xl border border-borderDark overflow-x-auto no-scrollbar">
-          <div className="min-w-[850px] flex items-stretch justify-between gap-3 text-xs">
+        <div className="glass-panel p-6 rounded-2xl border border-borderDark overflow-x-auto scrollbar-thin scrollbar-thumb-borderDark">
+          <div className="min-w-[900px] flex items-stretch justify-between gap-2.5 text-xs">
             
             {/* Stage 1: Finding */}
-            <div className="flex-1 p-3.5 rounded-xl bg-black border border-electricTangerine/40 flex flex-col justify-between space-y-2">
+            <div className="flex-1 min-w-[135px] p-3.5 rounded-xl bg-black border border-electricTangerine/40 flex flex-col justify-between space-y-2">
               <div>
                 <div className="flex items-center gap-1.5 mb-1">
                   <div className="w-2.5 h-2.5 rounded-full bg-electricTangerine shrink-0" />
@@ -612,59 +619,59 @@ function ContributionsContent() {
                     1. Finding
                   </span>
                 </div>
-                <div className="text-xs font-semibold text-textPrimary line-clamp-2">
+                <div className="text-xs font-semibold text-textPrimary leading-snug line-clamp-2" title={activeFinding?.title || activeRoute?.title}>
                   {activeFinding?.title || activeRoute?.title.replace('Fix: ', '') || 'Static Finding'}
                 </div>
               </div>
-              <span className="text-[10px] font-mono text-textMuted">
+              <span className="text-[10px] font-mono text-textMuted block truncate">
                 {activeFinding?.ruleId || 'DETERMINISTIC'}
               </span>
             </div>
 
-            <div className="flex items-center text-borderDark font-bold">→</div>
+            <div className="flex items-center text-borderDark font-bold text-sm shrink-0 px-0.5">→</div>
 
-            {/* Stage 2: File / Line */}
-            <div className="flex-1 p-3.5 rounded-xl bg-black border border-botticelli/40 flex flex-col justify-between space-y-2">
+            {/* Stage 2: Location */}
+            <div className="flex-1 min-w-[135px] p-3.5 rounded-xl bg-black border border-botticelli/40 flex flex-col justify-between space-y-2">
               <div>
                 <div className="flex items-center gap-1.5 mb-1">
                   <div className="w-2.5 h-2.5 rounded-full bg-botticelli shrink-0" />
                   <span className="text-[10px] font-mono font-bold text-botticelli uppercase">
-                    2. File / Line
+                    2. Location
                   </span>
                 </div>
-                <div className="text-xs font-mono text-cotton truncate" title={activeRoute?.files[0] || 'Config'}>
+                <div className="text-xs font-mono text-cotton leading-snug break-all" title={activeRoute?.files[0] || 'Repository Root'}>
                   {activeRoute?.files[0] || 'Repository Root'}
                 </div>
               </div>
-              <span className="text-[10px] font-mono text-botticelli">
-                {activeFinding?.lineStart ? `Line ${activeFinding.lineStart}` : 'Config Root'}
+              <span className="text-[10px] font-mono text-botticelli block">
+                {activeFinding?.lineStart ? `Line ${activeFinding.lineStart}` : 'Repository Scope'}
               </span>
             </div>
 
-            <div className="flex items-center text-borderDark font-bold">→</div>
+            <div className="flex items-center text-borderDark font-bold text-sm shrink-0 px-0.5">→</div>
 
-            {/* Stage 3: Technology / Skill */}
-            <div className="flex-1 p-3.5 rounded-xl bg-black border border-lemonChiffon/40 flex flex-col justify-between space-y-2">
+            {/* Stage 3: Skills Needed */}
+            <div className="flex-1 min-w-[135px] p-3.5 rounded-xl bg-black border border-lemonChiffon/40 flex flex-col justify-between space-y-2">
               <div>
                 <div className="flex items-center gap-1.5 mb-1">
                   <div className="w-2.5 h-2.5 rounded-full bg-lemonChiffon shrink-0" />
                   <span className="text-[10px] font-mono font-bold text-lemonChiffon uppercase">
-                    3. Technology / Skill
+                    3. Skills Needed
                   </span>
                 </div>
-                <div className="text-xs font-semibold text-textPrimary truncate">
-                  {activeRoute?.skills.slice(0, 2).join(', ') || 'Git, Markdown'}
+                <div className="text-xs font-semibold text-textPrimary leading-snug break-words" title={activeRoute?.skills.join(', ')}>
+                  {activeRoute?.skills.slice(0, 3).join(', ') || 'Git, Code Review'}
                 </div>
               </div>
-              <span className="text-[10px] font-mono text-lemonChiffon">
-                {activeRoute?.difficulty || 'beginner'} difficulty
+              <span className="text-[10px] font-mono text-lemonChiffon capitalize block">
+                {activeRoute?.difficulty || 'beginner'} track
               </span>
             </div>
 
-            <div className="flex items-center text-borderDark font-bold">→</div>
+            <div className="flex items-center text-borderDark font-bold text-sm shrink-0 px-0.5">→</div>
 
             {/* Stage 4: Task */}
-            <div className="flex-1 p-3.5 rounded-xl bg-black border border-recycledCotton/40 flex flex-col justify-between space-y-2">
+            <div className="flex-1 min-w-[145px] p-3.5 rounded-xl bg-black border border-recycledCotton/40 flex flex-col justify-between space-y-2">
               <div>
                 <div className="flex items-center gap-1.5 mb-1">
                   <div className="w-2.5 h-2.5 rounded-full bg-recycledCotton shrink-0" />
@@ -672,52 +679,56 @@ function ContributionsContent() {
                     4. Task
                   </span>
                 </div>
-                <div className="text-xs font-semibold text-cotton line-clamp-2">
+                <div className="text-xs font-semibold text-cotton line-clamp-3 leading-snug" title={activeRoute?.suggestedChange}>
                   {activeRoute?.suggestedChange || 'Update configuration per guidance'}
                 </div>
               </div>
-              <span className="text-[10px] font-mono text-textMuted">
+              <span className="text-[10px] font-mono text-textMuted block">
                 Est. {activeRoute?.estimatedEffort || '30 mins'}
               </span>
             </div>
 
-            <div className="flex items-center text-borderDark font-bold">→</div>
+            <div className="flex items-center text-borderDark font-bold text-sm shrink-0 px-0.5">→</div>
 
-            {/* Stage 5: Test */}
-            <div className="flex-1 p-3.5 rounded-xl bg-black border border-emerald-500/40 flex flex-col justify-between space-y-2">
+            {/* Stage 5: Test Plan */}
+            <div className="flex-1 min-w-[140px] p-3.5 rounded-xl bg-black border border-emerald-500/40 flex flex-col justify-between space-y-2">
               <div>
                 <div className="flex items-center gap-1.5 mb-1">
                   <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 shrink-0" />
                   <span className="text-[10px] font-mono font-bold text-emerald-400 uppercase">
-                    5. Test
+                    5. Test Plan
                   </span>
                 </div>
-                <div className="text-xs font-semibold text-textPrimary line-clamp-2">
+                <div className="text-xs font-semibold text-textPrimary line-clamp-3 leading-snug" title={activeRoute?.testPlan[0]}>
                   {activeRoute?.testPlan[0] || 'Verify change locally'}
                 </div>
               </div>
-              <span className="text-[10px] font-mono text-emerald-400">
+              <span className="text-[10px] font-mono text-emerald-400 block">
                 {activeRoute?.testPlan.length || 1} verify step(s)
               </span>
             </div>
 
-            <div className="flex items-center text-borderDark font-bold">→</div>
+            <div className="flex items-center text-borderDark font-bold text-sm shrink-0 px-0.5">→</div>
 
-            {/* Stage 6: Issue */}
-            <div className="flex-1 p-3.5 rounded-xl bg-sustainableLinen text-black border border-sustainableLinen flex flex-col justify-between space-y-2">
+            {/* Stage 6: Issue Draft */}
+            <div className={`flex-1 min-w-[140px] p-3.5 rounded-xl border flex flex-col justify-between space-y-2 transition-all ${
+              activeRoute?.draftId
+                ? 'bg-sustainableLinen text-black border-sustainableLinen shadow-md'
+                : 'bg-black text-textPrimary border-lemonChiffon/30'
+            }`}>
               <div>
                 <div className="flex items-center gap-1.5 mb-1">
-                  <div className="w-2.5 h-2.5 rounded-full bg-black shrink-0" />
-                  <span className="text-[10px] font-mono font-bold uppercase">
+                  <div className={`w-2.5 h-2.5 rounded-full shrink-0 ${activeRoute?.draftId ? 'bg-black' : 'bg-lemonChiffon'}`} />
+                  <span className={`text-[10px] font-mono font-bold uppercase ${activeRoute?.draftId ? 'text-black' : 'text-lemonChiffon'}`}>
                     6. Issue Draft
                   </span>
                 </div>
                 <div className="text-xs font-bold leading-snug">
-                  {activeRoute?.draftId ? 'Draft Persisted' : 'Reviewable Draft Ready'}
+                  {activeRoute?.draftId ? 'Draft Persisted' : 'Draft Not Generated'}
                 </div>
               </div>
-              <span className="text-[10px] font-mono font-semibold">
-                6 Required Sections
+              <span className={`text-[10px] font-mono font-semibold block ${activeRoute?.draftId ? 'text-black/80' : 'text-textMuted'}`}>
+                {activeRoute?.draftId ? 'Saved & Reviewable' : 'Ready to Generate'}
               </span>
             </div>
 
@@ -845,7 +856,7 @@ function ContributionsContent() {
                         </span>
 
                         <span className="text-xs font-mono text-lemonChiffon font-semibold">
-                          Readiness: {route.contributionReadiness?.total ?? route.readiness?.total ?? route.readinessScore ?? 80}/100
+                          Task Readiness: {route.contributionReadiness?.total ?? route.readiness?.total ?? route.readinessScore ?? 80}/100
                         </span>
 
                         {(route.contributionReadiness?.label || route.readinessLabel) && (
@@ -898,6 +909,33 @@ function ContributionsContent() {
                           <Lock className="w-3.5 h-3.5 text-lemonChiffon" />
                           <span>Private Disclosure Required</span>
                         </div>
+                      ) : route.draftId ? (
+                        <div className="flex items-center gap-1.5">
+                          <Link
+                            href={`/app/issue-drafts?draftId=${route.draftId}`}
+                            className="px-5 py-2.5 rounded-full bg-lemonChiffon hover:bg-sustainableLinen text-black text-xs font-semibold flex items-center gap-2 transition-all shadow-md hover:shadow-lemonChiffon/20"
+                          >
+                            <FileText className="w-3.5 h-3.5" />
+                            <span>View Saved Draft</span>
+                            <ArrowRight className="w-3.5 h-3.5" />
+                          </Link>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleGenerateDraft(route.id);
+                            }}
+                            disabled={generatingDraftId === route.id}
+                            className="p-2 rounded-full bg-black hover:bg-blackHole text-textMuted hover:text-lemonChiffon border border-borderDark transition-colors text-xs"
+                            title="Regenerate maintainer draft"
+                          >
+                            {generatingDraftId === route.id ? (
+                              <Loader2 className="w-3.5 h-3.5 animate-spin text-lemonChiffon" />
+                            ) : (
+                              <RotateCw className="w-3.5 h-3.5" />
+                            )}
+                          </button>
+                        </div>
                       ) : (
                         <button
                           onClick={(e) => {
@@ -914,7 +952,7 @@ function ContributionsContent() {
                             </>
                           ) : (
                             <>
-                              <FileText className="w-4 h-4" />
+                              <FileText className="w-3.5 h-3.5" />
                               <span>Generate Maintainer Draft</span>
                               <ArrowRight className="w-3.5 h-3.5" />
                             </>
@@ -927,22 +965,31 @@ function ContributionsContent() {
                   {/* Beginner Guidance 4-Box Overview */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs pt-1">
                     <div className="p-3 rounded-xl bg-black border border-borderDark">
-                      <span className="text-textMuted text-[10px] uppercase font-bold block mb-1">Target File</span>
-                      <code className="text-lemonChiffon font-mono text-[11px] block truncate">
-                        {route.files[0] || 'Configuration'}
+                      <span className="text-textMuted text-[10px] uppercase font-bold block mb-1">
+                        {route.files[0]?.includes('Repository Root') ? 'Target Area' : 'Target File'}
+                      </span>
+                      <code className="text-lemonChiffon font-mono text-[11px] block break-all" title={route.files[0] || 'Repository Root'}>
+                        {route.files[0] || 'Repository Root'}
                       </code>
                     </div>
 
                     <div className="p-3 rounded-xl bg-black border border-borderDark">
                       <span className="text-textMuted text-[10px] uppercase font-bold block mb-1">Required Skills</span>
-                      <span className="text-cotton font-semibold text-[11px] block truncate">
-                        {route.skills.join(', ')}
-                      </span>
+                      <div className="flex flex-wrap gap-1">
+                        {route.skills.map((skill, sIdx) => (
+                          <span
+                            key={sIdx}
+                            className="px-2 py-0.5 rounded bg-blackHole text-cotton border border-borderDark text-[10px] font-semibold"
+                          >
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
                     </div>
 
                     <div className="p-3 rounded-xl bg-black border border-borderDark sm:col-span-2">
                       <span className="text-textMuted text-[10px] uppercase font-bold block mb-1">Suggested Change</span>
-                      <p className="text-textPrimary text-[11px] leading-relaxed line-clamp-2">
+                      <p className="text-textPrimary text-[11px] leading-relaxed break-words" title={route.suggestedChange}>
                         {route.suggestedChange || 'Apply fix per repository best practices.'}
                       </p>
                     </div>

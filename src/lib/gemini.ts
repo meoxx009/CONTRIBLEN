@@ -453,6 +453,10 @@ function generateDeterministicPlan(
   const finding = request.evidence[0];
   const cat = finding?.category || 'health';
 
+  const isTestSignal =
+    finding?.ruleId === 'REPO-NO-TEST-SIGNAL' ||
+    (!finding?.file && (finding?.title?.toLowerCase().includes('test') || (cat === 'repository-health' && finding?.title?.toLowerCase().includes('test'))));
+
   let difficulty: 'beginner' | 'intermediate' | 'advanced' = 'beginner';
   let estimatedEffort = '30-45 mins';
   const skillsNeeded = ['Git', 'GitHub'];
@@ -469,28 +473,52 @@ function generateDeterministicPlan(
     difficulty = 'intermediate';
     estimatedEffort = '30 mins';
     skillsNeeded.push('Secret Rotation', 'Environment Configuration', 'Git History');
+  } else if (isTestSignal) {
+    difficulty = 'intermediate';
+    estimatedEffort = '30-45 mins';
+    skillsNeeded.push('Test Automation', 'CI/CD Pipelines', 'Automated Testing');
   } else {
     difficulty = 'beginner';
     estimatedEffort = '20 mins';
     skillsNeeded.push('Markdown', 'Technical Writing', 'Open Source Governance');
   }
 
-  const testPlan = [
-    `Verify affected file (${finding?.file || 'configuration'}) locally with appropriate linter or test suite.`,
-    'Confirm that no unexpected regressions or syntax errors are introduced.',
-  ];
+  let testPlan: string[];
+  let acceptanceCriteria: string[];
 
-  const acceptanceCriteria = [
-    `The issue (${finding?.title || 'finding'}) is resolved in source files.`,
-    'All continuous integration checks pass without warnings.',
-  ];
+  if (isTestSignal) {
+    testPlan = [
+      'Establish a recognized test runner (e.g., jest, vitest, or pytest) or automated test workflow in .github/workflows.',
+      'Execute the test suite command locally and confirm test execution succeeds with zero errors.',
+    ];
+    acceptanceCriteria = [
+      'An automated test script or runner configuration is added to repository files.',
+      'Baseline continuous integration test checks pass without regressions.',
+    ];
+  } else {
+    const targetLabel = finding?.file || 'configuration';
+    testPlan = [
+      `Verify affected file (${targetLabel}) locally with appropriate linter or test suite.`,
+      'Confirm that no unexpected regressions or syntax errors are introduced.',
+    ];
+    acceptanceCriteria = [
+      `The issue (${finding?.title || 'finding'}) is resolved in source files.`,
+      'All continuous integration checks pass without warnings.',
+    ];
+  }
+
+  const resolvedTarget = finding?.file
+    ? finding.file
+    : isTestSignal
+    ? 'Repository Root (Test Suite Configuration)'
+    : 'Repository Root (Configuration)';
 
   let issueMarkdown: string | null = null;
   if (request.operation === 'issue') {
     issueMarkdown = `# [Security/Health] Fix: ${finding?.title || 'Configuration Update'}
 
 ### 1. Problem Description
-A static analysis finding was identified in file \`${finding?.file || 'Repository Root'}\` (Deterministic Severity: **${finding?.severity || 'HIGH'}**, Rule ID: \`${finding?.ruleId || 'DETERMINISTIC'}\`).
+A static analysis finding was identified in file \`${resolvedTarget}\` (Deterministic Severity: **${finding?.severity || 'HIGH'}**, Rule ID: \`${finding?.ruleId || 'DETERMINISTIC'}\`).
 
 ### 2. Evidence
 \`\`\`text
@@ -510,7 +538,7 @@ ${testPlan.map((t) => `- [ ] ${t}`).join('\n')}
 - **Difficulty:** ${difficulty.toUpperCase()}
 - **Estimated Effort:** ${estimatedEffort}
 - **Required Skills:** ${skillsNeeded.join(', ')}
-- **Target Files:** \`${finding?.file || 'Configuration'}\`
+- **Target Files:** \`${resolvedTarget}\`
 
 **Acceptance Criteria:**
 ${acceptanceCriteria.map((c) => `- [ ] ${c}`).join('\n')}
@@ -521,13 +549,13 @@ ${acceptanceCriteria.map((c) => `- [ ] ${c}`).join('\n')}
 
   const result = {
     findingIds: request.findingIds,
-    explanation: `This finding identifies "${finding?.title || 'issue'}" in ${finding?.file || 'repository config'}. ${finding?.impact || 'Action is recommended to ensure security hygiene.'}`,
-    priorityReason: `Leaving this unresolved in ${finding?.file || 'repository'} presents an operational or security risk during integration.`,
+    explanation: `This finding identifies "${finding?.title || 'issue'}" in ${resolvedTarget}. ${finding?.impact || 'Action is recommended to ensure security hygiene.'}`,
+    priorityReason: `Leaving this unresolved in ${resolvedTarget} presents an operational or security risk during integration.`,
     taskTitle: `Fix: ${finding?.title || 'Finding'}`,
     taskSummary: finding?.fixHint || 'Follow standard contribution practices to address the detected issue.',
     difficulty,
     skills: skillsNeeded,
-    files: [finding?.file || 'Configuration'],
+    files: [resolvedTarget],
     testPlan,
     acceptanceCriteria,
     unsupportedClaims: [],
@@ -669,6 +697,10 @@ function generateDeterministicExplanation(
   scan: ScanSummary,
   fallbackReason: string = 'Deterministic engine used'
 ): GroundedExplanation & { fallback: true; fallbackReason: string } {
+  const isTestSignal =
+    finding.ruleId === 'REPO-NO-TEST-SIGNAL' ||
+    (!finding.file && (finding.title?.toLowerCase().includes('test') || (finding.category === 'repository-health' && finding.title?.toLowerCase().includes('test'))));
+
   let difficulty: 'beginner' | 'intermediate' | 'advanced' = 'beginner';
   let estimatedEffort = '30-45 mins';
   const skillsNeeded = ['Git', 'GitHub'];
@@ -685,15 +717,21 @@ function generateDeterministicExplanation(
     difficulty = 'intermediate';
     estimatedEffort = '30 mins';
     skillsNeeded.push('Secret Rotation', 'Environment Configuration', 'Git History');
+  } else if (isTestSignal) {
+    difficulty = 'intermediate';
+    estimatedEffort = '30-45 mins';
+    skillsNeeded.push('Test Automation', 'CI/CD Pipelines', 'Automated Testing');
   } else if (finding.category === 'health' || finding.category === 'repository-health') {
     difficulty = 'beginner';
     estimatedEffort = '20 mins';
     skillsNeeded.push('Markdown', 'Technical Writing', 'Open Source Governance');
   }
 
+  const targetLocation = finding.file || (isTestSignal ? 'test suite configuration' : 'repository configuration');
+
   const result = {
     findingId: finding.id,
-    explanation: `This finding identifies "${finding.title}" located in ${finding.file || 'repository config'}. ${finding.impact}`,
+    explanation: `This finding identifies "${finding.title}" located in ${targetLocation}. ${finding.impact}`,
     riskContext: `In ${scan.repoName}, leaving this unresolved risks degraded security hygiene, compliance gaps, or exposure during build and execution workflows.`,
     recommendedFix: finding.fixHint || 'Follow repository contribution standards and update the affected configuration.',
     skillsNeeded,
@@ -723,6 +761,10 @@ export async function buildContributionRoute(
   const testPlan: string[] = [];
   const acceptanceCriteria: string[] = [];
 
+  const isTestSignal =
+    finding.ruleId === 'REPO-NO-TEST-SIGNAL' ||
+    (!finding.file && (finding.title?.toLowerCase().includes('test') || (finding.category === 'repository-health' && finding.title?.toLowerCase().includes('test'))));
+
   if (finding.category === 'dependency') {
     testPlan.push(`Run existing test suite to ensure no breaking changes (e.g., npm test or pytest).`);
     testPlan.push(`Verify the lockfile reflects the updated non-vulnerable version.`);
@@ -733,23 +775,50 @@ export async function buildContributionRoute(
     testPlan.push(`Verify that workflow permissions and action hashes resolve correctly.`);
     acceptanceCriteria.push(`All third-party actions are pinned to complete commit SHAs with inline comments.`);
     acceptanceCriteria.push(`Workflow permissions follow the principle of least privilege.`);
+  } else if (isTestSignal) {
+    testPlan.push(`Establish a recognized test runner (e.g., vitest, jest, or pytest) or automated test workflow in .github/workflows.`);
+    testPlan.push(`Run local test suite command to confirm tests execute cleanly without unexpected errors.`);
+    acceptanceCriteria.push(`An automated test script or runner configuration is added to repository files.`);
+    acceptanceCriteria.push(`Baseline continuous integration checks execute and validate pull requests.`);
   } else if (finding.category === 'health' || finding.category === 'repository-health') {
-    testPlan.push(`Review the Markdown file formatting and check all hyperlinks.`);
+    const docName = finding.file || 'governance document';
+    testPlan.push(`Review the ${docName} formatting, structure, and check all hyperlinks.`);
     testPlan.push(`Ensure document meets standard open source community guidelines.`);
-    acceptanceCriteria.push(`The missing document (${finding.file}) is created with clear instructions.`);
+    acceptanceCriteria.push(`The documentation file (${docName}) is created with clear instructions.`);
     acceptanceCriteria.push(`Maintainer and contributor workflows are accurately documented.`);
-  } else {
+  } else if (finding.category === 'secret') {
     testPlan.push(`Verify no unmasked credentials remain in repository tree.`);
     testPlan.push(`Confirm that environment variable templates (.env.example) are documented.`);
     acceptanceCriteria.push(`The exposed credential pattern is removed and replaced by safe configuration.`);
+    acceptanceCriteria.push(`Private security disclosure protocol is followed.`);
+  } else {
+    testPlan.push(`Verify affected configuration locally with appropriate linter or static verification.`);
+    testPlan.push(`Ensure regression tests pass without unexpected errors.`);
+    acceptanceCriteria.push(`The detected issue is resolved in repository source files.`);
+    acceptanceCriteria.push(`Continuous integration checks complete successfully.`);
   }
+
+  // Filter and sanitize acceptance criteria & test plan to eliminate any raw null or '(null)'
+  const cleanTestPlan = testPlan
+    .filter((t): t is string => typeof t === 'string' && t.trim().length > 0)
+    .map((t) => t.replace(/\(null\)/g, '(configuration)'));
+
+  const cleanAcceptanceCriteria = acceptanceCriteria
+    .filter((c): c is string => typeof c === 'string' && c.trim().length > 0)
+    .map((c) => c.replace(/\(null\)/g, '(configuration)'));
+
+  const resolvedTarget = finding.file
+    ? finding.file
+    : isTestSignal
+    ? 'Repository Root (Test Suite Configuration)'
+    : 'Repository Root (Configuration)';
 
   const confidenceScore = typeof finding.confidence === 'number' ? finding.confidence : 0.95;
   const sevUpper = String(finding.severity || '').toUpperCase();
   const securityImpact = sevUpper === 'CRITICAL' ? 30 : sevUpper === 'HIGH' ? 25 : sevUpper === 'MEDIUM' ? 20 : 15;
   const evidenceConfidence = Math.round(confidenceScore * 25);
-  const testAvailability = testPlan.length > 0 ? 20 : 10;
-  const documentationClarity = acceptanceCriteria.length > 0 ? 20 : 10;
+  const testAvailability = cleanTestPlan.length > 0 ? 20 : 10;
+  const documentationClarity = cleanAcceptanceCriteria.length > 0 ? 20 : 10;
   const difficultyPenalty =
     explanation.difficulty === 'advanced' ? -10 : explanation.difficulty === 'intermediate' ? -5 : 0;
   const contributionReadiness = calculateContributionReadiness(finding);
@@ -771,10 +840,10 @@ export async function buildContributionRoute(
     estimatedMinutes: contributionReadiness.estimatedMinutes ?? (explanation.difficulty === 'beginner' ? 30 : 60),
     estimatedEffort: explanation.estimatedEffort,
     skills: explanation.skillsNeeded,
-    files: [finding.file || 'Configuration'],
+    files: [resolvedTarget],
     suggestedChange: explanation.recommendedFix,
-    testPlan,
-    acceptanceCriteria,
+    testPlan: cleanTestPlan,
+    acceptanceCriteria: cleanAcceptanceCriteria,
     readiness: {
       securityImpact,
       evidenceConfidence,
@@ -930,13 +999,32 @@ Do not include raw secrets or disclose private contact details.`;
   }
 
   if (!markdown) {
+    const isTestSignal =
+      finding.ruleId === 'REPO-NO-TEST-SIGNAL' ||
+      (!finding.file && (finding.title?.toLowerCase().includes('test') || (finding.category === 'repository-health' && finding.title?.toLowerCase().includes('test'))));
+
+    const resolvedTarget = finding.file
+      ? finding.file
+      : route.files && route.files[0]
+      ? route.files[0]
+      : isTestSignal
+      ? 'Repository Root (Test Suite Configuration)'
+      : 'Repository Root (Configuration)';
+
+    const cleanSteps = (route.testPlan || [])
+      .filter(Boolean)
+      .map((s) => s.replace(/\(null\)/g, '(configuration)'));
+    const cleanCriteria = (route.acceptanceCriteria || [])
+      .filter(Boolean)
+      .map((c) => c.replace(/\(null\)/g, '(configuration)'));
+
     markdown = `# [Security/Health] Fix: ${finding.title}
 
 ### 1. Problem Description
-In repository \`${scan.repoName}\`, a static analysis finding was identified in file \`${finding.file || 'Repository Root'}\` (Severity: **${finding.severity}**, Confidence: **${finding.confidence}**).
+In repository \`${scan.repoName}\`, a static analysis finding was identified in ${finding.file ? `file \`${finding.file}\`` : `\`${resolvedTarget}\``} (Severity: **${finding.severity}**, Confidence: **${finding.confidence}**).
 
 ### 2. Evidence
-**Target File:** \`${finding.file || 'Repository Root'}\`${finding.lineStart ? ` (Line: ${finding.lineStart}${finding.lineEnd ? `-${finding.lineEnd}` : ''})` : ''}
+**${finding.file ? 'Target File:' : 'Target Area:'}** \`${resolvedTarget}\`${finding.lineStart ? ` (Line: ${finding.lineStart}${finding.lineEnd ? `-${finding.lineEnd}` : ''})` : ''}
 
 \`\`\`text
 ${safeEvidence}
@@ -949,16 +1037,16 @@ ${finding.impact}
 ${finding.fixHint}
 
 ### 5. Verification & Test Plan
-${route.testPlan.map((step) => `- [ ] ${step}`).join('\n')}
+${cleanSteps.map((step) => `- [ ] ${step}`).join('\n')}
 
 ### 6. Contributor Readiness & Checklist
 - **Difficulty:** ${route.difficulty.toUpperCase()}
 - **Estimated Effort:** ${route.estimatedEffort}
 - **Required Skills:** ${route.skills.join(', ')}
-- **Target Files:** \`${route.files.join('`, `')}\`
+- **${finding.file ? 'Target Files:' : 'Target Area:'}** \`${route.files.join('`, `')}\`
 
 **Acceptance Criteria:**
-${route.acceptanceCriteria.map((c) => `- [ ] ${c}`).join('\n')}
+${cleanCriteria.map((c) => `- [ ] ${c}`).join('\n')}
 
 ### 7. Maintainer Review Note
 > **Maintainer Notice:** This issue draft was generated by an open-source contributor using [ContribLens OSS](https://github.com/ezyre/ContribLens) for maintainer review.

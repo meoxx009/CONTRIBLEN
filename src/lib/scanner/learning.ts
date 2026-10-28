@@ -112,6 +112,27 @@ export function generateSkillChecklist(
       estimatedMinutes: 45,
       completed: false,
     });
+  } else if (
+    finding.ruleId === 'REPO-NO-TEST-SIGNAL' ||
+    (!finding.file && (finding.title?.toLowerCase().includes('test') || (cat === 'repository-health' && finding.title?.toLowerCase().includes('test'))))
+  ) {
+    items.push({
+      id: 'skill-test-framework-setup',
+      concept: 'Automated Test Runner Configuration',
+      level: 'intermediate',
+      whyNeeded: 'Configures a standard test directory (tests/ or spec/) and automated runner script (npm test or pytest) for regression testing.',
+      estimatedMinutes: 25,
+      completed: false,
+    });
+
+    items.push({
+      id: 'skill-ci-test-workflow',
+      concept: 'Continuous Integration Test Automation',
+      level: 'intermediate',
+      whyNeeded: 'Automates test execution on pull requests via GitHub Actions workflows to protect repository stability.',
+      estimatedMinutes: 20,
+      completed: false,
+    });
   } else {
     // Health / Documentation / Community Governance
     items.push({
@@ -144,13 +165,22 @@ export function generateExplanationModes(
   finding: Finding,
   route: ContributionRoute
 ): ExplanationModes {
-  const file = finding.file || 'Repository Root';
+  const isTestSignal =
+    finding.ruleId === 'REPO-NO-TEST-SIGNAL' ||
+    (!finding.file && (finding.title?.toLowerCase().includes('test') || (finding.category === 'repository-health' && finding.title?.toLowerCase().includes('test'))));
+
+  const locationLabel = finding.file
+    ? `file \`${finding.file}\``
+    : isTestSignal
+    ? '`Repository Root (Test Suite Configuration)`'
+    : '`Repository Root (Configuration)`';
+
   const title = finding.title;
 
   return {
-    beginner: `This finding identifies "${title}" in \`${file}\`. In open-source software, addressing this prevents security issues and ensures the repository follows best practices. As a contributor, you will inspect the file, apply the suggested fix, and verify it locally before proposing the change to maintainers.`,
-    developer: `Static analysis detected \`${finding.ruleId || 'SECURITY-RULE'}\` in \`${file}\` with deterministic severity **${finding.severity}**. The fix requires updating the configuration or manifest per ${finding.fixHint || 'standards'}, validating changes locally, and submitting an atomic PR without altering unrelated code.`,
-    maintainer: `Hygiene finding: **${finding.severity}** severity risk in \`${file}\`. Impact: ${finding.impact || 'Security posture risk'}. A community contribution route has been structured with verifiable test plans and acceptance criteria to ensure zero operational regression.`,
+    beginner: `This finding identifies "${title}" in ${locationLabel}. In open-source software, addressing this prevents security issues and ensures the repository follows best practices. As a contributor, you will inspect the target area, apply the suggested fix, and verify it locally before proposing the change to maintainers.`,
+    developer: `Static analysis detected \`${finding.ruleId || 'SECURITY-RULE'}\` in ${locationLabel} with deterministic severity **${finding.severity}**. The fix requires updating the configuration or manifest per ${finding.fixHint || 'standards'}, validating changes locally, and submitting an atomic PR without altering unrelated code.`,
+    maintainer: `Hygiene finding: **${finding.severity}** severity risk in ${locationLabel}. Impact: ${finding.impact || 'Security posture risk'}. A community contribution route has been structured with verifiable test plans and acceptance criteria to ensure zero operational regression.`,
   };
 }
 
@@ -170,17 +200,25 @@ export function generateContributionPackMarkdown(
   const safeEvidence = redactSecrets(finding.evidence || finding.redactedEvidence || 'Deterministic static match.');
   const file = finding.file || 'Repository Root';
 
-  const testPlans = Array.isArray(route.testPlan)
+  const rawTestPlans = Array.isArray(route.testPlan)
     ? route.testPlan
     : typeof route.testPlan === 'string'
     ? [route.testPlan]
     : ['Run existing unit tests or linter checks matching target file extension.'];
 
-  const acceptanceList = Array.isArray(route.acceptanceCriteria)
+  const rawAcceptanceList = Array.isArray(route.acceptanceCriteria)
     ? route.acceptanceCriteria
     : typeof route.acceptanceCriteria === 'string'
     ? [route.acceptanceCriteria]
     : ['All tests and lint checks pass cleanly.', 'No unrelated files modified.'];
+
+  const testPlans = rawTestPlans
+    .filter(Boolean)
+    .map((t) => t.replace(/\(null\)/g, '(configuration)'));
+
+  const acceptanceList = rawAcceptanceList
+    .filter(Boolean)
+    .map((c) => c.replace(/\(null\)/g, '(configuration)'));
 
   const filesList = Array.isArray(route.files)
     ? route.files

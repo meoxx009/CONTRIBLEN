@@ -27,6 +27,7 @@ import {
   Code2,
   FileCode,
   AlertCircle,
+  RotateCw,
 } from 'lucide-react';
 import type { ContributionRoute, Finding, SkillGapItem, ExplanationMode } from '@/types';
 
@@ -280,7 +281,7 @@ export default function RouteDetailPage() {
               )}
               {readiness && (
                 <span className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-lemonChiffon text-black">
-                  Readiness: {readiness.total}/100 ({readiness.label.replace(/-/g, ' ')})
+                  Task Readiness: {readiness.total}/100 ({readiness.label.replace(/-/g, ' ')})
                 </span>
               )}
             </div>
@@ -296,6 +297,33 @@ export default function RouteDetailPage() {
               <div className="px-5 py-2.5 rounded-full bg-rosewood/30 border border-rosewood text-cotton text-xs font-semibold flex items-center gap-2">
                 <Lock className="w-4 h-4 text-lemonChiffon" />
                 <span>Private Security Disclosure Only</span>
+              </div>
+            ) : route.draftId ? (
+              <div className="flex items-center gap-2">
+                <Link
+                  href={`/app/issue-drafts?draftId=${route.draftId}`}
+                  className="px-6 py-2.5 rounded-full bg-lemonChiffon hover:bg-sustainableLinen text-black text-xs font-semibold flex items-center gap-2 transition-all shadow-md shrink-0"
+                >
+                  <FileText className="w-4 h-4" />
+                  <span>View Saved Draft</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+                <button
+                  type="button"
+                  onClick={handleGenerateDraft}
+                  disabled={generatingDraft}
+                  className="px-4 py-2.5 rounded-full bg-black hover:bg-blackHole text-textMuted hover:text-lemonChiffon border border-borderDark transition-colors text-xs font-semibold flex items-center gap-1.5 shrink-0"
+                  title="Regenerate maintainer draft"
+                >
+                  {generatingDraft ? (
+                    <Loader2 className="w-3.5 h-3.5 animate-spin text-lemonChiffon" />
+                  ) : (
+                    <>
+                      <RotateCw className="w-3.5 h-3.5" />
+                      <span>Regenerate</span>
+                    </>
+                  )}
+                </button>
               </div>
             ) : (
               <button
@@ -599,27 +627,35 @@ export default function RouteDetailPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
             <div className="p-3.5 rounded-xl bg-blackHole border border-borderDark space-y-1">
               <span className="text-[10px] uppercase font-bold text-electricTangerine block">1. What is wrong?</span>
-              <p className="text-textMuted leading-relaxed">{finding?.impact || route.summary}</p>
+              <p className="text-textMuted leading-relaxed break-words">{finding?.impact || route.summary}</p>
             </div>
             <div className="p-3.5 rounded-xl bg-blackHole border border-borderDark space-y-1">
-              <span className="text-[10px] uppercase font-bold text-botticelli block">2. Where is it?</span>
-              <span className="font-mono text-cotton block truncate">{route.files.join(', ') || 'Repository Root'}</span>
+              <span className="text-[10px] uppercase font-bold text-botticelli block">
+                2. {route.files[0]?.includes('Repository Root') ? 'Target Area' : 'Where is it?'}
+              </span>
+              <span className="font-mono text-cotton block break-all" title={route.files.join(', ')}>
+                {route.files.join(', ') || 'Repository Root'}
+              </span>
             </div>
             <div className="p-3.5 rounded-xl bg-blackHole border border-borderDark space-y-1">
               <span className="text-[10px] uppercase font-bold text-lemonChiffon block">3. What skill is needed?</span>
-              <span className="text-cotton font-semibold block">{route.skills.join(', ')}</span>
+              <span className="text-cotton font-semibold block break-words">{route.skills.join(', ')}</span>
             </div>
             <div className="p-3.5 rounded-xl bg-blackHole border border-borderDark space-y-1">
               <span className="text-[10px] uppercase font-bold text-sustainableLinen block">4. What should I change?</span>
-              <p className="text-textPrimary leading-relaxed">{route.suggestedChange || 'Update configuration per guidance.'}</p>
+              <p className="text-textPrimary leading-relaxed break-words">{route.suggestedChange || 'Update configuration per guidance.'}</p>
             </div>
             <div className="p-3.5 rounded-xl bg-blackHole border border-borderDark space-y-1">
               <span className="text-[10px] uppercase font-bold text-lemonChiffon block">5. How do I test it?</span>
-              <p className="text-textMuted leading-relaxed">{route.testPlan[0] || 'Run local test suite.'}</p>
+              <p className="text-textMuted leading-relaxed break-words">
+                {(route.testPlan.filter(Boolean)[0] || 'Run local test suite.').replace(/\(null\)/g, '(configuration)')}
+              </p>
             </div>
             <div className="p-3.5 rounded-xl bg-blackHole border border-borderDark space-y-1">
               <span className="text-[10px] uppercase font-bold text-emerald-400 block">6. When is it complete?</span>
-              <p className="text-textMuted leading-relaxed">{route.acceptanceCriteria[0] || 'Fix tested and verified.'}</p>
+              <p className="text-textMuted leading-relaxed break-words">
+                {(route.acceptanceCriteria.filter(Boolean)[0] || 'Fix tested and verified.').replace(/\(null\)/g, '(configuration)')}
+              </p>
             </div>
           </div>
         </div>
@@ -627,10 +663,12 @@ export default function RouteDetailPage() {
         {/* Target Files & Required Skills */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
           <div className="p-4 rounded-xl bg-black border border-borderDark space-y-1.5">
-            <span className="font-semibold text-textMuted uppercase tracking-wider text-[11px]">Target Files to Edit</span>
+            <span className="font-semibold text-textMuted uppercase tracking-wider text-[11px]">
+              {route.files[0]?.includes('Repository Root') ? 'Target Repository Area' : 'Target Files to Edit'}
+            </span>
             <div className="space-y-1">
               {route.files.map((file, idx) => (
-                <div key={idx} className="font-mono text-lemonChiffon bg-blackHole px-3 py-1.5 rounded-lg border border-borderDark">
+                <div key={idx} className="font-mono text-lemonChiffon bg-blackHole px-3 py-1.5 rounded-lg border border-borderDark break-all">
                   {file}
                 </div>
               ))}
@@ -657,10 +695,10 @@ export default function RouteDetailPage() {
               Local Verification &amp; Test Plan
             </h3>
             <ul className="space-y-2">
-              {route.testPlan.map((step, idx) => (
+              {route.testPlan.filter(Boolean).map((step, idx) => (
                 <li key={idx} className="flex items-start gap-2.5 p-2 rounded-lg bg-blackHole border border-borderDark/60">
                   <span className="text-lemonChiffon font-mono font-bold text-xs shrink-0">{idx + 1}.</span>
-                  <span className="text-textPrimary leading-relaxed">{step}</span>
+                  <span className="text-textPrimary leading-relaxed break-words">{step.replace(/\(null\)/g, '(configuration)')}</span>
                 </li>
               ))}
             </ul>
@@ -673,10 +711,10 @@ export default function RouteDetailPage() {
               Maintainer Acceptance Criteria
             </h3>
             <ul className="space-y-2">
-              {route.acceptanceCriteria.map((crit, idx) => (
+              {route.acceptanceCriteria.filter(Boolean).map((crit, idx) => (
                 <li key={idx} className="flex items-start gap-2.5 p-2 rounded-lg bg-blackHole border border-borderDark/60">
                   <span className="text-electricTangerine font-mono font-bold text-xs shrink-0">✓</span>
-                  <span className="text-textPrimary leading-relaxed">{crit}</span>
+                  <span className="text-textPrimary leading-relaxed break-words">{crit.replace(/\(null\)/g, '(configuration)')}</span>
                 </li>
               ))}
             </ul>

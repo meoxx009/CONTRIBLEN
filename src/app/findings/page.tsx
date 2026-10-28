@@ -365,11 +365,12 @@ export default function FindingsPage() {
       </div>
 
       {/* Filter Toolbar */}
-      <div className="glass-panel p-4 rounded-2xl border border-borderDark space-y-4">
-        <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4">
+      <div className="glass-panel p-4 sm:p-5 rounded-2xl border border-borderDark space-y-3.5">
+        {/* Row 1: Search & Severity Filters */}
+        <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
           
           {/* Search */}
-          <div className="w-full lg:w-72 relative">
+          <div className="w-full md:w-80 relative shrink-0">
             <Search className="w-4 h-4 text-textMuted absolute left-3 top-2.5" />
             <input
               type="text"
@@ -382,7 +383,7 @@ export default function FindingsPage() {
           </div>
 
           {/* Severity Filter */}
-          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 lg:pb-0" role="toolbar" aria-label="Severity filter">
+          <div className="flex flex-wrap items-center gap-1.5" role="toolbar" aria-label="Severity filter">
             <span className="text-xs text-textMuted font-medium flex items-center gap-1 shrink-0">
               <Filter className="w-3.5 h-3.5" /> Severity:
             </span>
@@ -401,32 +402,31 @@ export default function FindingsPage() {
               </button>
             ))}
           </div>
-
-          {/* Category Filter */}
-          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 lg:pb-0" role="toolbar" aria-label="Category filter">
-            <span className="text-xs text-textMuted font-medium shrink-0">Category:</span>
-            {CATEGORY_OPTIONS.map((c) => (
-              <button
-                key={c.id}
-                type="button"
-                onClick={() => setCategoryFilter(c.id)}
-                className={`px-3 py-1 text-xs rounded-full font-medium transition-colors shrink-0 ${
-                  categoryFilter === c.id
-                    ? 'bg-coffeeBean text-lemonChiffon border border-lemonChiffon/30'
-                    : 'text-textMuted hover:text-textPrimary bg-black border border-borderDark'
-                }`}
-              >
-                {c.label}
-              </button>
-            ))}
-          </div>
-
         </div>
 
-        {/* Row 2 Filters: Contribution Readiness & Diff Status */}
-        <div className="pt-2 border-t border-borderDark/40 flex flex-wrap items-center justify-between gap-3 text-xs">
+        {/* Row 2: Category Filter */}
+        <div className="pt-2.5 border-t border-borderDark/40 flex flex-wrap items-center gap-1.5" role="toolbar" aria-label="Category filter">
+          <span className="text-xs text-textMuted font-medium shrink-0 mr-1">Category:</span>
+          {CATEGORY_OPTIONS.map((c) => (
+            <button
+              key={c.id}
+              type="button"
+              onClick={() => setCategoryFilter(c.id)}
+              className={`px-3 py-1 text-xs rounded-full font-medium transition-colors shrink-0 ${
+                categoryFilter === c.id
+                  ? 'bg-coffeeBean text-lemonChiffon border border-lemonChiffon/30 font-semibold'
+                  : 'text-textMuted hover:text-textPrimary bg-black border border-borderDark'
+              }`}
+            >
+              {c.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Row 3 Filters: Contribution Readiness & Diff Status */}
+        <div className="pt-2.5 border-t border-borderDark/40 flex flex-wrap items-center justify-between gap-3 text-xs">
           {/* Readiness Filter */}
-          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+          <div className="flex flex-wrap items-center gap-1.5">
             <span className="text-textMuted font-medium flex items-center gap-1 shrink-0">
               <TrendingUp className="w-3.5 h-3.5 text-lemonChiffon" /> Readiness:
             </span>
@@ -447,7 +447,7 @@ export default function FindingsPage() {
           </div>
 
           {/* Diff Status Filter */}
-          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+          <div className="flex flex-wrap items-center gap-1.5">
             <span className="text-textMuted font-medium flex items-center gap-1 shrink-0">
               <GitCompare className="w-3.5 h-3.5 text-botticelli" /> Diff Status:
             </span>
