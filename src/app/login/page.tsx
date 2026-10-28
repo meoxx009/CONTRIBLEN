@@ -4,7 +4,8 @@ import React, { useState, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useApp } from '@/components/AppContext';
-import { Shield, Eye, EyeOff, ArrowRight, Loader2 } from 'lucide-react';
+import ContriBLensMark from '@/components/ContriBLensMark';
+import { Eye, EyeOff, ArrowRight, Loader2 } from 'lucide-react';
 
 function LoginContent() {
   const router = useRouter();
@@ -70,7 +71,7 @@ function LoginContent() {
       <div className="glass-panel p-8 rounded-2xl shadow-glass-card max-w-md w-full space-y-8 relative z-10 border border-borderDark">
         <div className="text-center">
           <div className="inline-flex w-12 h-12 rounded-xl bg-electricTangerine/15 border border-electricTangerine/30 items-center justify-center text-electricTangerine mb-4 shadow-glow-tangerine">
-            <Shield className="w-6 h-6" />
+            <ContriBLensMark className="w-6 h-6" />
           </div>
           <h2 className="text-2xl font-bold text-textPrimary tracking-tight">Log in to ContribLens</h2>
           <p className="mt-2 text-xs text-textMuted">

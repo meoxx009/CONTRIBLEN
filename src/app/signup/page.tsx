@@ -4,8 +4,8 @@ import React, { useState, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useApp } from '@/components/AppContext';
+import ContriBLensMark from '@/components/ContriBLensMark';
 import {
-  Shield,
   Eye,
   EyeOff,
   AlertCircle,
@@ -110,7 +110,7 @@ function SignupContent() {
         
         <div className="text-center">
           <div className="inline-flex w-12 h-12 rounded-xl bg-electricTangerine/15 border border-electricTangerine/30 items-center justify-center text-electricTangerine mb-3 shadow-glow-tangerine">
-            <Shield className="w-6 h-6" />
+            <ContriBLensMark className="w-6 h-6" />
           </div>
           <h2 className="text-2xl font-bold text-textPrimary tracking-tight">Create your account</h2>
           <p className="mt-1.5 text-xs text-textMuted">

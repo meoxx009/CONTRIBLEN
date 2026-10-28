@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
-import { Shield, Lock, Cpu } from 'lucide-react';
+import { Lock, Cpu } from 'lucide-react';
+import ContriBLensMark from './ContriBLensMark';
 
 export default function Footer() {
   return (
@@ -10,10 +11,10 @@ export default function Footer() {
           
           <div className="md:col-span-2 space-y-3.5">
             <div className="flex items-center gap-2.5 text-platinumSilver font-bold text-base">
-              <div className="w-7 h-7 rounded-lg bg-electricTangerine/20 border border-electricTangerine/30 flex items-center justify-center text-electricTangerine">
-                <Shield className="w-4 h-4" />
+              <div className="w-7 h-7 rounded-lg bg-electricTangerine/20 border border-electricTangerine/30 flex items-center justify-center">
+                <ContriBLensMark className="w-4 h-4" />
               </div>
-              <span className="tracking-tight">ContriBLens <span className="text-[10px] bg-coffeeBean text-lemonChiffon border border-lemonChiffon/30 px-2 py-0.5 rounded-full font-mono">OSS</span></span>
+              <span className="tracking-tight">Contri<span className="text-textPrimary">B</span><span className="text-electricTangerine">Lens</span> <span className="text-[10px] bg-coffeeBean text-lemonChiffon border border-lemonChiffon/30 px-2 py-0.5 rounded-full font-mono">OSS</span></span>
             </div>
             <p className="text-platinumSilver/70 max-w-sm text-xs leading-relaxed">
               Scan. Understand. Contribute. Discover meaningful open-source contribution opportunities by scanning public GitHub repositories and turning verified findings into actionable plans and maintainer issue drafts.

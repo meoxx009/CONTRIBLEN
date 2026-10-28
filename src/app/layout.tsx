@@ -8,6 +8,14 @@ export const metadata: Metadata = {
   title: 'ContriBLens OSS — Scan. Understand. Contribute.',
   description:
     'Helps beginners discover meaningful open-source contribution opportunities by scanning public GitHub repositories, verifying findings, explaining them in plain English, and creating actionable contribution plans.',
+  icons: {
+    icon: [
+      { url: '/icon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+    ],
+    shortcut: '/icon.svg',
+    apple: '/contrilens-mark.svg',
+  },
 };
 
 export default function RootLayout({

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import ContriBLensMark from '@/components/ContriBLensMark';
 import {
   Shield,
   Search,
@@ -323,7 +324,7 @@ export default function LandingPage() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
                   <div className="w-7 h-7 rounded-lg liquid-chrome-orb flex items-center justify-center shadow-sm">
-                    <Shield className="w-3.5 h-3.5 text-black" />
+                    <ContriBLensMark className="w-4 h-4" />
                   </div>
                   <div>
                     <div className="text-xs font-mono font-semibold text-lemonChiffon flex items-center gap-1.5">

@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useApp } from './AppContext';
+import ContriBLensMark from './ContriBLensMark';
 import {
   Shield,
   LogOut,
@@ -144,16 +145,16 @@ export default function Navbar() {
           
           {/* Logo & Brand */}
           <div className="flex items-center gap-3 shrink-0">
-            <Link href={user ? '/app/dashboard' : '/'} className="flex items-center gap-2.5 group">
-              <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-platinumSilver/20 via-coffeeBean/40 to-electricTangerine/20 border border-platinumSilver/30 flex items-center justify-center text-electricTangerine group-hover:scale-105 transition-all shadow-liquid-glass">
-                <Shield className="w-5 h-5 text-electricTangerine drop-shadow-[0_0_8px_rgba(255,109,31,0.6)]" />
+            <Link href={user ? '/app/dashboard' : '/'} className="flex items-center gap-2.5 group" aria-label="ContriBLens OSS Home">
+              <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-platinumSilver/20 via-coffeeBean/40 to-electricTangerine/20 border border-platinumSilver/30 flex items-center justify-center group-hover:scale-105 transition-all shadow-liquid-glass">
+                <ContriBLensMark className="w-5 h-5 drop-shadow-[0_0_8px_rgba(255,109,31,0.5)]" />
                 <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-transparent via-white/10 to-transparent pointer-events-none" />
               </div>
               <div className="flex flex-col">
                 <span className="font-bold text-base tracking-tight text-textPrimary flex items-center gap-1.5 group-hover:text-platinumSilver transition-colors">
-                  ContriBLens <span className="text-[10px] font-semibold bg-coffeeBean text-lemonChiffon border border-lemonChiffon/30 px-2 py-0.5 rounded-full shadow-sm font-mono">OSS</span>
+                  <span>Contri<span className="text-textPrimary">B</span><span className="text-electricTangerine">Lens</span></span> <span className="text-[10px] font-semibold bg-coffeeBean text-lemonChiffon border border-lemonChiffon/30 px-2 py-0.5 rounded-full shadow-sm font-mono">OSS</span>
                 </span>
-                <span className="text-[11px] text-textMuted -mt-0.5 hidden sm:inline tracking-wide">Scan. Understand. Contribute.</span>
+                <span className="text-[11px] text-textMuted -mt-0.5 hidden sm:inline tracking-wide font-normal">Scan. Understand. Contribute.</span>
               </div>
             </Link>
 
