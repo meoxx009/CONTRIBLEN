@@ -324,7 +324,7 @@ export default function LandingPage() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
                   <div className="w-7 h-7 rounded-lg liquid-chrome-orb flex items-center justify-center shadow-sm">
-                    <ContriBLensMark className="w-4 h-4" />
+                    <ContriBLensMark size={16} className="w-4 h-4" />
                   </div>
                   <div>
                     <div className="text-xs font-mono font-semibold text-lemonChiffon flex items-center gap-1.5">

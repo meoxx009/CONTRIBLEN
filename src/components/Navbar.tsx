@@ -147,7 +147,7 @@ export default function Navbar() {
           <div className="flex items-center gap-3 shrink-0">
             <Link href={user ? '/app/dashboard' : '/'} className="flex items-center gap-2.5 group" aria-label="ContriBLens OSS Home">
               <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-platinumSilver/20 via-coffeeBean/40 to-electricTangerine/20 border border-platinumSilver/30 flex items-center justify-center group-hover:scale-105 transition-all shadow-liquid-glass">
-                <ContriBLensMark className="w-5 h-5 drop-shadow-[0_0_8px_rgba(255,109,31,0.5)]" />
+                <ContriBLensMark size={20} className="w-5 h-5 drop-shadow-[0_0_8px_rgba(255,109,31,0.5)]" />
                 <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-transparent via-white/10 to-transparent pointer-events-none" />
               </div>
               <div className="flex flex-col">

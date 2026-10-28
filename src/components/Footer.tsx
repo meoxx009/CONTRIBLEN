@@ -12,7 +12,7 @@ export default function Footer() {
           <div className="md:col-span-2 space-y-3.5">
             <div className="flex items-center gap-2.5 text-platinumSilver font-heading font-bold text-base">
               <div className="w-7 h-7 rounded-lg bg-electricTangerine/20 border border-electricTangerine/30 flex items-center justify-center">
-                <ContriBLensMark className="w-4 h-4" />
+                <ContriBLensMark size={16} className="w-4 h-4" />
               </div>
               <span className="tracking-tight">Contri<span className="text-textPrimary">B</span><span className="text-electricTangerine">Lens</span> <span className="text-[10px] bg-coffeeBean text-lemonChiffon border border-lemonChiffon/30 px-2 py-0.5 rounded-full font-mono">OSS</span></span>
             </div>

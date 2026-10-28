@@ -23,7 +23,7 @@ export default function ContriBLensLogo({
     <div className={`flex items-center gap-2.5 ${className}`}>
       {/* Brand Mark Icon Container */}
       <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-platinumSilver/15 via-blackHole/80 to-electricTangerine/20 border border-platinumSilver/25 flex items-center justify-center shadow-liquid-glass group-hover:scale-105 transition-all">
-        <ContriBLensMark className={markClassName} />
+        <ContriBLensMark size={24} className={markClassName} />
         <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-transparent via-white/5 to-transparent pointer-events-none" />
       </div>
 

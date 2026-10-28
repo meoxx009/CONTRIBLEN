@@ -71,7 +71,7 @@ function LoginContent() {
       <div className="glass-panel p-8 rounded-2xl shadow-glass-card max-w-md w-full space-y-8 relative z-10 border border-borderDark">
         <div className="text-center">
           <div className="inline-flex w-12 h-12 rounded-xl bg-electricTangerine/15 border border-electricTangerine/30 items-center justify-center text-electricTangerine mb-4 shadow-glow-tangerine">
-            <ContriBLensMark className="w-6 h-6" />
+            <ContriBLensMark size={24} className="w-6 h-6" />
           </div>
           <h2 className="text-2xl font-bold text-textPrimary tracking-tight">Log in to ContribLens</h2>
           <p className="mt-2 text-xs text-textMuted">

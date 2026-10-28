@@ -18,7 +18,8 @@ interface ContriBLensMarkProps extends React.SVGProps<SVGSVGElement> {
  */
 export default function ContriBLensMark({
   className = 'w-6 h-6',
-  size,
+  size = 24,
+  style,
   ...props
 }: ContriBLensMarkProps) {
   return (
@@ -27,8 +28,9 @@ export default function ContriBLensMark({
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
-      width={size}
-      height={size}
+      width={size || 24}
+      height={size || 24}
+      style={{ maxWidth: '100%', maxHeight: '100%', ...style }}
       aria-hidden="true"
       {...props}
     >
