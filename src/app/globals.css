@@ -332,10 +332,12 @@ html.text-lg-mode {
 /* Typography Token Utility Classes */
 .font-heading {
   font-family: var(--font-heading);
+  letter-spacing: -0.015em;
 }
 
 .font-showcase {
   font-family: var(--font-showcase);
+  letter-spacing: -0.01em;
 }
 
 .font-body {
@@ -349,4 +351,5 @@ html.text-lg-mode {
 /* Global Heading Assignment to Berkelium Sans */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
+  letter-spacing: -0.015em;
 }

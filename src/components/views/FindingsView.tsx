@@ -343,7 +343,7 @@ export default function FindingsView() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-borderDark">
         <div>
-          <h1 className="text-2xl font-bold text-textPrimary flex items-center gap-2">
+          <h1 className="text-2xl font-heading font-bold text-textPrimary flex items-center gap-2">
             <span>Verified Findings</span>
             {activeScan && (
               <span className="text-xs font-mono font-medium text-lemonChiffon bg-coffeeBean px-3 py-1 rounded-full border border-lemonChiffon/20">
@@ -597,7 +597,7 @@ export default function FindingsView() {
                         </span>
                       </div>
 
-                      <h4 className="text-xs font-semibold text-textPrimary line-clamp-2">
+                      <h4 className="text-xs font-heading font-semibold text-textPrimary line-clamp-2">
                         {finding.title}
                       </h4>
 
@@ -686,7 +686,7 @@ export default function FindingsView() {
                     </div>
                   </div>
 
-                  <h3 className="text-lg font-bold text-textPrimary leading-snug">
+                  <h3 className="text-lg font-heading font-bold text-textPrimary leading-snug">
                     {selectedFinding.title}
                   </h3>
 
@@ -1071,7 +1071,7 @@ export default function FindingsView() {
         /* Empty State */
         <div className="text-center py-20 glass-panel rounded-2xl border border-dashed border-borderDark px-4">
           <Shield className="w-10 h-10 text-lemonChiffon/70 mx-auto mb-3" />
-          <h3 className="text-sm font-semibold text-textPrimary">No verified findings match your filters</h3>
+          <h3 className="text-sm font-heading font-semibold text-textPrimary">No verified findings match your filters</h3>
           <p className="text-xs text-textMuted mt-1.5 max-w-md mx-auto leading-relaxed">
             No deterministic findings match the current severity, category, or readiness filters.
           </p>
@@ -1121,7 +1121,7 @@ export default function FindingsView() {
                     {currentExplanation.difficulty} Track
                   </span>
                 </div>
-                <h3 className="text-lg font-bold text-textPrimary">{selectedFinding.title}</h3>
+                <h3 className="text-lg font-heading font-bold text-textPrimary">{selectedFinding.title}</h3>
               </div>
               <button
                 onClick={() => setCurrentExplanation(null)}
@@ -1134,7 +1134,7 @@ export default function FindingsView() {
 
             <div className="space-y-4 text-xs text-textPrimary">
               <div>
-                <h4 className="font-semibold text-textMuted uppercase tracking-wider mb-1">
+                <h4 className="font-heading font-semibold text-textMuted uppercase tracking-wider mb-1">
                   Educational Context
                 </h4>
                 <p className="leading-relaxed bg-black p-3.5 rounded-xl border border-borderDark">
@@ -1143,7 +1143,7 @@ export default function FindingsView() {
               </div>
 
               <div>
-                <h4 className="font-semibold text-textMuted uppercase tracking-wider mb-1">
+                <h4 className="font-heading font-semibold text-textMuted uppercase tracking-wider mb-1">
                   Repository Risk
                 </h4>
                 <p className="leading-relaxed bg-black p-3.5 rounded-xl border border-borderDark">
@@ -1152,7 +1152,7 @@ export default function FindingsView() {
               </div>
 
               <div>
-                <h4 className="font-semibold text-textMuted uppercase tracking-wider mb-1">
+                <h4 className="font-heading font-semibold text-textMuted uppercase tracking-wider mb-1">
                   Step-by-Step Fix Guidance
                 </h4>
                 <p className="leading-relaxed bg-black p-3.5 rounded-xl border border-borderDark text-lemonChiffon">

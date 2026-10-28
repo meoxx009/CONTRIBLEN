@@ -242,7 +242,7 @@ function ContributionsContent() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-borderDark">
         <div>
-          <h1 className="text-2xl font-bold text-textPrimary flex items-center gap-2">
+          <h1 className="text-2xl font-heading font-bold text-textPrimary flex items-center gap-2">
             <span>Contributions + Technology Stack</span>
             {activeScan && (
               <span className="text-xs font-mono font-medium text-lemonChiffon bg-coffeeBean px-3 py-1 rounded-full border border-lemonChiffon/20">
@@ -276,7 +276,7 @@ function ContributionsContent() {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Layers className="w-4 h-4 text-electricTangerine" />
-            <h2 className="text-xs font-bold text-textPrimary uppercase tracking-wider">
+            <h2 className="text-xs font-heading font-bold text-textPrimary uppercase tracking-wider">
               Detected Technology Stack &amp; Manifests
             </h2>
           </div>
@@ -292,7 +292,7 @@ function ContributionsContent() {
             
             {/* Languages */}
             <div className="glass-panel p-5 rounded-2xl border border-borderDark space-y-3">
-              <h3 className="text-xs font-semibold text-textMuted uppercase tracking-wider flex items-center justify-between">
+              <h3 className="text-xs font-heading font-semibold text-textMuted uppercase tracking-wider flex items-center justify-between">
                 <span>Languages</span>
                 <span className="text-lemonChiffon font-mono text-[11px]">{techStack.languages.length} detected</span>
               </h3>
@@ -326,7 +326,7 @@ function ContributionsContent() {
 
             {/* Frameworks */}
             <div className="glass-panel p-5 rounded-2xl border border-borderDark space-y-3">
-              <h3 className="text-xs font-semibold text-textMuted uppercase tracking-wider flex items-center justify-between">
+              <h3 className="text-xs font-heading font-semibold text-textMuted uppercase tracking-wider flex items-center justify-between">
                 <span>Frameworks</span>
                 <span className="text-botticelli font-mono text-[11px]">{techStack.frameworks.length} found</span>
               </h3>
@@ -359,7 +359,7 @@ function ContributionsContent() {
 
             {/* Tooling & Testing */}
             <div className="glass-panel p-5 rounded-2xl border border-borderDark space-y-3">
-              <h3 className="text-xs font-semibold text-textMuted uppercase tracking-wider flex items-center justify-between">
+              <h3 className="text-xs font-heading font-semibold text-textMuted uppercase tracking-wider flex items-center justify-between">
                 <span>Tooling &amp; CI</span>
                 <span className="text-cotton font-mono text-[11px]">{techStack.tooling.length} found</span>
               </h3>
@@ -392,7 +392,7 @@ function ContributionsContent() {
 
             {/* Manifest Files */}
             <div className="glass-panel p-5 rounded-2xl border border-borderDark space-y-3">
-              <h3 className="text-xs font-semibold text-textMuted uppercase tracking-wider flex items-center justify-between">
+              <h3 className="text-xs font-heading font-semibold text-textMuted uppercase tracking-wider flex items-center justify-between">
                 <span>Package Manifests</span>
                 <span className="text-sustainableLinen font-mono text-[11px]">{techStack.manifests.length} files</span>
               </h3>
@@ -427,7 +427,7 @@ function ContributionsContent() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-lemonChiffon" />
-              <h2 className="text-xs font-bold text-lemonChiffon uppercase tracking-wider">
+              <h2 className="text-xs font-heading font-bold text-lemonChiffon uppercase tracking-wider">
                 Top Contribution Recommendation
               </h2>
             </div>
@@ -461,7 +461,7 @@ function ContributionsContent() {
                     </span>
                   )}
                 </div>
-                <h3 className="text-xl sm:text-2xl font-bold text-textPrimary leading-snug">
+                <h3 className="text-xl sm:text-2xl font-heading font-bold text-textPrimary leading-snug">
                   {topRoute.title}
                 </h3>
               </div>
@@ -598,7 +598,7 @@ function ContributionsContent() {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Compass className="w-4 h-4 text-electricTangerine" />
-            <h2 className="text-xs font-bold text-textPrimary uppercase tracking-wider">
+            <h2 className="text-xs font-heading font-bold text-textPrimary uppercase tracking-wider">
               Contribution Impact Graph
             </h2>
           </div>
@@ -741,7 +741,7 @@ function ContributionsContent() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <Compass className="w-4 h-4 text-electricTangerine" />
-            <h2 className="text-xs font-bold text-textPrimary uppercase tracking-wider">
+            <h2 className="text-xs font-heading font-bold text-textPrimary uppercase tracking-wider">
               Available Contribution Routes ({filteredRoutes.length})
             </h2>
           </div>
@@ -872,7 +872,7 @@ function ContributionsContent() {
                         )}
                       </div>
 
-                      <h3 className="text-lg sm:text-xl font-bold text-textPrimary">{route.title}</h3>
+                      <h3 className="text-lg sm:text-xl font-heading font-bold text-textPrimary">{route.title}</h3>
                       <p className="text-xs text-textMuted leading-relaxed max-w-3xl">
                         {route.summary}
                       </p>
@@ -1017,7 +1017,7 @@ function ContributionsContent() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                     {/* Test Plan */}
                     <div className="p-4 rounded-xl bg-black border border-borderDark space-y-2.5">
-                      <h4 className="font-semibold text-textPrimary uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+                      <h4 className="font-heading font-semibold text-textPrimary uppercase tracking-wider text-[11px] flex items-center gap-1.5">
                         <Terminal className="w-3.5 h-3.5 text-lemonChiffon" />
                         Step-by-Step Verification Plan
                       </h4>
@@ -1033,7 +1033,7 @@ function ContributionsContent() {
 
                     {/* Acceptance Criteria */}
                     <div className="p-4 rounded-xl bg-black border border-borderDark space-y-2.5">
-                      <h4 className="font-semibold text-textPrimary uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+                      <h4 className="font-heading font-semibold text-textPrimary uppercase tracking-wider text-[11px] flex items-center gap-1.5">
                         <CheckCircle2 className="w-3.5 h-3.5 text-electricTangerine" />
                         Maintainer Acceptance Criteria
                       </h4>
@@ -1104,7 +1104,7 @@ function ContributionsContent() {
           <div className="text-center py-16 glass-panel rounded-2xl border border-dashed border-borderDark px-4 space-y-4">
             <Compass className="w-12 h-12 text-lemonChiffon/60 mx-auto" />
             <div>
-              <h3 className="text-base font-bold text-textPrimary">No contribution routes created yet</h3>
+              <h3 className="text-base font-heading font-bold text-textPrimary">No contribution routes created yet</h3>
               <p className="text-xs text-textMuted mt-1 max-w-md mx-auto leading-relaxed">
                 Contribution routes are actionable fix blueprints constructed from verified security findings and repository health gaps.
               </p>

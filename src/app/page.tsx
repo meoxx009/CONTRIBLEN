@@ -781,7 +781,7 @@ export default function LandingPage() {
             <span className="text-xs font-bold text-electricTangerine uppercase tracking-widest block font-mono">
               Frequently Asked Questions
             </span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-textPrimary tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-heading font-extrabold text-textPrimary tracking-tight">
               Clear answers on safety, grounding, and ethics
             </h2>
           </div>
@@ -845,7 +845,7 @@ export default function LandingPage() {
             <span className="text-xs font-bold text-lemonChiffon uppercase tracking-widest block font-mono">
               Start Contributing Today
             </span>
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-textPrimary tracking-tight">
+            <h2 className="text-2xl sm:text-4xl font-heading font-extrabold text-textPrimary tracking-tight">
               Ready to scan and contribute to open source?
             </h2>
             <p className="text-xs sm:text-sm text-platinumSilver/80 max-w-lg mx-auto leading-relaxed">

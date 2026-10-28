@@ -218,7 +218,7 @@ function DraftsContent() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-borderDark">
         <div>
-          <h1 className="text-2xl font-bold text-textPrimary flex items-center gap-2">
+          <h1 className="text-2xl font-heading font-bold text-textPrimary flex items-center gap-2">
             <span>Maintainer Issue Drafts</span>
             {activeScan && (
               <span className="text-xs font-mono font-medium text-lemonChiffon bg-coffeeBean px-3 py-1 rounded-full border border-lemonChiffon/20">
@@ -247,7 +247,7 @@ function DraftsContent() {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
           {/* Drafts Sidebar List (Col 1) */}
           <div className="space-y-3 lg:col-span-1">
-            <h3 className="text-xs font-semibold text-textMuted uppercase tracking-wider">
+            <h3 className="text-xs font-heading font-semibold text-textMuted uppercase tracking-wider">
               Saved Drafts ({drafts.length})
             </h3>
             <div className="space-y-2.5 max-h-[700px] overflow-y-auto no-scrollbar pr-1">
@@ -277,7 +277,7 @@ function DraftsContent() {
                         {d.status || 'draft'}
                       </span>
                     </div>
-                    <h4 className="text-xs font-semibold text-textPrimary line-clamp-2">{d.title}</h4>
+                    <h4 className="text-xs font-heading font-semibold text-textPrimary line-clamp-2">{d.title}</h4>
                     <div className="mt-1 flex items-center justify-between text-[10px] text-textMuted/70">
                       <span>{d.repoName}</span>
                       <span>{new Date(d.createdAt).toLocaleDateString()}</span>
@@ -327,7 +327,7 @@ function DraftsContent() {
                   </span>
                 </div>
 
-                <h2 className="text-base font-bold text-textPrimary mt-0.5">{selectedDraft.title}</h2>
+                <h2 className="text-base font-heading font-bold text-textPrimary mt-0.5">{selectedDraft.title}</h2>
               </div>
 
               <div className="flex flex-wrap items-center gap-2">
@@ -657,7 +657,7 @@ function DraftsContent() {
         /* Empty State */
         <div className="text-center py-24 glass-panel rounded-2xl border border-borderDark max-w-lg mx-auto p-8 space-y-4">
           <FileText className="w-12 h-12 text-lemonChiffon/50 mx-auto" />
-          <h2 className="text-lg font-bold text-textPrimary">No Issue Drafts Available</h2>
+          <h2 className="text-lg font-heading font-bold text-textPrimary">No Issue Drafts Available</h2>
           <p className="text-xs text-textMuted leading-relaxed">
             Generate your first maintainer-reviewable issue draft from verified findings in the Contributions + Stack view.
           </p>

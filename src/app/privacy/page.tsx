@@ -29,7 +29,7 @@ export default function PrivacyNoticePage() {
             </span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl font-bold text-[#F5F3ED] tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-heading font-bold text-[#F5F3ED] tracking-tight">
             Privacy Policy &amp; Data Principles
           </h1>
           <p className="mt-2 text-sm text-[#AAA9A1] leading-relaxed">
@@ -41,7 +41,7 @@ export default function PrivacyNoticePage() {
           <div className="p-6 sm:p-8 rounded-2xl bg-[#222222]/80 border border-[#FAF3E1]/10 space-y-4">
             <div className="flex items-center gap-3 text-[#FFF8CA]">
               <Lock className="w-5 h-5 text-[#FF6D1F]" />
-              <h2 className="text-lg font-semibold">1. Zero Raw Secret Storage</h2>
+              <h2 className="text-lg font-heading font-semibold">1. Zero Raw Secret Storage</h2>
             </div>
             <p className="text-xs sm:text-sm text-[#F5F3ED]/85 leading-relaxed">
               When scanning repositories, any matching API tokens, AWS keys, GitHub PATs, private keys, or passwords are automatically and irreversibly redacted using client/server regex masking (<code className="text-[#FFF8CA]">ghp_••••••••••••</code>). Raw secrets never touch the database, logs, or AI prompt contexts.
@@ -51,7 +51,7 @@ export default function PrivacyNoticePage() {
           <div className="p-6 sm:p-8 rounded-2xl bg-[#222222]/80 border border-[#FAF3E1]/10 space-y-4">
             <div className="flex items-center gap-3 text-[#FFF8CA]">
               <Terminal className="w-5 h-5 text-[#FF6D1F]" />
-              <h2 className="text-lg font-semibold">2. Zero Code Execution</h2>
+              <h2 className="text-lg font-heading font-semibold">2. Zero Code Execution</h2>
             </div>
             <p className="text-xs sm:text-sm text-[#F5F3ED]/85 leading-relaxed">
               ContribLens never runs arbitrary code, executes scripts, or executes package manager installers (<code className="text-[#FFF8CA]">npm install</code>, <code className="text-[#FFF8CA]">pip install</code>) against audited repositories. All analysis is purely static, AST/manifest parsed, and read-only.
@@ -61,7 +61,7 @@ export default function PrivacyNoticePage() {
           <div className="p-6 sm:p-8 rounded-2xl bg-[#222222]/80 border border-[#FAF3E1]/10 space-y-4">
             <div className="flex items-center gap-3 text-[#FFF8CA]">
               <EyeOff className="w-5 h-5 text-[#FF6D1F]" />
-              <h2 className="text-lg font-semibold">3. Safe AI Contract</h2>
+              <h2 className="text-lg font-heading font-semibold">3. Safe AI Contract</h2>
             </div>
             <p className="text-xs sm:text-sm text-[#F5F3ED]/85 leading-relaxed">
               We send Gemini minimal, redacted evidence bundles rather than whole-repository dumps. Gemini is constrained to explain validated facts only and cannot alter findings, invent CVEs, or transmit repository contents outside our secure adapter boundary.
@@ -71,7 +71,7 @@ export default function PrivacyNoticePage() {
           <div className="p-6 sm:p-8 rounded-2xl bg-[#222222]/80 border border-[#FAF3E1]/10 space-y-4">
             <div className="flex items-center gap-3 text-[#FFF8CA]">
               <Database className="w-5 h-5 text-[#FF6D1F]" />
-              <h2 className="text-lg font-semibold">4. User Rights & Data Portability</h2>
+              <h2 className="text-lg font-heading font-semibold">4. User Rights & Data Portability</h2>
             </div>
             <p className="text-xs sm:text-sm text-[#F5F3ED]/85 leading-relaxed">
               You own your scan history and generated issue drafts. From your Profile settings, you can export all stored records as a formatted JSON bundle or permanently purge your repository activity and scan history at any time.

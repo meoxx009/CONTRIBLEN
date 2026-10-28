@@ -140,8 +140,8 @@ export default function DashboardView() {
             <span className="text-platinumSilver/40">•</span>
             <span className="text-lemonChiffon">ContribLens OSS</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-textPrimary tracking-tight flex items-center gap-2">
-            Welcome back, <span className="text-transparent bg-clip-text bg-gradient-to-r from-platinumSilver via-lemonChiffon to-electricTangerine">{user?.name || 'Contributor'}</span>
+          <h1 className="text-2xl sm:text-3xl font-heading font-extrabold text-textPrimary tracking-tight flex items-center gap-2">
+            Welcome back, <span className="font-showcase italic font-normal text-transparent bg-clip-text bg-gradient-to-r from-platinumSilver via-lemonChiffon to-electricTangerine">{user?.name || 'Contributor'}</span>
           </h1>
           <p className="text-xs sm:text-sm text-platinumSilver/80 mt-1">
             Navigate verified findings, plan bounded contributor fixes, and generate maintainer-ready drafts.
@@ -182,7 +182,7 @@ export default function DashboardView() {
               <Zap className="w-4 h-4" />
             </div>
             <div>
-              <h2 className="text-sm font-bold text-textPrimary">Contribution Pipeline Status</h2>
+              <h2 className="text-sm font-heading font-bold text-textPrimary">Contribution Pipeline Status</h2>
               <span className="text-[11px] text-platinumSilver/70">
                 {activeScan ? `Active Context: ${activeScan.repoName}` : 'Select a repository to inspect pipeline'}
               </span>
@@ -308,7 +308,7 @@ export default function DashboardView() {
             <div className="flex items-center justify-between pb-3 border-b border-platinumSilver/15">
               <div className="flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-electricTangerine" />
-                <h3 className="text-sm font-bold text-textPrimary">Next Best Action</h3>
+                <h3 className="text-sm font-heading font-bold text-textPrimary">Next Best Action</h3>
               </div>
               <span className="text-[11px] font-mono text-lemonChiffon bg-black/60 px-3 py-1 rounded-full border border-lemonChiffon/30 shadow-inner">
                 Grounded Route
@@ -319,7 +319,7 @@ export default function DashboardView() {
               <div className="p-5 rounded-2xl bg-black/80 border border-platinumSilver/20 space-y-4 shadow-sm">
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <h4 className="text-base sm:text-lg font-bold text-textPrimary leading-snug">{recommendedRoute.title}</h4>
+                    <h4 className="text-base sm:text-lg font-heading font-bold text-textPrimary leading-snug">{recommendedRoute.title}</h4>
                     <p className="text-xs text-platinumSilver/70 mt-1">
                       {recommendedRoute.files[0]?.includes('Repository Root') ? 'Target Area' : 'Target File'}: <code className="text-lemonChiffon font-mono bg-white/5 px-2 py-0.5 rounded break-all">{recommendedRoute.files[0]}</code>
                     </p>
@@ -355,7 +355,7 @@ export default function DashboardView() {
                   <Compass className="w-6 h-6" />
                 </div>
                 <div className="max-w-md mx-auto space-y-1">
-                  <h4 className="text-sm font-bold text-textPrimary">No Contribution Routes Yet</h4>
+                  <h4 className="text-sm font-heading font-bold text-textPrimary">No Contribution Routes Yet</h4>
                   <p className="text-xs text-platinumSilver/70 leading-relaxed">
                     {scans.length === 0
                       ? 'Scan your first public GitHub repository to discover verified security findings and beginner-friendly routes.'
@@ -378,7 +378,7 @@ export default function DashboardView() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Compass className="w-4 h-4 text-lemonChiffon" />
-                <h3 className="text-sm font-bold text-textPrimary">Open Contribution Progress</h3>
+                <h3 className="text-sm font-heading font-bold text-textPrimary">Open Contribution Progress</h3>
               </div>
               <span className="text-xs font-mono font-semibold text-lemonChiffon">
                 {completedRoutes.length} of {displayedRoutes.length} completed ({progressPercentage}%)
@@ -400,7 +400,7 @@ export default function DashboardView() {
           {/* Recent Repositories */}
           <div className="liquid-glass-card p-6 rounded-3xl space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-platinumSilver/15">
-              <h3 className="text-sm font-bold text-textPrimary">Recent Repositories</h3>
+              <h3 className="text-sm font-heading font-bold text-textPrimary">Recent Repositories</h3>
               <Link href="/app/scan" className="text-xs text-lemonChiffon hover:underline font-semibold">
                 New Scan →
               </Link>
@@ -515,7 +515,7 @@ export default function DashboardView() {
           <div className="liquid-glass-card p-6 rounded-3xl space-y-4">
             <div className="flex items-center gap-2 pb-3 border-b border-platinumSilver/15">
               <Layers className="w-4 h-4 text-electricTangerine" />
-              <h3 className="text-sm font-bold text-textPrimary">Technology Snapshot</h3>
+              <h3 className="text-sm font-heading font-bold text-textPrimary">Technology Snapshot</h3>
             </div>
 
             {activeScan ? (
@@ -587,7 +587,7 @@ export default function DashboardView() {
           <div className="liquid-glass-card p-6 rounded-3xl space-y-4">
             <div className="flex items-center gap-2 pb-3 border-b border-platinumSilver/15">
               <Clock className="w-4 h-4 text-platinumSilver/70" />
-              <h3 className="text-sm font-bold text-textPrimary">Recent Activity</h3>
+              <h3 className="text-sm font-heading font-bold text-textPrimary">Recent Activity</h3>
             </div>
 
             {activities.length > 0 ? (

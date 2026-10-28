@@ -159,7 +159,7 @@ export default function ProfileView() {
       
       {/* Header */}
       <div className="pb-6 border-b border-borderDark">
-        <h1 className="text-2xl font-bold text-textPrimary flex items-center gap-2">
+        <h1 className="text-2xl font-heading font-bold text-textPrimary flex items-center gap-2">
           <UserIcon className="w-6 h-6 text-electricTangerine" />
           <span>Profile &amp; Safety Controls</span>
         </h1>
@@ -179,7 +179,7 @@ export default function ProfileView() {
               <Shield className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-sm font-bold text-textPrimary">Safety &amp; Evidence Grounding Controls</h2>
+              <h2 className="text-sm font-heading font-bold text-textPrimary">Safety &amp; Evidence Grounding Controls</h2>
               <span className="text-xs text-textMuted">Secret masking, AI grounding policy, and external safety rules</span>
             </div>
           </div>
@@ -320,7 +320,7 @@ export default function ProfileView() {
               <UserIcon className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-sm font-bold text-textPrimary">Profile &amp; Credentials</h2>
+              <h2 className="text-sm font-heading font-bold text-textPrimary">Profile &amp; Credentials</h2>
               <span className="text-xs text-textMuted">Display name, email address, and phone number</span>
             </div>
           </div>
@@ -379,7 +379,7 @@ export default function ProfileView() {
               <Sliders className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-sm font-bold text-textPrimary">Appearance &amp; Accessibility</h2>
+              <h2 className="text-sm font-heading font-bold text-textPrimary">Appearance &amp; Accessibility</h2>
               <span className="text-xs text-textMuted">Theme, font scale, font stack, and reduced motion</span>
             </div>
           </div>
@@ -509,7 +509,7 @@ export default function ProfileView() {
               <Activity className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-sm font-bold text-textPrimary">Activity History &amp; Audit Trail</h2>
+              <h2 className="text-sm font-heading font-bold text-textPrimary">Activity History &amp; Audit Trail</h2>
               <span className="text-xs text-textMuted">Local timeline of scans, generated routes, and issue draft exports</span>
             </div>
           </div>
@@ -593,7 +593,7 @@ export default function ProfileView() {
               <Download className="w-5 h-5 text-lemonChiffon" />
             </div>
             <div>
-              <h2 className="text-sm font-bold text-textPrimary">Workspace Data &amp; Export</h2>
+              <h2 className="text-sm font-heading font-bold text-textPrimary">Workspace Data &amp; Export</h2>
               <span className="text-xs text-textMuted">Export scans as JSON, clear database history, or sign out</span>
             </div>
           </div>

@@ -73,7 +73,7 @@ function LoginContent() {
           <div className="inline-flex w-12 h-12 rounded-xl bg-electricTangerine/15 border border-electricTangerine/30 items-center justify-center text-electricTangerine mb-4 shadow-glow-tangerine">
             <ContriBLensMark size={24} className="w-6 h-6" />
           </div>
-          <h2 className="text-2xl font-bold text-textPrimary tracking-tight">Log in to ContribLens</h2>
+          <h2 className="text-2xl font-heading font-bold text-textPrimary tracking-tight">Log in to ContribLens</h2>
           <p className="mt-2 text-xs text-textMuted">
             Access your scanned repositories, contribution routes, and issue drafts.
           </p>

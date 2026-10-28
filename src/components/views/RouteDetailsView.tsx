@@ -204,7 +204,7 @@ export default function RouteDetailPage() {
     return (
       <div className="max-w-4xl mx-auto px-4 py-16 text-center space-y-4 bg-black text-textPrimary">
         <Compass className="w-12 h-12 text-rosewood mx-auto" />
-        <h2 className="text-lg font-bold">Contribution Route Not Found</h2>
+        <h2 className="text-lg font-heading font-bold">Contribution Route Not Found</h2>
         <p className="text-xs text-textMuted max-w-md mx-auto">
           The requested route ID does not exist or you do not have permission to access it.
         </p>
@@ -286,7 +286,7 @@ export default function RouteDetailPage() {
               )}
             </div>
 
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-textPrimary tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-heading font-extrabold text-textPrimary tracking-tight">
               {route.title}
             </h1>
           </div>
@@ -427,7 +427,7 @@ export default function RouteDetailPage() {
           <div className="p-5 rounded-xl bg-black border border-borderDark space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-xs font-bold text-textPrimary uppercase tracking-wider">
+                <h3 className="text-xs font-heading font-bold text-textPrimary uppercase tracking-wider">
                   Contribution Readiness Breakdown
                 </h3>
                 <span className="text-[11px] text-textMuted">
@@ -519,7 +519,7 @@ export default function RouteDetailPage() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <BookOpen className="w-4 h-4 text-lemonChiffon" />
-              <h3 className="text-xs font-bold text-textPrimary uppercase tracking-wider">
+              <h3 className="text-xs font-heading font-bold text-textPrimary uppercase tracking-wider">
                 Skill Gap &amp; Learning Mode Checklist
               </h3>
             </div>
@@ -571,7 +571,7 @@ export default function RouteDetailPage() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Shield className="w-4 h-4 text-electricTangerine" />
-                <h3 className="text-xs font-bold text-textPrimary uppercase tracking-wider">
+                <h3 className="text-xs font-heading font-bold text-textPrimary uppercase tracking-wider">
                   Evidence Chain &amp; Trust Trail
                 </h3>
               </div>
@@ -620,7 +620,7 @@ export default function RouteDetailPage() {
 
         {/* Beginner Contributor Answers Framework */}
         <div className="p-6 rounded-2xl bg-black border border-lemonChiffon/30 space-y-4">
-          <h3 className="text-xs font-bold text-lemonChiffon uppercase tracking-wider flex items-center gap-1.5">
+          <h3 className="text-xs font-heading font-bold text-lemonChiffon uppercase tracking-wider flex items-center gap-1.5">
             <Compass className="w-4 h-4 text-lemonChiffon" />
             Beginner Contributor Roadmap
           </h3>
@@ -690,7 +690,7 @@ export default function RouteDetailPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 text-xs">
           {/* Test Plan */}
           <div className="p-5 rounded-xl bg-black border border-borderDark space-y-3">
-            <h3 className="font-semibold text-textPrimary uppercase tracking-wider text-xs flex items-center gap-2">
+            <h3 className="font-heading font-semibold text-textPrimary uppercase tracking-wider text-xs flex items-center gap-2">
               <Terminal className="w-4 h-4 text-lemonChiffon" />
               Local Verification &amp; Test Plan
             </h3>
@@ -706,7 +706,7 @@ export default function RouteDetailPage() {
 
           {/* Acceptance Criteria */}
           <div className="p-5 rounded-xl bg-black border border-borderDark space-y-3">
-            <h3 className="font-semibold text-textPrimary uppercase tracking-wider text-xs flex items-center gap-2">
+            <h3 className="font-heading font-semibold text-textPrimary uppercase tracking-wider text-xs flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-electricTangerine" />
               Maintainer Acceptance Criteria
             </h3>

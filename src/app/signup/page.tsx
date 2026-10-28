@@ -112,7 +112,7 @@ function SignupContent() {
           <div className="inline-flex w-12 h-12 rounded-xl bg-electricTangerine/15 border border-electricTangerine/30 items-center justify-center text-electricTangerine mb-3 shadow-glow-tangerine">
             <ContriBLensMark size={24} className="w-6 h-6" />
           </div>
-          <h2 className="text-2xl font-bold text-textPrimary tracking-tight">Create your account</h2>
+          <h2 className="text-2xl font-heading font-bold text-textPrimary tracking-tight">Create your account</h2>
           <p className="mt-1.5 text-xs text-textMuted">
             Sign up with your email and phone to start navigating repositories safely.
           </p>

@@ -281,7 +281,7 @@ export default function ScanView() {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full space-y-8 bg-black text-textPrimary">
       {/* Header */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-textPrimary flex items-center gap-2.5">
+        <h1 className="text-2xl sm:text-3xl font-heading font-bold text-textPrimary flex items-center gap-2.5">
           <Shield className="w-7 h-7 text-electricTangerine" />
           <span>Scan Public Repository</span>
         </h1>
@@ -460,7 +460,7 @@ export default function ScanView() {
                 }`}>
                   {scanResult.hasWarnings ? 'Complete with Warnings' : 'Scan Completed Successfully'}
                 </span>
-                <h3 className="text-lg font-bold text-cotton font-mono">{scanResult.scan.repoName}</h3>
+                <h3 className="text-lg font-heading font-bold text-cotton font-mono">{scanResult.scan.repoName}</h3>
               </div>
 
               <div className="flex items-center gap-2">
@@ -600,7 +600,7 @@ export default function ScanView() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <GitBranch className="w-4 h-4 text-lemonChiffon" />
-              <h3 className="text-sm font-bold text-textPrimary">Previous Repository Scans</h3>
+              <h3 className="text-sm font-heading font-bold text-textPrimary">Previous Repository Scans</h3>
             </div>
             <span className="text-[11px] font-mono text-textMuted">
               {recentScans.length} {recentScans.length === 1 ? 'repository' : 'repositories'}
@@ -615,7 +615,7 @@ export default function ScanView() {
               >
                 <div className="flex items-start justify-between gap-2">
                   <div>
-                    <h4 className="text-xs font-bold font-mono text-textPrimary">{scan.repoName}</h4>
+                    <h4 className="text-xs font-heading font-bold font-mono text-textPrimary">{scan.repoName}</h4>
                     <span className="text-[10px] text-textMuted font-mono">
                       Ref: {scan.branch} • {new Date(scan.scannedAt).toLocaleDateString()}
                     </span>

@@ -227,7 +227,7 @@ export default function FindingDetailPage({
       <div className="min-h-screen bg-[#000000] text-[#F5F3ED] px-4 py-16">
         <div className="max-w-3xl mx-auto text-center space-y-4">
           <AlertTriangle className="w-12 h-12 text-[#FF6D1F] mx-auto" />
-          <h1 className="text-2xl font-bold">Finding Not Found</h1>
+          <h1 className="text-2xl font-heading font-bold">Finding Not Found</h1>
           <p className="text-[#AAA9A1]">
             Finding ID <code className="text-[#FFF8CA]">{findingId}</code> could not be located in this workspace.
           </p>
@@ -321,7 +321,7 @@ export default function FindingDetailPage({
             <span className="text-[11px] font-mono uppercase tracking-wider text-electricTangerine">
               1. What was found
             </span>
-            <h1 className="text-2xl sm:text-3xl font-semibold text-[#F5F3ED] leading-snug mt-1">
+            <h1 className="text-2xl sm:text-3xl font-heading font-semibold text-[#F5F3ED] leading-snug mt-1">
               {finding.title}
             </h1>
           </div>
@@ -370,7 +370,7 @@ export default function FindingDetailPage({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <TrendingUp className="w-5 h-5 text-lemonChiffon" />
-              <h2 className="text-base font-semibold text-[#F5F3ED]">
+              <h2 className="text-base font-heading font-semibold text-[#F5F3ED]">
                 Contribution Readiness &amp; Risk Separation
               </h2>
             </div>
@@ -512,7 +512,7 @@ export default function FindingDetailPage({
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Layers className="w-5 h-5 text-botticelli" />
-                <h2 className="text-base font-semibold text-[#F5F3ED]">
+                <h2 className="text-base font-heading font-semibold text-[#F5F3ED]">
                   Evidence Chain / Trust Trail (8 Traceable Steps)
                 </h2>
               </div>
@@ -554,7 +554,7 @@ export default function FindingDetailPage({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Lock className="w-4 h-4 text-[#FF6D1F]" />
-              <h2 className="text-base font-semibold text-[#F5F3ED] uppercase tracking-wider">
+              <h2 className="text-base font-heading font-semibold text-[#F5F3ED] uppercase tracking-wider">
                 4. Verified Evidence (Redacted)
               </h2>
             </div>
@@ -578,14 +578,14 @@ export default function FindingDetailPage({
         {/* 3 & 11. Why it Matters & Recommended Action */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="p-6 rounded-2xl bg-[#222222]/80 border border-[#FAF3E1]/10 space-y-3">
-            <h3 className="text-xs font-semibold text-[#FF6D1F] uppercase tracking-wider">
+            <h3 className="text-xs font-heading font-semibold text-[#FF6D1F] uppercase tracking-wider">
               3. Why it Matters (Impact)
             </h3>
             <p className="text-sm text-[#F5F3ED]/90 leading-relaxed">{finding.impact}</p>
           </div>
 
           <div className="p-6 rounded-2xl bg-[#222222]/80 border border-[#FAF3E1]/10 space-y-3">
-            <h3 className="text-xs font-semibold text-[#FFF8CA] uppercase tracking-wider">
+            <h3 className="text-xs font-heading font-semibold text-[#FFF8CA] uppercase tracking-wider">
               11. Recommended Action
             </h3>
             <p className="text-sm text-[#F5F3ED]/90 leading-relaxed">{finding.fixHint}</p>
@@ -594,7 +594,7 @@ export default function FindingDetailPage({
 
         {/* 9 & 10. What is Confirmed vs. What is NOT Confirmed (Limitations) */}
         <div className="p-6 sm:p-8 rounded-2xl bg-[#222222]/80 border border-[#FAF3E1]/10 space-y-4">
-          <h2 className="text-sm font-bold text-textPrimary uppercase tracking-wider flex items-center gap-2">
+          <h2 className="text-sm font-heading font-bold text-textPrimary uppercase tracking-wider flex items-center gap-2">
             <Info className="w-4 h-4 text-botticelli" />
             <span>9 &amp; 10. Scanner Scope &amp; Limitations</span>
           </h2>
@@ -632,7 +632,7 @@ export default function FindingDetailPage({
             <div className="flex items-center gap-2">
               <Sparkles className="w-5 h-5 text-lemonChiffon" />
               <div>
-                <h2 className="text-base font-semibold text-[#F5F3ED]">
+                <h2 className="text-base font-heading font-semibold text-[#F5F3ED]">
                   Explanation Depth &amp; Grounded Perspectives
                 </h2>
                 <span className="text-xs text-[#AAA9A1]">
@@ -680,7 +680,7 @@ export default function FindingDetailPage({
             <div className="flex items-center gap-2">
               <Sparkles className="w-5 h-5 text-[#FF6D1F]" />
               <div>
-                <h2 className="text-base font-semibold text-[#F5F3ED]">
+                <h2 className="text-base font-heading font-semibold text-[#F5F3ED]">
                   Gamma 4 Deep Explanation Query
                 </h2>
                 <span className="text-xs text-textMuted">Evidence-grounded assistance (never mutates severity)</span>
@@ -746,7 +746,7 @@ export default function FindingDetailPage({
 
         {/* 13, 14, 15, 16, 17, 18. Contributor Roadmap & Next Actions */}
         <div className="p-6 sm:p-8 rounded-2xl bg-[#222222]/80 border border-[#FAF3E1]/10 space-y-6">
-          <h2 className="text-base font-semibold text-textPrimary flex items-center gap-2">
+          <h2 className="text-base font-heading font-semibold text-textPrimary flex items-center gap-2">
             <Compass className="w-5 h-5 text-electricTangerine" />
             <span>Contributor Roadmap &amp; Actions</span>
           </h2>

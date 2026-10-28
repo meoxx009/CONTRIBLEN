@@ -41,13 +41,13 @@ export default function SecurityModelPage() {
             </span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl font-bold text-[#F5F3ED] tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-heading font-bold text-[#F5F3ED] tracking-tight">
             Security Guarantees &amp; Responsible Disclosure
           </h1>
           <p className="mt-2 text-sm text-[#AAA9A1] leading-relaxed">
             ContribLens adheres to a strict non-negotiable safety invariant:
             <strong className="text-[#FFF8CA] block mt-1 font-semibold">
-              Code verifies. Gemini explains. Human approves.
+              Code verifies. <span className="font-showcase italic font-normal text-lemonChiffon">Gamma 4 explains.</span> Human approves.
             </strong>
           </p>
         </div>
@@ -56,7 +56,7 @@ export default function SecurityModelPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="p-5 rounded-2xl bg-[#222222]/90 border border-[#FAF3E1]/10 space-y-2">
             <Cpu className="w-6 h-6 text-[#FF6D1F]" />
-            <h3 className="text-sm font-semibold text-[#F5F3ED]">1. Code Verifies</h3>
+            <h3 className="text-sm font-heading font-semibold text-[#F5F3ED]">1. Code Verifies</h3>
             <p className="text-xs text-[#AAA9A1] leading-relaxed">
               Vulnerabilities and security risks are detected solely by deterministic parsers and official OSV.dev advisories.
             </p>
@@ -64,7 +64,7 @@ export default function SecurityModelPage() {
 
           <div className="p-5 rounded-2xl bg-[#222222]/90 border border-[#FAF3E1]/10 space-y-2">
             <FileCheck2 className="w-6 h-6 text-[#FFF8CA]" />
-            <h3 className="text-sm font-semibold text-[#F5F3ED]">2. Gemini Explains</h3>
+            <h3 className="text-sm font-heading font-semibold text-[#F5F3ED]">2. Gamma 4 Explains</h3>
             <p className="text-xs text-[#AAA9A1] leading-relaxed">
               AI translates validated evidence into beginner-friendly guidance. AI cannot invent CVEs or inflate severities.
             </p>
@@ -72,7 +72,7 @@ export default function SecurityModelPage() {
 
           <div className="p-5 rounded-2xl bg-[#222222]/90 border border-[#FAF3E1]/10 space-y-2">
             <UserCheck className="w-6 h-6 text-[#CDE3E8]" />
-            <h3 className="text-sm font-semibold text-[#F5F3ED]">3. Human Approves</h3>
+            <h3 className="text-sm font-heading font-semibold text-[#F5F3ED]">3. Human Approves</h3>
             <p className="text-xs text-[#AAA9A1] leading-relaxed">
               No automatic pull requests or public issue spam. Maintainers review, verify, and publish issue drafts manually.
             </p>
@@ -81,7 +81,7 @@ export default function SecurityModelPage() {
 
         {/* What ContribLens Scans vs What It Does Not Scan */}
         <div className="p-6 sm:p-8 rounded-2xl bg-[#222222]/80 border border-[#FAF3E1]/10 space-y-6">
-          <h2 className="text-base font-semibold text-[#FFF8CA] uppercase tracking-wider">
+          <h2 className="text-base font-heading font-semibold text-[#FFF8CA] uppercase tracking-wider">
             Repository Scanning Scope &amp; Safety Boundaries
           </h2>
 
@@ -115,7 +115,7 @@ export default function SecurityModelPage() {
           <div className="p-6 rounded-2xl bg-[#222222]/80 border border-[#FAF3E1]/10 space-y-3">
             <div className="flex items-center gap-2 text-electricTangerine">
               <Lock className="w-5 h-5" />
-              <h3 className="text-sm font-bold text-textPrimary uppercase tracking-wider">
+              <h3 className="text-sm font-heading font-bold text-textPrimary uppercase tracking-wider">
                 Zero Code Execution Guarantee
               </h3>
             </div>
@@ -127,7 +127,7 @@ export default function SecurityModelPage() {
           <div className="p-6 rounded-2xl bg-[#222222]/80 border border-[#FAF3E1]/10 space-y-3">
             <div className="flex items-center gap-2 text-lemonChiffon">
               <EyeOff className="w-5 h-5" />
-              <h3 className="text-sm font-bold text-textPrimary uppercase tracking-wider">
+              <h3 className="text-sm font-heading font-bold text-textPrimary uppercase tracking-wider">
                 Strict Secret Masking
               </h3>
             </div>
@@ -139,7 +139,7 @@ export default function SecurityModelPage() {
 
         {/* GitHub Tokens & Gemini Grounding Invariants */}
         <div className="p-6 sm:p-8 rounded-2xl bg-[#222222]/80 border border-[#FAF3E1]/10 space-y-6">
-          <h2 className="text-base font-semibold text-lemonChiffon uppercase tracking-wider">
+          <h2 className="text-base font-heading font-semibold text-lemonChiffon uppercase tracking-wider">
             Token Isolation &amp; Responsible Disclosure Policy
           </h2>
 
