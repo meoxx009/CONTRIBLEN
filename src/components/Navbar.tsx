@@ -151,7 +151,7 @@ export default function Navbar() {
                 <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-transparent via-white/10 to-transparent pointer-events-none" />
               </div>
               <div className="flex flex-col">
-                <span className="font-bold text-base tracking-tight text-textPrimary flex items-center gap-1.5 group-hover:text-platinumSilver transition-colors">
+                <span className="font-heading font-bold text-base tracking-tight text-textPrimary flex items-center gap-1.5 group-hover:text-platinumSilver transition-colors">
                   <span>Contri<span className="text-textPrimary">B</span><span className="text-electricTangerine">Lens</span></span> <span className="text-[10px] font-semibold bg-coffeeBean text-lemonChiffon border border-lemonChiffon/30 px-2 py-0.5 rounded-full shadow-sm font-mono">OSS</span>
                 </span>
                 <span className="text-[11px] text-textMuted -mt-0.5 hidden sm:inline tracking-wide font-normal">Scan. Understand. Contribute.</span>

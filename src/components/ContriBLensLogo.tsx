@@ -29,7 +29,7 @@ export default function ContriBLensLogo({
 
       {/* Typography: ContriBLens + OSS Badge + Tagline */}
       <div className="flex flex-col">
-        <span className="font-bold text-base tracking-tight text-textPrimary flex items-center gap-1.5 transition-colors">
+        <span className="font-heading font-bold text-base tracking-tight text-textPrimary flex items-center gap-1.5 transition-colors">
           <span>Contri<span className="text-textPrimary">B</span><span className="text-electricTangerine">Lens</span></span>
           {showBadge && (
             <span className="text-[10px] font-semibold bg-coffeeBean text-lemonChiffon border border-lemonChiffon/30 px-2 py-0.5 rounded-full shadow-sm font-mono">

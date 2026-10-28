@@ -10,7 +10,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
           
           <div className="md:col-span-2 space-y-3.5">
-            <div className="flex items-center gap-2.5 text-platinumSilver font-bold text-base">
+            <div className="flex items-center gap-2.5 text-platinumSilver font-heading font-bold text-base">
               <div className="w-7 h-7 rounded-lg bg-electricTangerine/20 border border-electricTangerine/30 flex items-center justify-center">
                 <ContriBLensMark className="w-4 h-4" />
               </div>

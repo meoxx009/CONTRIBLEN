@@ -242,10 +242,10 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* Headline */}
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-textPrimary leading-[1.12]">
+            {/* Headline with Berkelium Sans Heading & Ferdinand Showcase Accent */}
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-heading font-extrabold tracking-tight text-textPrimary leading-[1.12]">
               From security finding to{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-platinumSilver via-lemonChiffon to-electricTangerine">
+              <span className="font-showcase italic font-normal text-transparent bg-clip-text bg-gradient-to-r from-platinumSilver via-lemonChiffon to-electricTangerine">
                 safe contribution.
               </span>
             </h1>
@@ -695,8 +695,8 @@ export default function LandingPage() {
             <span className="text-xs font-bold text-electricTangerine uppercase tracking-widest font-mono">
               Core Safety Commitment
             </span>
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-textPrimary tracking-tight">
-              Code verifies. Gamma 4 explains. Human approves.
+            <h2 className="text-2xl sm:text-4xl font-heading font-extrabold text-textPrimary tracking-tight">
+              Code verifies. <span className="font-showcase italic font-normal text-lemonChiffon">Gamma 4 explains.</span> Human approves.
             </h2>
             <p className="text-xs sm:text-sm text-platinumSilver/80 max-w-xl mx-auto leading-relaxed">
               Deterministic scanner rules own finding existence and severity. Grounded Gamma 4 translates technical evidence into constructive contributor guides without inventing CVEs. External PR creation always requires human maintainer review.

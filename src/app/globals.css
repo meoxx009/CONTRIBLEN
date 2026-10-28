@@ -33,6 +33,12 @@
   --color-info: #CDE3E8;
   --shadow-glass: 0 20px 48px -12px rgba(0, 0, 0, 0.7);
   --blur-glass: 20px;
+
+  /* Centralized Typography Tokens per Section 7 */
+  --font-heading: 'Berkelium Sans', 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-showcase: 'Ferdinand', 'Playfair Display', Georgia, Cambria, 'Times New Roman', serif;
+  --font-body: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-technical: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
 body {
@@ -245,4 +251,102 @@ html.text-base-mode {
 }
 html.text-lg-mode {
   font-size: 18px;
+}
+
+/* ========================================================
+   Typography System — Berkelium Sans & Ferdinand
+   ======================================================== */
+
+/* Berkelium Sans: Primary Heading Family */
+@font-face {
+  font-family: 'Berkelium Sans';
+  src: url('/fonts/BerkeliumSans-Regular.woff2') format('woff2'),
+       url('/fonts/BerkeliumSans-Regular.woff') format('woff'),
+       url('/fonts/BerkeliumSans-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Berkelium Sans';
+  src: url('/fonts/BerkeliumSans-Medium.woff2') format('woff2'),
+       url('/fonts/BerkeliumSans-Medium.woff') format('woff'),
+       url('/fonts/BerkeliumSans-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Berkelium Sans';
+  src: url('/fonts/BerkeliumSans-SemiBold.woff2') format('woff2'),
+       url('/fonts/BerkeliumSans-SemiBold.woff') format('woff'),
+       url('/fonts/BerkeliumSans-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Berkelium Sans';
+  src: url('/fonts/BerkeliumSans-Bold.woff2') format('woff2'),
+       url('/fonts/BerkeliumSans-Bold.woff') format('woff'),
+       url('/fonts/BerkeliumSans-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Ferdinand: Showcase Display Serif Family */
+@font-face {
+  font-family: 'Ferdinand';
+  src: url('/fonts/Ferdinand-Regular.woff2') format('woff2'),
+       url('/fonts/Ferdinand-Regular.woff') format('woff'),
+       url('/fonts/Ferdinand-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Ferdinand';
+  src: url('/fonts/Ferdinand-SemiBold.woff2') format('woff2'),
+       url('/fonts/Ferdinand-SemiBold.woff') format('woff'),
+       url('/fonts/Ferdinand-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Ferdinand';
+  src: url('/fonts/Ferdinand-Bold.woff2') format('woff2'),
+       url('/fonts/Ferdinand-Bold.woff') format('woff'),
+       url('/fonts/Ferdinand-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Typography Token Utility Classes */
+.font-heading {
+  font-family: var(--font-heading);
+}
+
+.font-showcase {
+  font-family: var(--font-showcase);
+}
+
+.font-body {
+  font-family: var(--font-body);
+}
+
+.font-technical {
+  font-family: var(--font-technical);
+}
+
+/* Global Heading Assignment to Berkelium Sans */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
 }

@@ -52,6 +52,10 @@ const config: Config = {
       fontFamily: {
         sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', '"Segoe UI"', 'sans-serif'],
         mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace'],
+        heading: ['var(--font-heading)', 'Berkelium Sans', 'Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        showcase: ['var(--font-showcase)', 'Ferdinand', 'Playfair Display', 'Georgia', 'serif'],
+        body: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', '"Segoe UI"', 'sans-serif'],
+        technical: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace'],
       },
       boxShadow: {
         'glow-tangerine': '0 0 50px -10px rgba(255, 109, 31, 0.45)',
