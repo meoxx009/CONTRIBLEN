@@ -21,6 +21,40 @@ export interface BoundedFile {
   content: string;
 }
 
+export class GitHubRateLimitError extends Error {
+  resetTime?: Date;
+  constructor(message: string, resetTime?: Date) {
+    super(message);
+    this.name = 'GitHubRateLimitError';
+    this.resetTime = resetTime;
+  }
+}
+
+export class GitHubNotFoundError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'GitHubNotFoundError';
+  }
+}
+
+export class GitHubBranchNotFoundError extends Error {
+  branch: string;
+  defaultBranch?: string;
+  constructor(message: string, branch: string, defaultBranch?: string) {
+    super(message);
+    this.name = 'GitHubBranchNotFoundError';
+    this.branch = branch;
+    this.defaultBranch = defaultBranch;
+  }
+}
+
+export class GitHubAuthError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'GitHubAuthError';
+  }
+}
+
 const MAX_FILES = Number(process.env.SCAN_MAX_FILES) || 60;
 const MAX_FILE_SIZE_BYTES = Number(process.env.SCAN_MAX_FILE_BYTES) || 180 * 1024;
 const MAX_TOTAL_BYTES = Number(process.env.SCAN_MAX_TOTAL_BYTES) || 3 * 1024 * 1024;
@@ -49,16 +83,44 @@ const IGNORED_DIRECTORIES = [
   'coverage/',
 ];
 
-export function parseGitHubUrl(rawUrl: string): { owner: string; repo: string } | null {
-  try {
-    let cleanUrl = rawUrl.trim().replace(/\/$/, '');
-    if (!cleanUrl) return null;
+function isValidGitHubIdentifier(val: string): boolean {
+  return /^[a-zA-Z0-9_\-\.]+$/.test(val) && val !== '.' && val !== '..';
+}
 
-    if (!cleanUrl.startsWith('http://') && !cleanUrl.startsWith('https://')) {
-      cleanUrl = 'https://' + cleanUrl;
+export function parseGitHubUrl(rawUrl: string): { owner: string; repo: string; branch?: string } | null {
+  try {
+    if (!rawUrl || typeof rawUrl !== 'string') return null;
+    let clean = rawUrl.trim();
+    if (!clean) return null;
+
+    // Strip hash and query parameters
+    clean = clean.split('#')[0].split('?')[0].trim();
+    // Strip trailing slashes
+    clean = clean.replace(/\/+$/, '');
+
+    // SSH format: git@github.com:owner/repo(.git)
+    if (clean.startsWith('git@github.com:')) {
+      clean = clean.replace(/^git@github\.com:/, 'https://github.com/');
     }
 
-    const parsed = new URL(cleanUrl);
+    // Shorthand format: owner/repo(.git)
+    if (!clean.includes('://') && !clean.includes('github.com')) {
+      const parts = clean.split('/');
+      if (parts.length === 2) {
+        const owner = parts[0];
+        const repo = parts[1].replace(/\.git$/i, '');
+        if (isValidGitHubIdentifier(owner) && isValidGitHubIdentifier(repo)) {
+          return { owner, repo };
+        }
+      }
+      return null;
+    }
+
+    if (!clean.startsWith('http://') && !clean.startsWith('https://')) {
+      clean = 'https://' + clean;
+    }
+
+    const parsed = new URL(clean);
     const hostname = parsed.hostname.toLowerCase();
     if (hostname !== 'github.com' && hostname !== 'www.github.com') {
       return null;
@@ -68,13 +130,26 @@ export function parseGitHubUrl(rawUrl: string): { owner: string; repo: string } 
     if (parts.length < 2) return null;
 
     const owner = parts[0];
-    const repo = parts[1].replace(/\.git$/, '');
+    const repo = parts[1].replace(/\.git$/i, '');
 
-    if (!owner || !repo || !/^[a-zA-Z0-9_\-\.]+$/.test(owner) || !/^[a-zA-Z0-9_\-\.]+$/.test(repo)) {
+    if (!isValidGitHubIdentifier(owner) || !isValidGitHubIdentifier(repo)) {
       return null;
     }
 
-    return { owner, repo };
+    let branch: string | undefined = undefined;
+    if (parts.length >= 4 && (parts[2] === 'tree' || parts[2] === 'blob')) {
+      if (parts[2] === 'tree') {
+        branch = parts.slice(3).join('/');
+      } else if (parts[2] === 'blob') {
+        branch = parts[3];
+      }
+    }
+
+    const result: { owner: string; repo: string; branch?: string } = { owner, repo };
+    if (branch) {
+      result.branch = branch;
+    }
+    return result;
   } catch {
     return null;
   }
@@ -96,11 +171,20 @@ export async function fetchRepoMetadata(owner: string, repo: string): Promise<Gi
   const response = await fetch(url, { headers: getGitHubHeaders() });
 
   if (!response.ok) {
-    if (response.status === 404) {
-      throw new Error(`Repository "${owner}/${repo}" was not found or is private.`);
+    if (response.status === 401) {
+      throw new GitHubAuthError('GitHub API token is invalid or unauthorized. Please verify the configured GITHUB_TOKEN.');
     }
-    if (response.status === 403) {
-      throw new Error('GitHub API rate limit exceeded. Please configure a read-only GITHUB_TOKEN in settings or wait.');
+    if (response.status === 403 || response.status === 429) {
+      const resetHeader = response.headers.get('x-ratelimit-reset');
+      const resetTime = resetHeader ? new Date(Number(resetHeader) * 1000) : undefined;
+      const resetMsg = resetTime ? ` Rate limit resets at ${resetTime.toLocaleTimeString()} UTC.` : '';
+      throw new GitHubRateLimitError(
+        `GitHub API rate limit exceeded.${resetMsg} Please configure a read-only GITHUB_TOKEN in your environment or retry later.`,
+        resetTime
+      );
+    }
+    if (response.status === 404) {
+      throw new GitHubNotFoundError(`Repository "${owner}/${repo}" was not found or is private.`);
     }
     throw new Error(`GitHub API error: ${response.statusText} (${response.status})`);
   }
@@ -121,13 +205,34 @@ export async function fetchRepoMetadata(owner: string, repo: string): Promise<Gi
 export async function fetchBoundedRepositoryTree(
   owner: string,
   repo: string,
-  branch: string
+  branch: string,
+  defaultBranch?: string
 ): Promise<{ files: BoundedFile[]; totalFilesIndexed: number; totalBytes: number; warnings: string[] }> {
-  const treeUrl = `https://api.github.com/repos/${owner}/${repo}/git/trees/${branch}?recursive=1`;
+  const treeUrl = `https://api.github.com/repos/${owner}/${repo}/git/trees/${encodeURIComponent(branch)}?recursive=1`;
   const response = await fetch(treeUrl, { headers: getGitHubHeaders() });
 
   if (!response.ok) {
-    throw new Error(`Failed to load repository tree for branch "${branch}": ${response.statusText}`);
+    if (response.status === 401) {
+      throw new GitHubAuthError('GitHub API token is invalid or unauthorized.');
+    }
+    if (response.status === 403 || response.status === 429) {
+      const resetHeader = response.headers.get('x-ratelimit-reset');
+      const resetTime = resetHeader ? new Date(Number(resetHeader) * 1000) : undefined;
+      const resetMsg = resetTime ? ` Rate limit resets at ${resetTime.toLocaleTimeString()} UTC.` : '';
+      throw new GitHubRateLimitError(
+        `GitHub API rate limit exceeded.${resetMsg} Please configure a read-only GITHUB_TOKEN in your environment or retry later.`,
+        resetTime
+      );
+    }
+    if (response.status === 404) {
+      const defaultHint = defaultBranch ? ` (default branch: "${defaultBranch}")` : '';
+      throw new GitHubBranchNotFoundError(
+        `Branch "${branch}" was not found in repository "${owner}/${repo}"${defaultHint}. Please verify the branch name or select the default branch.`,
+        branch,
+        defaultBranch
+      );
+    }
+    throw new Error(`Failed to load repository tree for branch "${branch}": ${response.statusText || response.status}`);
   }
 
   const data = await response.json();

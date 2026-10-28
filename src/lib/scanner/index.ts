@@ -26,6 +26,7 @@ import { createFindingEvidence } from './evidence.ts';
 import { triageFinding } from './readiness.ts';
 import { buildEvidenceChain } from './evidence-chain.ts';
 import { compareScans, computeFindingFingerprint } from './diff.ts';
+import { buildContributionRoute } from '../gemini.ts';
 import { db } from '../db.ts';
 import type { Finding, FindingEvidence, ScanSummary, TechStack } from '../../types.ts';
 
@@ -208,13 +209,14 @@ export async function executeRepositoryScan(
 
   // 1. Fetch metadata
   const meta = await fetchRepoMetadata(owner, repo);
-  const targetBranch = branch?.trim() || meta.defaultBranch || 'main';
+  const targetBranch = branch?.trim() || parsed.branch?.trim() || meta.defaultBranch || 'main';
 
   // 2. Fetch bounded file tree
   const { files, totalFilesIndexed, totalBytes, warnings } = await fetchBoundedRepositoryTree(
     owner,
     repo,
-    targetBranch
+    targetBranch,
+    meta.defaultBranch
   );
 
   // 3. Execute pure in-memory deterministic scan
@@ -324,6 +326,31 @@ export async function executeRepositoryScan(
   // Save to DB
   db.saveScan(scanSummary);
   db.saveFindings(enrichedFindings);
+
+  // Auto-generate initial contribution routes for top eligible findings (up to 5)
+  // Secrets and private disclosures are strictly excluded from public routes
+  const eligibleFindings = enrichedFindings.filter(
+    (f) => f.category !== 'secret' && f.disclosureMode !== 'security-disclosure'
+  );
+  const sortedFindings = [...eligibleFindings].sort((a, b) => {
+    const aIsGoodFirst = a.readiness?.label === 'good-first-contribution' ? 1 : 0;
+    const bIsGoodFirst = b.readiness?.label === 'good-first-contribution' ? 1 : 0;
+    if (aIsGoodFirst !== bIsGoodFirst) return bIsGoodFirst - aIsGoodFirst;
+    return (b.urgencyScore ?? 0) - (a.urgencyScore ?? 0);
+  });
+
+  const routesToCreate = sortedFindings.slice(0, 5);
+  for (const f of routesToCreate) {
+    try {
+      const route = await buildContributionRoute(f, scanSummary);
+      db.saveRoute(route);
+      f.routeCreated = true;
+      f.routeId = route.id;
+      db.updateFinding(f);
+    } catch (routeErr) {
+      console.warn(`Auto-generating route for finding ${f.id} skipped:`, routeErr);
+    }
+  }
 
   // Log user activity
   db.logActivity({

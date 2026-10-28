@@ -28,7 +28,13 @@ console.log('Running ContribLens test suite...\n');
 }
 
 // 2. GitHub URL Validation tests
-import { parseGitHubUrl } from '../src/lib/scanner/github.ts';
+import {
+  parseGitHubUrl,
+  GitHubRateLimitError,
+  GitHubBranchNotFoundError,
+  GitHubNotFoundError,
+  GitHubAuthError,
+} from '../src/lib/scanner/github.ts';
 {
   const valid1 = parseGitHubUrl('https://github.com/expressjs/express');
   assert.deepStrictEqual(valid1, { owner: 'expressjs', repo: 'express' });
@@ -1569,6 +1575,64 @@ import { generateContributionPackMarkdown } from '../src/lib/scanner/learning.ts
   console.log('✓ Contribution Pack Export: complete self-contained markdown, zero secrets, readiness, evidence chain, and draft verified');
 }
 
+// 29. Section 14 Regression Suite: URL Normalization, Branch Extraction, Typed Errors & Route Auto-Creation
+{
+  // 1. Canonical repository URL
+  assert.deepStrictEqual(parseGitHubUrl('https://github.com/meoxx009/career-AI'), { owner: 'meoxx009', repo: 'career-AI' });
+
+  // 2. URL with .git suffix
+  assert.deepStrictEqual(parseGitHubUrl('https://github.com/meoxx009/career-AI.git'), { owner: 'meoxx009', repo: 'career-AI' });
+
+  // 3. URL with trailing slash
+  assert.deepStrictEqual(parseGitHubUrl('https://github.com/meoxx009/career-AI/'), { owner: 'meoxx009', repo: 'career-AI' });
+
+  // 4. URL with .git and trailing slash
+  assert.deepStrictEqual(parseGitHubUrl('https://github.com/meoxx009/career-AI.git/'), { owner: 'meoxx009', repo: 'career-AI' });
+
+  // 5. Shorthand owner/repo
+  assert.deepStrictEqual(parseGitHubUrl('meoxx009/career-AI'), { owner: 'meoxx009', repo: 'career-AI' });
+
+  // 6. Shorthand owner/repo.git
+  assert.deepStrictEqual(parseGitHubUrl('meoxx009/career-AI.git'), { owner: 'meoxx009', repo: 'career-AI' });
+
+  // 7. HTTP URL
+  assert.deepStrictEqual(parseGitHubUrl('http://github.com/meoxx009/career-AI'), { owner: 'meoxx009', repo: 'career-AI' });
+
+  // 8. Without protocol
+  assert.deepStrictEqual(parseGitHubUrl('github.com/meoxx009/career-AI'), { owner: 'meoxx009', repo: 'career-AI' });
+
+  // 9. URL with branch path
+  assert.deepStrictEqual(parseGitHubUrl('https://github.com/meoxx009/career-AI/tree/main'), { owner: 'meoxx009', repo: 'career-AI', branch: 'main' });
+
+  // 10. Multi-segment branch path
+  assert.deepStrictEqual(parseGitHubUrl('https://github.com/meoxx009/career-AI/tree/feature/sub-branch'), { owner: 'meoxx009', repo: 'career-AI', branch: 'feature/sub-branch' });
+
+  // 11. Query params and hash
+  assert.deepStrictEqual(parseGitHubUrl('https://github.com/meoxx009/career-AI.git?tab=readme-ov-file#installation'), { owner: 'meoxx009', repo: 'career-AI' });
+
+  // 12. SSH git format
+  assert.deepStrictEqual(parseGitHubUrl('git@github.com:meoxx009/career-AI.git'), { owner: 'meoxx009', repo: 'career-AI' });
+
+  // 13. Typed Errors
+  const resetEpoch = new Date(Date.now() + 1800000);
+  const rateLimitErr = new GitHubRateLimitError('Rate limit exceeded', resetEpoch);
+  assert.strictEqual(rateLimitErr.name, 'GitHubRateLimitError');
+  assert.strictEqual(rateLimitErr.resetTime, resetEpoch);
+
+  const branchErr = new GitHubBranchNotFoundError('Branch dev not found', 'dev', 'main');
+  assert.strictEqual(branchErr.name, 'GitHubBranchNotFoundError');
+  assert.strictEqual(branchErr.branch, 'dev');
+  assert.strictEqual(branchErr.defaultBranch, 'main');
+
+  const notFoundErr = new GitHubNotFoundError('Repository not found or private');
+  assert.strictEqual(notFoundErr.name, 'GitHubNotFoundError');
+
+  const authErr = new GitHubAuthError('Invalid token');
+  assert.strictEqual(authErr.name, 'GitHubAuthError');
+
+  console.log('✓ Section 14 Regressions: URL normalization variants, branch extraction, and typed GitHub errors verified');
+}
+
 console.log('\n=========================================');
-console.log('🎉 ALL 28 TEST SUITES PASSED CLEANLY (100%)');
+console.log('🎉 ALL 29 TEST SUITES PASSED CLEANLY (100%)');
 console.log('=========================================\n');

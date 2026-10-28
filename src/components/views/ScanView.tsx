@@ -36,6 +36,7 @@ interface FailureDetails {
   type:
     | 'invalid_url'
     | 'not_found'
+    | 'branch_not_found'
     | 'private_or_unavailable'
     | 'rate_limited'
     | 'tree_too_large'
@@ -44,6 +45,8 @@ interface FailureDetails {
     | 'persist_failed';
   userMessage: string;
   correlationId: string;
+  resetTime?: string;
+  defaultBranch?: string;
 }
 
 const STAGE_LABELS: Record<ScanStage, string> = {
@@ -114,69 +117,90 @@ export default function ScanView() {
     }
   };
 
-  const classifyError = (rawMessage: string): FailureDetails => {
-    const correlationId = `CS-ERR-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+  const classifyError = (
+    rawMessage: string,
+    errorCode?: string,
+    correlationIdParam?: string,
+    resetTime?: string,
+    defaultBranch?: string
+  ): FailureDetails => {
+    const correlationId = correlationIdParam || `CS-ERR-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
     const lower = rawMessage.toLowerCase();
 
-    if (lower.includes('invalid') || lower.includes('format')) {
+    if (errorCode === 'GITHUB_INVALID_URL' || lower.includes('invalid') || lower.includes('format')) {
       return {
         type: 'invalid_url',
-        userMessage: 'The provided URL is not a recognized public GitHub repository format. Please verify the URL.',
+        userMessage: rawMessage || 'The provided URL is not a recognized public GitHub repository format. Please verify the URL.',
         correlationId,
       };
     }
-    if (lower.includes('not found') || lower.includes('404')) {
+    if (errorCode === 'GITHUB_BRANCH_NOT_FOUND' || (lower.includes('branch') && (lower.includes('not found') || lower.includes('failed to load')))) {
       return {
-        type: 'not_found',
-        userMessage: 'Repository could not be found. Check for typos or verify the repository exists on GitHub.',
+        type: 'branch_not_found',
+        userMessage: rawMessage || 'The specified branch was not found in this repository.',
         correlationId,
+        defaultBranch,
       };
     }
-    if (lower.includes('rate limit') || lower.includes('403')) {
+    if (errorCode === 'GITHUB_RATE_LIMITED' || lower.includes('rate limit') || lower.includes('403') || lower.includes('429')) {
       return {
         type: 'rate_limited',
-        userMessage: 'GitHub API hourly rate limit reached for unauthenticated requests. You may configure a read-only token in .env.local to proceed immediately.',
+        userMessage: rawMessage || 'GitHub API rate limit reached. Configure a read-only token in .env.local or retry later.',
+        correlationId,
+        resetTime,
+      };
+    }
+    if (errorCode === 'GITHUB_NOT_FOUND') {
+      return {
+        type: 'not_found',
+        userMessage: rawMessage || 'Repository could not be found. Check for typos or verify the repository exists on GitHub.',
         correlationId,
       };
     }
-    if (lower.includes('private') || lower.includes('authentication')) {
+    if (errorCode === 'GITHUB_PRIVATE_OR_UNAVAILABLE' || lower.includes('private') || lower.includes('authentication')) {
       return {
         type: 'private_or_unavailable',
-        userMessage: 'The requested repository appears to be private or unavailable for public auditing.',
+        userMessage: rawMessage || 'The requested repository appears to be private or unavailable for public auditing.',
         correlationId,
       };
     }
-    if (lower.includes('tree') || lower.includes('size') || lower.includes('large')) {
+    if (
+      errorCode === 'GITHUB_TREE_TRUNCATED' ||
+      errorCode === 'GITHUB_FILE_LIMIT' ||
+      lower.includes('tree') ||
+      lower.includes('size') ||
+      lower.includes('large')
+    ) {
       return {
         type: 'tree_too_large',
-        userMessage: 'Repository file tree exceeds bounded safety constraints (60 files max).',
+        userMessage: rawMessage || 'Repository file tree exceeds bounded safety constraints (60 files max).',
         correlationId,
       };
     }
-    if (lower.includes('osv') || lower.includes('dependency')) {
+    if (errorCode === 'OSV_UNAVAILABLE' || lower.includes('osv') || lower.includes('dependency')) {
       return {
         type: 'dependency_lookup_unavailable',
-        userMessage: 'OSV.dev vulnerability lookup was temporarily unavailable. Deterministic analysis was preserved.',
+        userMessage: rawMessage || 'OSV.dev vulnerability lookup was temporarily unavailable. Deterministic analysis was preserved.',
         correlationId,
       };
     }
-    if (lower.includes('persist') || lower.includes('db')) {
+    if (errorCode === 'PERSISTENCE_FAILED' || lower.includes('persist') || lower.includes('db')) {
       return {
         type: 'persist_failed',
-        userMessage: 'Failed to write scan results to disk store. Please retry the scan.',
+        userMessage: rawMessage || 'Failed to write scan results to disk store. Please retry the scan.',
         correlationId,
       };
     }
 
     return {
       type: 'network_error',
-      userMessage: 'A temporary network interruption occurred while connecting to GitHub. Your input has been preserved.',
+      userMessage: rawMessage || 'A temporary network interruption occurred while connecting to GitHub. Your input has been preserved.',
       correlationId,
     };
   };
 
-  const handleScan = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleScan = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     setFailure(null);
     setScanResult(null);
 
@@ -190,10 +214,11 @@ export default function ScanView() {
       return;
     }
 
-    if (!cleanUrl.includes('github.com/')) {
+    const isShorthand = /^[a-zA-Z0-9_\-\.]+\/[a-zA-Z0-9_\-\.]+$/.test(cleanUrl);
+    if (!cleanUrl.includes('github.com/') && !isShorthand && !cleanUrl.startsWith('git@github.com:')) {
       setFailure({
         type: 'invalid_url',
-        userMessage: 'URL must be a public GitHub repository (e.g. https://github.com/expressjs/express).',
+        userMessage: 'URL must be a public GitHub repository (e.g. https://github.com/expressjs/express or owner/repo).',
         correlationId: `CS-ERR-${Math.random().toString(36).substring(2, 8).toUpperCase()}`,
       });
       return;
@@ -237,7 +262,16 @@ export default function ScanView() {
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.error || 'Failed to scan repository.');
+        setStage('idle');
+        const failureObj = classifyError(
+          data.error || 'Failed to scan repository.',
+          data.errorCode,
+          data.correlationId,
+          data.resetTime,
+          data.defaultBranch
+        );
+        setFailure(failureObj);
+        return;
       }
 
       // Check if complete or complete_with_warnings
@@ -292,19 +326,47 @@ export default function ScanView() {
 
       {/* Scan Input Form */}
       <div className="glass-panel p-6 sm:p-8 rounded-2xl shadow-glass-card space-y-6 border border-borderDark">
-        {/* Failure State Display with Safe User Message + Correlation ID */}
+        {/* Failure State Display with Safe User Message + Correlation ID + Actions */}
         {failure && (
-          <div className="p-4 rounded-xl bg-rosewood/40 border border-rosewood text-cotton text-xs sm:text-sm space-y-2">
+          <div className="p-4 rounded-xl bg-rosewood/40 border border-rosewood text-cotton text-xs sm:text-sm space-y-3">
             <div className="flex items-start gap-2.5">
               <AlertTriangle className="w-4 h-4 shrink-0 text-lemonChiffon mt-0.5" />
-              <div className="space-y-1">
+              <div className="space-y-1.5 flex-1">
                 <span className="font-semibold block text-lemonChiffon uppercase tracking-wider text-[11px]">
                   Scan Failed ({failure.type.replace(/_/g, ' ')})
                 </span>
-                <p>{failure.userMessage}</p>
+                <p className="leading-relaxed">{failure.userMessage}</p>
+                {failure.resetTime && (
+                  <p className="text-[11px] text-lemonChiffon/90">
+                    Estimated Rate Limit Reset: <span className="font-mono">{new Date(failure.resetTime).toLocaleTimeString()} UTC</span>
+                  </p>
+                )}
                 <span className="font-mono text-[10px] text-textMuted block">
                   Support Correlation ID: {failure.correlationId}
                 </span>
+
+                {/* Helpful Action Buttons */}
+                <div className="flex flex-wrap items-center gap-2 pt-2">
+                  {failure.type === 'branch_not_found' && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setBranch(failure.defaultBranch || 'main');
+                        setFailure(null);
+                      }}
+                      className="px-3 py-1 rounded-full bg-lemonChiffon text-black text-[11px] font-semibold hover:bg-sustainableLinen transition-colors"
+                    >
+                      Use default branch ({failure.defaultBranch || 'main'})
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => handleScan()}
+                    className="px-3 py-1 rounded-full bg-black border border-lemonChiffon/40 text-lemonChiffon text-[11px] font-semibold hover:bg-lemonChiffon hover:text-black transition-colors"
+                  >
+                    Retry Scan
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -318,11 +380,12 @@ export default function ScanView() {
             </label>
             <div className="relative">
               <input
-                type="url"
+                type="text"
+                inputMode="url"
                 required
                 value={repoUrl}
                 onChange={(e) => setRepoUrl(e.target.value)}
-                placeholder="https://github.com/owner/repository"
+                placeholder="https://github.com/owner/repository or owner/repo"
                 disabled={scanning}
                 className="w-full pl-11 pr-4 py-3.5 bg-black border border-borderDark rounded-xl text-base text-textPrimary placeholder-textMuted/40 focus:outline-none focus:border-lemonChiffon focus:ring-1 focus:ring-lemonChiffon font-mono transition-colors"
               />

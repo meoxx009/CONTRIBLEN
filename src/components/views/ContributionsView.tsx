@@ -1191,9 +1191,24 @@ function ContributionsContent() {
             </div>
             
             <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+              {findings.length > 0 && (
+                <button
+                  type="button"
+                  onClick={handleAutoGenerateRoutes}
+                  disabled={generatingAllRoutes}
+                  className="px-5 py-2.5 rounded-full bg-lemonChiffon text-black text-xs font-semibold hover:bg-sustainableLinen transition-colors shadow-sm flex items-center gap-1.5 disabled:opacity-50"
+                >
+                  {generatingAllRoutes ? (
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  ) : (
+                    <Sparkles className="w-3.5 h-3.5 text-electricTangerine" />
+                  )}
+                  <span>Generate Routes from Findings ({findings.length})</span>
+                </button>
+              )}
               <Link
                 href="/app/findings"
-                className="px-5 py-2.5 rounded-full bg-lemonChiffon text-black text-xs font-semibold hover:bg-sustainableLinen transition-colors shadow-sm"
+                className="px-5 py-2.5 rounded-full bg-coffeeBean border border-lemonChiffon/30 text-lemonChiffon text-xs font-semibold hover:bg-coffeeBean/80 transition-colors"
               >
                 Browse Verified Findings →
               </Link>

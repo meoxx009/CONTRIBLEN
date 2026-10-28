@@ -2,7 +2,13 @@ import { NextResponse } from 'next/server';
 import { getCurrentUser } from '@/lib/auth';
 import { executeRepositoryScan } from '@/lib/scanner';
 import { db } from '@/lib/db';
-import { parseGitHubUrl } from '@/lib/scanner/github';
+import {
+  parseGitHubUrl,
+  GitHubRateLimitError,
+  GitHubBranchNotFoundError,
+  GitHubNotFoundError,
+  GitHubAuthError,
+} from '@/lib/scanner/github';
 import type { ContribLensErrorCode } from '@/types';
 
 // In-memory rate limiting and concurrency tracking
@@ -114,6 +120,7 @@ export async function POST(req: Request) {
       );
     }
 
+    const effectiveRef = ref || parsed.branch;
     const expectedRepoName = `${parsed.owner}/${parsed.repo}`;
 
     // Caching check per API INTEGRATION.md Section 7
@@ -122,7 +129,7 @@ export async function POST(req: Request) {
       const recentScan = existingScans.find(
         (s) =>
           s.repoName.toLowerCase() === expectedRepoName.toLowerCase() &&
-          (!ref || s.branch === ref) &&
+          (!effectiveRef || s.branch === effectiveRef) &&
           Date.now() - new Date(s.scannedAt).getTime() < CACHE_TTL_MS
       );
 
@@ -162,7 +169,7 @@ export async function POST(req: Request) {
     }
 
     // Execute pure deterministic scan bounded by safety caps
-    const result = await executeRepositoryScan(repoUrl, user.id, ref, checks);
+    const result = await executeRepositoryScan(repoUrl, user.id, effectiveRef, checks);
     releaseActiveScan(user.id);
 
     const findingsCount = result.scan.findingsCount;
@@ -204,33 +211,58 @@ export async function POST(req: Request) {
 
     let errorCode: ContribLensErrorCode = 'PERSISTENCE_FAILED';
     let statusCode = 500;
+    let resetTime: string | undefined = undefined;
+    let defaultBranch: string | undefined = undefined;
 
-    const lower = message.toLowerCase();
-
-    if (lower.includes('not found') || lower.includes('404')) {
-      errorCode = 'GITHUB_NOT_FOUND';
-      statusCode = 404;
-    } else if (lower.includes('private') || lower.includes('access')) {
-      errorCode = 'GITHUB_PRIVATE_OR_UNAVAILABLE';
-      statusCode = 404;
-    } else if (lower.includes('rate limit') || lower.includes('403') || lower.includes('429')) {
+    if (error instanceof GitHubRateLimitError || error?.name === 'GitHubRateLimitError') {
       errorCode = 'GITHUB_RATE_LIMITED';
       statusCode = 429;
-    } else if (lower.includes('tree') || lower.includes('truncate') || lower.includes('candidate')) {
-      errorCode = 'GITHUB_TREE_TRUNCATED';
-      statusCode = 422;
-    } else if (lower.includes('3 mb') || lower.includes('180 kb') || lower.includes('limit')) {
-      errorCode = 'GITHUB_FILE_LIMIT';
-      statusCode = 413;
-    } else if (lower.includes('osv') || lower.includes('advisory')) {
-      errorCode = 'OSV_UNAVAILABLE';
-      statusCode = 503;
+      resetTime = error.resetTime?.toISOString();
+    } else if (error instanceof GitHubBranchNotFoundError || error?.name === 'GitHubBranchNotFoundError') {
+      errorCode = 'GITHUB_BRANCH_NOT_FOUND';
+      statusCode = 404;
+      defaultBranch = error.defaultBranch;
+    } else if (error instanceof GitHubNotFoundError || error?.name === 'GitHubNotFoundError') {
+      errorCode = 'GITHUB_NOT_FOUND';
+      statusCode = 404;
+    } else if (error instanceof GitHubAuthError || error?.name === 'GitHubAuthError') {
+      errorCode = 'AUTH_INVALID_CREDENTIALS';
+      statusCode = 401;
+    } else {
+      const lower = message.toLowerCase();
+      if (lower.includes('rate limit') || lower.includes('403') || lower.includes('429')) {
+        errorCode = 'GITHUB_RATE_LIMITED';
+        statusCode = 429;
+      } else if (lower.includes('branch') && (lower.includes('not found') || lower.includes('failed to load'))) {
+        errorCode = 'GITHUB_BRANCH_NOT_FOUND';
+        statusCode = 404;
+      } else if (lower.includes('not found') || lower.includes('404')) {
+        errorCode = 'GITHUB_NOT_FOUND';
+        statusCode = 404;
+      } else if (lower.includes('private') || lower.includes('access')) {
+        errorCode = 'GITHUB_PRIVATE_OR_UNAVAILABLE';
+        statusCode = 404;
+      } else if (lower.includes('tree') || lower.includes('truncate') || lower.includes('candidate')) {
+        errorCode = 'GITHUB_TREE_TRUNCATED';
+        statusCode = 422;
+      } else if (lower.includes('3 mb') || lower.includes('180 kb') || lower.includes('limit')) {
+        errorCode = 'GITHUB_FILE_LIMIT';
+        statusCode = 413;
+      } else if (lower.includes('osv') || lower.includes('advisory')) {
+        errorCode = 'OSV_UNAVAILABLE';
+        statusCode = 503;
+      }
     }
+
+    const correlationId = `CS-ERR-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
 
     return NextResponse.json(
       {
         error: message,
         errorCode,
+        correlationId,
+        resetTime,
+        defaultBranch,
         ok: false,
         success: false,
       },

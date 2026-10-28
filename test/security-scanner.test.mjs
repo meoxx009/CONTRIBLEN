@@ -4,14 +4,21 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import { redactSecrets, detectSecretsInText, computeEvidenceHash } from '../src/lib/redaction.ts';
-import { parseGitHubUrl } from '../src/lib/scanner/github.ts';
+import {
+  parseGitHubUrl,
+  GitHubRateLimitError,
+  GitHubBranchNotFoundError,
+  GitHubNotFoundError,
+  GitHubAuthError,
+} from '../src/lib/scanner/github.ts';
 import { parsePackageJson, parseRequirementsTxt, parsePyprojectToml } from '../src/lib/scanner/manifests.ts';
 import { scanGitHubActions } from '../src/lib/scanner/actions.ts';
 import { checkRepositoryHealth } from '../src/lib/scanner/health.ts';
 import { detectTechnologyStack } from '../src/lib/scanner/tech-detector.ts';
 import { createFindingEvidence, convertToTechnologySnapshot } from '../src/lib/scanner/evidence.ts';
 import { scanRepositoryFiles } from '../src/lib/scanner/index.ts';
-import { explainFinding } from '../src/lib/gemini.ts';
+import { explainFinding, buildContributionRoute } from '../src/lib/gemini.ts';
+import { db } from '../src/lib/db.ts';
 
 const FIXTURES_DIR = path.join(process.cwd(), 'test', 'fixtures');
 
@@ -478,5 +485,163 @@ describe('ContribLens Technology Stack Detection Pipeline & Gemini Context Integ
     assert.strictEqual(explanation.repositoryContext.packageManager, 'pnpm');
     assert.ok(explanation.repositoryContext.tooling.includes('Jest'));
     assert.ok(explanation.recommendedFix.includes('pnpm'), 'Recommended fix should leverage detected package manager');
+  });
+});
+
+describe('ContribLens Robust URL Parsing, Error Classification & Route Generation Regressions (Section 14)', () => {
+  // Scenario 1: Canonical repository URL
+  test('Scenario 1: parses canonical repository URL', () => {
+    const res = parseGitHubUrl('https://github.com/meoxx009/career-AI');
+    assert.deepStrictEqual(res, { owner: 'meoxx009', repo: 'career-AI' });
+  });
+
+  // Scenario 2: URL with .git suffix
+  test('Scenario 2: parses URL with .git suffix', () => {
+    const res = parseGitHubUrl('https://github.com/meoxx009/career-AI.git');
+    assert.deepStrictEqual(res, { owner: 'meoxx009', repo: 'career-AI' });
+  });
+
+  // Scenario 3: URL with trailing slash
+  test('Scenario 3: parses URL with trailing slash', () => {
+    const res = parseGitHubUrl('https://github.com/meoxx009/career-AI/');
+    assert.deepStrictEqual(res, { owner: 'meoxx009', repo: 'career-AI' });
+  });
+
+  // Scenario 4: URL with .git and trailing slash
+  test('Scenario 4: parses URL with .git and trailing slash', () => {
+    const res = parseGitHubUrl('https://github.com/meoxx009/career-AI.git/');
+    assert.deepStrictEqual(res, { owner: 'meoxx009', repo: 'career-AI' });
+  });
+
+  // Scenario 5: Shorthand owner/repo
+  test('Scenario 5: parses owner/repo shorthand', () => {
+    const res = parseGitHubUrl('meoxx009/career-AI');
+    assert.deepStrictEqual(res, { owner: 'meoxx009', repo: 'career-AI' });
+  });
+
+  // Scenario 6: Shorthand owner/repo.git
+  test('Scenario 6: parses owner/repo.git shorthand', () => {
+    const res = parseGitHubUrl('meoxx009/career-AI.git');
+    assert.deepStrictEqual(res, { owner: 'meoxx009', repo: 'career-AI' });
+  });
+
+  // Scenario 7: HTTP URL
+  test('Scenario 7: parses HTTP URL correctly without failure', () => {
+    const res = parseGitHubUrl('http://github.com/meoxx009/career-AI');
+    assert.deepStrictEqual(res, { owner: 'meoxx009', repo: 'career-AI' });
+  });
+
+  // Scenario 8: URL without protocol
+  test('Scenario 8: parses github.com/owner/repo without protocol', () => {
+    const res = parseGitHubUrl('github.com/meoxx009/career-AI');
+    assert.deepStrictEqual(res, { owner: 'meoxx009', repo: 'career-AI' });
+  });
+
+  // Scenario 9: URL with branch path
+  test('Scenario 9: parses URL with /tree/branch', () => {
+    const res = parseGitHubUrl('https://github.com/meoxx009/career-AI/tree/main');
+    assert.deepStrictEqual(res, { owner: 'meoxx009', repo: 'career-AI', branch: 'main' });
+  });
+
+  // Scenario 10: URL with complex multi-segment branch path
+  test('Scenario 10: parses URL with complex branch path like feature/v2-auth', () => {
+    const res = parseGitHubUrl('https://github.com/meoxx009/career-AI/tree/feature/v2-auth');
+    assert.deepStrictEqual(res, { owner: 'meoxx009', repo: 'career-AI', branch: 'feature/v2-auth' });
+  });
+
+  // Scenario 11: URL with query parameters and hash fragments
+  test('Scenario 11: strips query parameters and hash fragments cleanly', () => {
+    const res = parseGitHubUrl('https://github.com/meoxx009/career-AI.git?tab=readme-ov-file#installation');
+    assert.deepStrictEqual(res, { owner: 'meoxx009', repo: 'career-AI' });
+  });
+
+  // Scenario 12: SSH git format
+  test('Scenario 12: parses SSH git format git@github.com:owner/repo.git', () => {
+    const res = parseGitHubUrl('git@github.com:meoxx009/career-AI.git');
+    assert.deepStrictEqual(res, { owner: 'meoxx009', repo: 'career-AI' });
+  });
+
+  // Scenario 13: Invalid URL rejection
+  test('Scenario 13: rejects non-GitHub and SSRF attempts', () => {
+    assert.strictEqual(parseGitHubUrl('https://gitlab.com/meoxx009/career-AI'), null);
+    assert.strictEqual(parseGitHubUrl('https://bitbucket.org/meoxx009/career-AI'), null);
+    assert.strictEqual(parseGitHubUrl('http://169.254.169.254/latest/meta-data/'), null);
+    assert.strictEqual(parseGitHubUrl('https://localhost:3000/owner/repo'), null);
+    assert.strictEqual(parseGitHubUrl('https://github.com/'), null);
+    assert.strictEqual(parseGitHubUrl('https://github.com/owner'), null);
+    assert.strictEqual(parseGitHubUrl('not-a-repo'), null);
+  });
+
+  // Scenario 14: Typed error classification
+  test('Scenario 14: typed errors correctly encode status and operational context', () => {
+    const resetDate = new Date(Date.now() + 3600000);
+    const rateLimitErr = new GitHubRateLimitError('Rate limit exceeded', resetDate);
+    assert.strictEqual(rateLimitErr.name, 'GitHubRateLimitError');
+    assert.strictEqual(rateLimitErr.resetTime, resetDate);
+
+    const branchErr = new GitHubBranchNotFoundError('Branch not found', 'dev-v2', 'main');
+    assert.strictEqual(branchErr.name, 'GitHubBranchNotFoundError');
+    assert.strictEqual(branchErr.branch, 'dev-v2');
+    assert.strictEqual(branchErr.defaultBranch, 'main');
+
+    const notFoundErr = new GitHubNotFoundError('Repository not found or private');
+    assert.strictEqual(notFoundErr.name, 'GitHubNotFoundError');
+
+    const authErr = new GitHubAuthError('Invalid token');
+    assert.strictEqual(authErr.name, 'GitHubAuthError');
+  });
+
+  // Scenario 15: Automatic Contribution Route generation from scan findings
+  test('Scenario 15: auto-generates contribution routes with complete test plans and difficulty tracks', async () => {
+    const mockFinding = {
+      id: 'fnd_auto_route_123',
+      scanId: 'scn_auto_test',
+      title: 'Missing SECURITY.md Policy',
+      category: 'health',
+      severity: 'MEDIUM',
+      confidence: 0.95,
+      sourceTool: 'Repository Health Auditor',
+      ruleId: 'REPO-MISSING-SECURITY-MD',
+      file: 'SECURITY.md',
+      impact: 'Lack of security disclosure guidelines',
+      fixHint: 'Add SECURITY.md with maintainer contacts',
+      disclosureMode: 'maintainer-review',
+      createdAt: new Date().toISOString(),
+    };
+
+    const mockScan = {
+      id: 'scn_auto_test',
+      userId: 'test_user',
+      repoUrl: 'https://github.com/meoxx009/career-AI',
+      repoName: 'meoxx009/career-AI',
+      owner: 'meoxx009',
+      branch: 'main',
+      scannedAt: new Date().toISOString(),
+      totalFiles: 20,
+      totalBytes: 50000,
+      status: 'completed',
+      readinessScore: 85,
+      techStack: {
+        languages: [{ name: 'TypeScript', confidence: 100, sourceFile: 'package.json' }],
+        frameworks: [{ name: 'Next.js', confidence: 100, sourceFile: 'package.json' }],
+        dependencies: [],
+        manifests: [{ path: 'package.json', type: 'npm', dependenciesCount: 5 }],
+        packageManagers: [{ name: 'npm', confidence: 95, sourceFile: 'package.json' }],
+        tooling: [],
+        confidenceScore: 90,
+      },
+      findingsCount: { total: 1, critical: 0, high: 0, medium: 1, low: 0, info: 0 },
+    };
+
+    const route = await buildContributionRoute(mockFinding, mockScan);
+
+    assert.ok(route.id.startsWith('rte_'));
+    assert.strictEqual(route.scanId, 'scn_auto_test');
+    assert.strictEqual(route.findingId, 'fnd_auto_route_123');
+    assert.strictEqual(route.status, 'not-started');
+    assert.ok(route.testPlan.length > 0, 'Test plan must have actionable verification steps');
+    assert.ok(route.acceptanceCriteria.length > 0, 'Acceptance criteria must have clear criteria');
+    assert.ok(route.skills.length > 0, 'Skills must be listed');
+    assert.ok(['beginner', 'intermediate', 'advanced'].includes(route.difficulty));
   });
 });
